@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
 import 'package:projekt_grupp34/widgets/Logo.dart';
-import 'package:projekt_grupp34/widgets/kategorier.dart';
+import 'package:projekt_grupp34/widgets/kategorierslider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 class Headertest extends StatelessWidget {
   const Headertest({super.key});
@@ -22,7 +22,7 @@ class Headertest extends StatelessWidget {
           // Scrollable content
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) => Kategorier(), // or any other widget
+              (context, index) => Kategorierslider(), // or any other widget
               childCount: 10,
             ),
           ),

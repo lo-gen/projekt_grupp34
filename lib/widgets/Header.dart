@@ -36,8 +36,7 @@ class Header extends StatelessWidget {
                       
                     SizedBox(width: 100,),
 
-                    Expanded(       //Varukorg, listor, m.m knappar
-                      child: Column(
+                    Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -98,7 +97,7 @@ class Header extends StatelessWidget {
                           ),                       
                         ],
                       ),
-                  ],)
+                  ],
               ),], ),);
 }
 }

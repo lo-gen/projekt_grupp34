@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 
-class Kategorier extends StatelessWidget {
-  const Kategorier({super.key});
+class Kategorierslider extends StatelessWidget {
+  const Kategorierslider({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [Container(    //kategorier på vänstra sidan
-              width: 120,
+              width: 220,
               height: 600,
               color: Colors.grey,
               margin: const EdgeInsets.only(left: 16),

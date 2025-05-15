@@ -27,6 +27,11 @@ class AppTheme {
         fontWeight: FontWeight.bold,
     );
 
+    static const TextStyle mediumheader = TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold
+    );
+
 }
   
 class StickyHeaderDelegate extends SliverPersistentHeaderDelegate {

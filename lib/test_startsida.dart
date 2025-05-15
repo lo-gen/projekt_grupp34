@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
-import 'package:projekt_grupp34/widgets/kategorier.dart';
+import 'package:projekt_grupp34/widgets/kategorierslider.dart';
 
 class TestStartsida extends StatelessWidget {
   const TestStartsida({super.key});
@@ -27,7 +27,7 @@ class TestStartsida extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Kategorier(),
+                      Kategorierslider(),
                       Image.asset('assets/images/Kött.jpg', width: 100, height: 100,)
                 ],
               ),]

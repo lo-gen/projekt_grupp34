@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
 import 'package:projekt_grupp34/widgets/Headertest.dart';
-import 'package:projekt_grupp34/widgets/kategorier.dart';
+import 'package:projekt_grupp34/widgets/kategorierslider.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class HomePage extends StatelessWidget {
@@ -34,28 +34,102 @@ class HomePage extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Kategorier(),
-                      Container(       //Main bild
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        padding: EdgeInsets.all(16),
-                        height: 200,
-                        width: 400,
+                      Kategorierslider(),
+                      Column(
+                        children:[Container(       //Main bild
+                        margin: EdgeInsets.symmetric(horizontal: 30),
+                        height: screenheight - 400,
+                        width: screenwidth - 300,
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
                           image: DecorationImage(
-                            image: AssetImage('assets/images/Kött.jpg'),
+                            image: AssetImage('assets/images/Kött.jpg'), //kom ihåg att ändra bild här vid copy pasting
                             fit: BoxFit.cover)
                         ),
                         alignment: Alignment.center,
                         child: Container( 
                           alignment: Alignment.bottomCenter,
-                          child: Text('Till dina inköpslistor', style: TextStyle(color: AppTheme.white),)     
-                          )                    
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text('För att alla ska kunna handla online!', style: TextStyle(color: AppTheme.white, fontSize: 40),),
+                              SizedBox(height: AppTheme.paddingMedium,),
+                              ElevatedButton(
+                              style: ElevatedButton.styleFrom(backgroundColor: AppTheme.ligtblue,),
+                              onPressed: () {
+                                //Navigator.push(context, MaterialPageRoute(builder: (context) => Listor()))
+                              },
+                              child: Text('Till dina inköpslistor', style: TextStyle(color: AppTheme.white, fontSize: 40),),
+                            ),
+                              SizedBox(height: AppTheme.paddingMedium,)
+                            ],
+                            )
+                          
+                          )                   
                       ),
-                      SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Image.asset('assets/images/Kött.jpg'),
-                      )
+                      SizedBox(height: AppTheme.paddingMedium,),
+                      //FeatureKategorier, ska vara gridbuilders egentligen kom jag på hehe
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                                children: [
+                                  Container(
+                                    height: 150,
+                                    width: 280,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      image: DecorationImage(
+                                        image: AssetImage('assets/images/Kött.jpg'),
+                                        fit: BoxFit.cover)
+                                    ),
+                                  ),
+                                  Text('Kött', style: AppTheme.smallheader,)
+                                ],
+                              ),
+                              SizedBox(width: AppTheme.paddingMedium,),
+                            Column(
+                                children: [
+                                  Container(
+                                    height: 150,
+                                    width: 280,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      image: DecorationImage(
+                                        image: AssetImage('assets/images/Kött.jpg'),
+                                        fit: BoxFit.cover)
+                                    ),
+                                  ),
+                                  Text('Fisk', style: AppTheme.smallheader,)
+                                ],
+                            ),
+                            SizedBox(width: AppTheme.paddingMedium,),
+                            Column(
+                                children: [
+                                  Container(
+                                    height: 150,
+                                    width: 280,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      image: DecorationImage(
+                                        image: AssetImage('assets/images/Kött.jpg'),
+                                        fit: BoxFit.cover)
+                                    ),
+                                  ),
+                                  Text('Grönt', style: AppTheme.smallheader,)
+                                ],
+                            ),
+
+                          ],
+
+                        ),
+                      
+
+                      ],
+                      ),
+
+                      // Forstätt
+
                 ],
               ),
               ]
