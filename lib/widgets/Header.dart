@@ -28,7 +28,7 @@ class Header extends StatelessWidget {
                       child: Text('Logo', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),),
                     ),
 
-                    SizedBox(width: AppTheme.paddingMedium,),
+                    SizedBox(width: 100,),
                     
                     Expanded(
                       child: SearchBar(hintText: 'Sök efter produkter här',),
@@ -68,7 +68,7 @@ class Header extends StatelessWidget {
                                 child: Text('Konto', style: TextStyle(fontSize: 26, color: AppTheme.white)),
                           ), 
                           ),],),
-                    SizedBox(height: AppTheme.paddingSmall,),
+                      SizedBox(height: AppTheme.paddingSmall,),
                         Row(
                           children: [
                           SizedBox(

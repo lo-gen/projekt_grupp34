@@ -1,0 +1,94 @@
+  // Huvudinnehåll
+
+                // Banner
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.all(16),
+                  height: 160,
+                  //decoration: BoxDecoration(
+                    //image: DecorationImage(
+                      //image: AssetImage('assets/images/banner.jpg'), // <-- byt till din banner
+                      //fit: BoxFit.cover,),
+                
+                  
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text('Till dina inköpslistor'),
+                  ),
+                ),
+
+                // Kategoriknappar
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: ['Kött', 'Fisk', 'Grönt'].map((label) {
+                      return Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: 
+                            //Image.asset('assets/images/$label.jpg', // tex: Kött.jpg
+                              SizedBox(
+                              width: 100,
+                              height: 80,
+                              //fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+                // Produktgrid
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: GridView.count(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      children: List.generate(9, (index) {
+                        return Container(
+                          color: Colors.white,
+                          child: Center(child: Text('Produkt ${index + 1}')),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+
+                // Footer
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Text('Köpvillkor', style: TextStyle(decoration: TextDecoration.underline)),
+                      Text('Kundtjänst', style: TextStyle(decoration: TextDecoration.underline)),
+                      Text('Om Oss', style: TextStyle(decoration: TextDecoration.underline)),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+
+          // Högerkolumn (Erbjudanden)
+          Container(
+            width: 100,
+            color: Colors.white,
+            child: Column(
+              children: [
+                SizedBox(height: 12),
+                Text('Erbjudanden', style: TextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(height: 12),
+                Text('Bild här')
+                //Image.asset('assets/images/erbjudande.jpg'), // byt ut mot korrekt bild
+              ],
+            ),
+          ),

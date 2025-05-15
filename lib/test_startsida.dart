@@ -1,38 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
-import 'package:projekt_grupp34/widgets/Logo.dart';
 import 'package:projekt_grupp34/widgets/kategorier.dart';
-import 'package:sticky_headers/sticky_headers.dart';
-class Headertest extends StatelessWidget {
-  const Headertest({super.key});
+
+class TestStartsida extends StatelessWidget {
+  const TestStartsida({super.key});
 
   @override
   Widget build(BuildContext context) {
+    double screenwidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: CustomScrollView(
-        slivers: <Widget>[
-          // Sticky Header
+        slivers: [
           SliverPersistentHeader(
             pinned: true,
             delegate: _StickyHeaderDelegate(
               child: Header(),
-              height: 130, // Match Header height
+              height: 130,
             ),
           ),
-          // Scrollable content
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => Kategorier(), // or any other widget
-              childCount: 10,
+          SliverToBoxAdapter(
+            child: Container(
+              width: screenwidth,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Kategorier(),
+                      Image.asset('assets/images/Kött.jpg', width: 100, height: 100,)
+                ],
+              ),]
             ),
-          ),
-        ],
-      ),
+          ), )
+        ]
+      )
     );
+    
   }
 }
 
 class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
+
   final Widget child;
   final double height;
 
@@ -40,14 +49,13 @@ class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   double get minExtent => height;
-
   @override
   double get maxExtent => height;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Material(
-      elevation: 4,
+      elevation: overlapsContent ? 4 : 0,
       child: child,
     );
   }

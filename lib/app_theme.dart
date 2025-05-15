@@ -27,6 +27,33 @@ class AppTheme {
         fontWeight: FontWeight.bold,
     );
 
-
-
 }
+  
+class StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
+  
+  final Widget child;
+  final double height;
+  final double width;
+
+  StickyHeaderDelegate({required this.child, required this.height, required this.width});
+
+  @override
+  double get minExtent => height;
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Material(
+      elevation: overlapsContent ? 4 : 0,
+      child: child,
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant StickyHeaderDelegate oldDelegate) {
+    return oldDelegate.child != child || oldDelegate.height != height;
+  }
+}
+
+
