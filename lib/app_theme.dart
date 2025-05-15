@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
     //Colors
@@ -15,6 +16,16 @@ class AppTheme {
     static const double paddingHuge = 50;
 
     //different rounded edges
+
+
+    //different google fonts
+    static TextTheme nunito = GoogleFonts.nunitoTextTheme();
+    static TextTheme sans = GoogleFonts.dmSansTextTheme();
+
+    static const TextStyle smallheader = TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+    );
 
 
 
