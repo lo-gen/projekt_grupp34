@@ -8,24 +8,81 @@ class Kategorierslider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Container(    //kategorier på vänstra sidan
-              width: 220,
-              height: 600,
-              color: Colors.grey,
-              margin: const EdgeInsets.only(left: 16),
-              padding: EdgeInsets.all(8),
-              child: Column(     
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                    Text('Kategorier', style: AppTheme.smallheader,),
-                    SizedBox(height: AppTheme.paddingTiny),
-                    Text('Kött +', style: TextStyle(fontSize: 12),),
-                    Text('Fisk +', style: TextStyle(fontSize: 12),),
-                    Text('Yap +', style: TextStyle(fontSize: 12),),
-                    Text('Erbjudanden +', style: TextStyle(fontSize: 12),),
-                  
-                  ],
-              ),
-            ),], );
+              children: [
+                Container(    //kategorier på vänstra sidan
+                  width: 220,
+                  height: 600,
+                  margin: const EdgeInsets.only(left: 16, top: AppTheme.paddingSmall),
+                  padding: EdgeInsets.only(top: AppTheme.paddingSmall),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16), 
+                    color: AppTheme.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.20),
+                        blurRadius: 15,
+                        offset: Offset(0, 4)
+                      )
+                    ]
+                    ),
+                    child: Column(     
+                    //crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [Text('Kategorier', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),),
+                          ]),
+                        SizedBox(height: AppTheme.paddingTiny),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(width: AppTheme.paddingTiny,),
+                            Text('Kött', style: TextStyle(fontSize: 30),),
+                            Column(
+                              children: [
+                                //DropdownButton()     + knappen med subkategorier
+                                  
+                              ],
+                            )
+                          ]),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(width: AppTheme.paddingTiny,),
+                            Text('Fisk', style: TextStyle(fontSize: 30),),
+                            Column(
+                              children: [
+                                //DropdownButton()     + knappen med subkategorier
+                                  
+                              ],
+                            )
+                          ]),                          
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(width: AppTheme.paddingTiny,),
+                            Text('Grönt', style: TextStyle(fontSize: 30),),
+                            Column(
+                              children: [
+                                //DropdownButton()     + knappen med subkategorier
+                                  
+                              ],
+                            )
+                          ]),                          
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(width: AppTheme.paddingTiny,),
+                            Text('Yap', style: TextStyle(fontSize: 30),),
+                            Column(
+                              children: [
+                                //DropdownButton()     + knappen med subkategorier
+                                  
+                              ],
+                            )
+                          ]),                      
+                      ],
+                  ),
+                ),], );
   }
 }

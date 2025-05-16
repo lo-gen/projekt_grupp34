@@ -36,15 +36,17 @@ class HomePage extends StatelessWidget {
                     children: [
                       Kategorierslider(),
                       Column(
-                        children:[Container(       //Main bild
-                        margin: EdgeInsets.symmetric(horizontal: 30),
-                        height: screenheight - 400,
-                        width: screenwidth - 300,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/Kött.jpg'), //kom ihåg att ändra bild här vid copy pasting
-                            fit: BoxFit.cover)
+                        children:[
+                          SizedBox(height: AppTheme.paddingSmall),
+                          Container(       //Main bild
+                            margin: EdgeInsets.symmetric(horizontal: 30),
+                            height: screenheight - 400,
+                            width: screenwidth - 300,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/Kött.jpg'), //kom ihåg att ändra bild här vid copy pasting
+                                fit: BoxFit.cover)
                         ),
                         alignment: Alignment.center,
                         child: Container( 
@@ -69,6 +71,7 @@ class HomePage extends StatelessWidget {
                       ),
                       SizedBox(height: AppTheme.paddingMedium,),
                       //FeatureKategorier, ska vara gridbuilders egentligen kom jag på hehe
+                     
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

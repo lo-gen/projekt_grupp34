@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/Startsida.dart';
+import 'package:projekt_grupp34/widgets/Logo.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class Header extends StatelessWidget {
@@ -13,20 +14,14 @@ class Header extends StatelessWidget {
                 color: AppTheme.darkblue,  //header
                 width: screenwidth, 
                 height: 130,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: 
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 275,
-                      child:
-                      ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                      },
-                      child: Text('Logo', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),),
-                    ),
+                    SizedBox(width: AppTheme.paddingMedium,),
+
+                    Logo(),
 
                     SizedBox(width: 100,),
                     
@@ -97,7 +92,11 @@ class Header extends StatelessWidget {
                           ),                       
                         ],
                       ),
+                      
                   ],
-              ),], ),);
-}
+              ),
+            ], 
+          ),
+        );
+  }
 }
