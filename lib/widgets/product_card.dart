@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:imat_app/app_theme.dart';
-import 'package:imat_app/model/imat/product.dart';
-import 'package:imat_app/model/imat_data_handler.dart';
+import 'package:projekt_grupp34/model/imat/product.dart';
+import 'package:projekt_grupp34/model/imat_data_handler.dart';
+import 'package:projekt_grupp34/app_theme.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;

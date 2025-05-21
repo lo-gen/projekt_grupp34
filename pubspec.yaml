@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   sticky_headers: ^0.3.0+2
+  provider: ^6.1.5
   
 
 dev_dependencies:

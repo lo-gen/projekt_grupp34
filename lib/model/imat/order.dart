@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:imat_app/model/imat/shopping_item.dart';
+import 'package:projekt_grupp34/model/imat/shopping_item.dart';
 
 class Order {
   int orderNumber;

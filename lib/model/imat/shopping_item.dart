@@ -1,4 +1,4 @@
-import 'package:imat_app/model/imat/product.dart';
+import 'package:projekt_grupp34/model/imat/product.dart';
 
 class ShoppingItem {
   Product product;

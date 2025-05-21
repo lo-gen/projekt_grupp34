@@ -4,16 +4,16 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:imat_app/model/imat/credit_card.dart';
-import 'package:imat_app/model/imat/customer.dart';
-import 'package:imat_app/model/imat/order.dart';
-import 'package:imat_app/model/imat/product.dart';
-import 'package:imat_app/model/imat/product_detail.dart';
-import 'package:imat_app/model/imat/settings.dart';
-import 'package:imat_app/model/imat/shopping_cart.dart';
-import 'package:imat_app/model/imat/shopping_item.dart';
-import 'package:imat_app/model/imat/user.dart';
-import 'package:imat_app/model/internet_handler.dart';
+import 'package:projekt_grupp34/model/imat/credit_card.dart';
+import 'package:projekt_grupp34/model/imat/customer.dart';
+import 'package:projekt_grupp34/model/imat/order.dart';
+import 'package:projekt_grupp34/model/imat/product.dart';
+import 'package:projekt_grupp34/model/imat/product_detail.dart';
+import 'package:projekt_grupp34/model/imat/settings.dart';
+import 'package:projekt_grupp34/model/imat/shopping_cart.dart';
+import 'package:projekt_grupp34/model/imat/shopping_item.dart';
+import 'package:projekt_grupp34/model/imat/user.dart';
+import 'package:projekt_grupp34/model/internet_handler.dart';
 
 class ImatDataHandler extends ChangeNotifier {
   // Initializes the IMatDataHandler

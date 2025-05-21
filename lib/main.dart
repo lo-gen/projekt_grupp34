@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/startsida.dart';
 import 'package:projekt_grupp34/main_view.dart';
 import 'package:projekt_grupp34/test_startsida.dart';
+import 'package:projekt_grupp34/model/imat_data_handler.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp( 
+    ChangeNotifierProvider(
+      create: (context) => ImatDataHandler(), 
+      child: const MyApp(),
+    ),);
 }
 
 class MyApp extends StatelessWidget {

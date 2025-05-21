@@ -2,14 +2,14 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:imat_app/model/imat/credit_card.dart';
-import 'package:imat_app/model/imat/customer.dart';
-import 'package:imat_app/model/imat/product.dart';
-import 'package:imat_app/model/imat/shopping_cart.dart';
-import 'package:imat_app/model/imat/user.dart';
+import 'package:projekt_grupp34/model/imat/credit_card.dart';
+import 'package:projekt_grupp34/model/imat/customer.dart';
+import 'package:projekt_grupp34/model/imat/product.dart';
+import 'package:projekt_grupp34/model/imat/shopping_cart.dart';
+import 'package:projekt_grupp34/model/imat/user.dart';
 import 'dart:convert';
 
-import 'package:imat_app/model/imat/util/functions.dart';
+import 'package:projekt_grupp34/model/imat/util/functions.dart';
 
 // A class that handles the communication over the internet.
 // All methods are static class methods which means that we can
