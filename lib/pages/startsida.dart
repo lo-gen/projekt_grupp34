@@ -8,6 +8,8 @@ import 'package:projekt_grupp34/widgets/startsida_bild_och_kategorier.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+    //Borde vara klar nu (förutom bilder)
+
   @override
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width;
