@@ -15,10 +15,15 @@ class Logo extends StatelessWidget {
             height: logoheight,
             child:
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                padding: EdgeInsets.zero,
+              ),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
             },
-            child: Text('IMat', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),),
+            child: Image(image: AssetImage('../assets/images/IMat_logo_basket_right.png')),),
     );
   }
 }
