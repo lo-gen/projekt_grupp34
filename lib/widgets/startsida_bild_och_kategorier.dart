@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
-import 'dart:math' as math;
 
 class StartsidaBildOchKategorier extends StatelessWidget {
   const StartsidaBildOchKategorier({super.key});
@@ -147,7 +146,7 @@ class StartsidaBildOchKategorier extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => Grönt()));
+                    //Navigator.push(context, MaterialPageRoute(builder: (context) => Frukt_&_Grönt()));
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -173,7 +172,7 @@ class StartsidaBildOchKategorier extends StatelessWidget {
                       ),
 
                       Text(
-                        'Grönt',
+                        'Frukt & Grönt',
                         style: AppTheme.smallheader,
                       ),
                     ],

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
-import 'package:projekt_grupp34/widgets/Headertest.dart';
+import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/widgets/kategorierslider.dart';
 import 'package:projekt_grupp34/widgets/startsida_bild_och_kategorier.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -35,15 +34,15 @@ class HomePage extends StatelessWidget {
                     children: [
                       Kategorierslider(),
                       StartsidaBildOchKategorier(),
-                      
-
-                      // Forstätt
                     ],
                   ),
-                ],
+                  SizedBox(height: 100,),
+                  Footer(),
+                    ],
+                  )
+                
               ),
             ),
-          ),
         ],
       ),
     );
