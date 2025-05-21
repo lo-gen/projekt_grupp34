@@ -30,7 +30,10 @@ class Kategorierslider extends StatelessWidget {
                     children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: [Text('Kategorier', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),),
+                          children: [
+                            SizedBox(width: AppTheme.paddingTiny,),
+                            Text('Kategorier', 
+                            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),),
                           ]),
                         SizedBox(height: AppTheme.paddingTiny),
                         Row(
