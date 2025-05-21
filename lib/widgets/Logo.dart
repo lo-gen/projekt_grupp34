@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projekt_grupp34/startsida.dart';
+import 'package:projekt_grupp34/pages/startsida.dart';
 
 class Logo extends StatelessWidget {
   const Logo({super.key,});

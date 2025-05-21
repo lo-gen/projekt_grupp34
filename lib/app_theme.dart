@@ -25,6 +25,7 @@ class AppTheme {
     static const TextStyle smallheader = TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.bold,
+        color: Colors.black
     );
 
     static const TextStyle mediumheader = TextStyle(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
-import 'package:projekt_grupp34/Startsida.dart';
+import 'package:projekt_grupp34/pages/Startsida.dart';
 import 'package:projekt_grupp34/widgets/Logo.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 

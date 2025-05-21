@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:projekt_grupp34/Startsida.dart';
+import 'package:projekt_grupp34/pages/startsida.dart';
 
 class MainView extends StatelessWidget {
   const MainView({super.key});
