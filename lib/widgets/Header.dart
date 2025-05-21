@@ -19,7 +19,6 @@ class Header extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(width: AppTheme.paddingMedium,),
 
                     Logo(),
 
