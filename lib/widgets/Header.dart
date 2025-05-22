@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/pages/kontosida.dart';
+import 'package:projekt_grupp34/pages/leveranstider.dart';
 import 'package:projekt_grupp34/widgets/Logo.dart';
 
 class Header extends StatelessWidget {
@@ -42,7 +43,7 @@ class Header extends StatelessWidget {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: AppTheme.ligtblue),
                       onPressed: () {
-                      //Navigator.push(context, MaterialPageRoute(builder: (context) => LeveransTider()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LeveranstiderPage()));
                     }, 
                       child: Text('Lev. tider', style: TextStyle(fontSize: 26, color: AppTheme.white)),
                   ), 

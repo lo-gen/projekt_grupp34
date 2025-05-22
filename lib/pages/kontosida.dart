@@ -19,14 +19,15 @@ class _KontosidaState extends State<Kontosida> {
   late String phone = "If you see this something went wrong - phone";
   late String address = "If you see this something went wrong - address";
   late String postal = "If you see this something went wrong - postal";
-  late String postAddress = "If you see this something went wrong - postAddress";
+  late String postAddress =
+      "If you see this something went wrong - postAddress";
 
   @override
   void initState() {
     super.initState();
     customer = ImatDataHandler().getCustomer();
 
-    //UNDERNEATH IS TESTING!!!
+   /*  //UNDERNEATH IS TESTING!!!
     customer.firstName = "Test";
     customer.lastName = "Testsson";
     customer.email = "testing@email.com";
@@ -35,7 +36,7 @@ class _KontosidaState extends State<Kontosida> {
     customer.postCode = "56743";
     customer.postAddress = "Postaddress 123";
     ImatDataHandler().setCustomer(customer);
-    //THIS IS END OF TESTING!!!
+    //THIS IS END OF TESTING!!! */
 
     //THIS IS ACTUAL CODE AGAIN
     firstName = customer.firstName;
@@ -77,6 +78,7 @@ class _KontosidaState extends State<Kontosida> {
     );
   }
 
+  //Card widget för att visa information om kunden
   Widget _infoCard({
     required IconData icon,
     required String title,
@@ -84,7 +86,7 @@ class _KontosidaState extends State<Kontosida> {
     required VoidCallback onEdit,
   }) {
     return Card(
-      color:Colors.white,
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
       elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
@@ -375,7 +377,6 @@ class _KontosidaState extends State<Kontosida> {
                                       }
                                     }),
                               ),
-
                             ],
                           ),
                         ),
