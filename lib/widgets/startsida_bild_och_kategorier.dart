@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/pages/kategorisida.dart';
-import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/model/imat/product.dart';
 
 class StartsidaBildOchKategorier extends StatelessWidget {

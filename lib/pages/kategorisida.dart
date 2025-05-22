@@ -100,7 +100,6 @@ class _KategorisidaState extends State<Kategorisida> {
   @override
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width;
-    var imat = Provider.of<ImatDataHandler>(context);
 
     if (_productCategory == null) {
       return Scaffold(

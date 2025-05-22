@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
-import 'package:projekt_grupp34/model/imat/shopping_cart.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/widgets/kategorierslider.dart';
@@ -14,7 +13,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width;
-    double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
