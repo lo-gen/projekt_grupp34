@@ -7,31 +7,52 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width;
-    return Container(      //Footer
+    return Container(
       width: screenwidth,
       height: 130,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SizedBox(width: AppTheme.paddingHuge,),
-          Column(
-            children: [
-              Text('Om oss', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-              SizedBox(height: AppTheme.paddingTiny,),
-              Text('Vi är roliga'),
-              SizedBox(height: AppTheme.paddingTiny,),
-              Text('Vi levererar snabbt'),
-            ],
-          ),
-          SizedBox(width: 70,),
-          Column(
-            children: [
-              Text('Kontakta oss', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-              SizedBox(height: AppTheme.paddingTiny,),
-              Text('070-1234567'),
-              SizedBox(height: AppTheme.paddingTiny,),
-              Text('Swish: 123456, kung e du'),
-            ],
+          Divider(thickness: 2, color: Colors.grey[400], height: 0),
+          SizedBox(height: AppTheme.paddingTiny),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SizedBox(width: AppTheme.paddingHuge),
+                Column(
+                  children: [
+                    Text(
+                      'Om oss',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: AppTheme.paddingTiny),
+                    Text('Vi är roliga'),
+                    SizedBox(height: AppTheme.paddingTiny),
+                    Text('Vi levererar snabbt'),
+                  ],
+                ),
+                SizedBox(width: 70),
+                Column(
+                  children: [
+                    Text(
+                      'Kontakta oss',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: AppTheme.paddingTiny),
+                    Text('070-1234567'),
+                    SizedBox(height: AppTheme.paddingTiny),
+                    Text('Swish: 123456, kung e du'),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
