@@ -3,16 +3,16 @@ import 'package:projekt_grupp34/model/imat/product.dart';
 import 'package:projekt_grupp34/model/imat/shopping_item.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/app_theme.dart';
+import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  final ImatDataHandler iMat;
-
-
-  const ProductCard(this.product, this.iMat, {super.key});
+  const ProductCard(this.product, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    var iMat = Provider.of<ImatDataHandler>(context);
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

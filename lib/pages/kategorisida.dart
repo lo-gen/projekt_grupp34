@@ -7,6 +7,7 @@ import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/widgets/product_card.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/widgets/kategorierslider.dart';
+import 'package:provider/provider.dart';
 
 class Kategorisida extends StatefulWidget {
   final String category;
@@ -18,45 +19,26 @@ class Kategorisida extends StatefulWidget {
 }
 
 class _KategorisidaState extends State<Kategorisida> {
-  late ImatDataHandler _imat;
-  late ProductCategory? _productCategory;
+  ProductCategory? _productCategory;
   List<Product> _products = [];
   bool _loading = true;
 
   @override
-  void initState() {
-    super.initState();
-    _imat = ImatDataHandler();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final imat = Provider.of<ImatDataHandler>(context);
     _productCategory = _mapCategoryName(widget.category);
 
-    // Lyssna på när produkterna laddats klart
-    _imat.addListener(_onDataChanged);
-
-    // Om produkterna redan är laddade (t.ex. singleton), visa direkt
-    _tryLoadProducts();
-  }
-
-  void _onDataChanged() {
-    _tryLoadProducts();
-  }
-
-  void _tryLoadProducts() {
-    if (_productCategory != null && _imat.products.isNotEmpty) {
+    if (_productCategory != null && imat.products.isNotEmpty) {
       setState(() {
-        _products = _imat.findProductsByCategory(_productCategory!);
+        _products = imat.findProductsByCategory(_productCategory!);
         _loading = false;
       });
-    } else if (_imat.products.isEmpty) {
+    } else if (imat.products.isEmpty) {
       setState(() {
         _loading = true;
       });
     }
-  }
-
-  @override
-  void dispose() {
-    _imat.removeListener(_onDataChanged);
-    super.dispose();
   }
 
   // Mappa sträng till rätt ProductCategory
@@ -118,6 +100,7 @@ class _KategorisidaState extends State<Kategorisida> {
   @override
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width;
+    var imat = Provider.of<ImatDataHandler>(context);
 
     if (_productCategory == null) {
       return Scaffold(
@@ -202,7 +185,7 @@ class _KategorisidaState extends State<Kategorisida> {
                             ),
                             itemCount: _products.length,
                             itemBuilder: (context, index) {
-                              return ProductCard(_products[index], _imat);
+                              return ProductCard(_products[index]);
                             },
                           ),
                         ),

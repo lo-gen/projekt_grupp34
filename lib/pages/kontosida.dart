@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/model/imat/customer.dart';
+import 'package:projekt_grupp34/pages/startsida.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
@@ -139,6 +141,38 @@ class _KontosidaState extends State<Kontosida> {
         child: Column(
           children: [
             const Header(),
+            Padding(
+            padding: const EdgeInsets.only(top: 16.0, left: 16.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: 200,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: AppTheme.darkblue,
+                ),
+                child: 
+              InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                },
+                child: Center(
+                  child: Text(
+                    'Tillbaka till Startsida',
+                    style: TextStyle(
+                      fontSize: 28,
+                      color: AppTheme.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              ),
+            ),
+          ),
             Expanded(
               child: Container(
                 color: const Color(0xFFFAF6F6),

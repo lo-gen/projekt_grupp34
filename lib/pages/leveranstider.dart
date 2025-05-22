@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projekt_grupp34/app_theme.dart';
+import 'package:projekt_grupp34/pages/startsida.dart';
 import '../widgets/Header.dart'; // Lägg till denna import
 
 class LeveranstiderPage extends StatefulWidget {
@@ -55,11 +57,31 @@ class _LeveranstiderPageState extends State<LeveranstiderPage> {
             padding: const EdgeInsets.only(top: 16.0, left: 16.0),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+              child: Container(
+                width: 200,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: AppTheme.darkblue,
+                ),
+                child: 
+              InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                 },
-                child: const Text('Tillbaka till startsidan'),
+                child: Center(
+                  child: Text(
+                    'Tillbaka till Startsida',
+                    style: TextStyle(
+                      fontSize: 28,
+                      color: AppTheme.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
               ),
             ),
           ),
