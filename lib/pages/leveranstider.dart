@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/Header.dart'; // Lägg till denna import
 
 class LeveranstiderPage extends StatefulWidget {
   const LeveranstiderPage({super.key});
@@ -47,19 +48,9 @@ class _LeveranstiderPageState extends State<LeveranstiderPage> {
     const weekdays = ['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön'];
     // Byt ut mot din vanliga header om du har en separat widget för det!
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            // Ersätt med din logga om du har en bild
-            const Icon(Icons.local_shipping),
-            const SizedBox(width: 8),
-            const Text('Leveranstider'),
-          ],
-        ),
-        automaticallyImplyLeading: false,
-      ),
       body: Column(
         children: [
+          const Header(), // Din vanliga header högst upp
           Padding(
             padding: const EdgeInsets.only(top: 16.0, left: 16.0),
             child: Align(

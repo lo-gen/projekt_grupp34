@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/pages/kontosida.dart';
 import 'package:projekt_grupp34/pages/leveranstider.dart';
+import 'package:projekt_grupp34/widgets/Kundvagn.dart';
 import 'package:projekt_grupp34/widgets/Logo.dart';
 
 class Header extends StatelessWidget {
@@ -84,8 +85,34 @@ class Header extends StatelessWidget {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: AppTheme.ligtblue),
                       onPressed: () {
-                      //Navigator.push(context, MaterialPageRoute(builder: (context) => Varukorg()));
-                    }, 
+  showDialog(
+    context: context,
+    barrierDismissible: true, // Klick utanför stänger panelen
+    builder: (context) {
+      return Stack(
+        children: [
+          // Transparent bakgrund
+          GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: Container(
+              color: Colors.black54, // Mörk bakgrund, valfritt
+            ),
+          ),
+          // Själva panelen
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 400, // Justera bredd efter behov
+              height: double.infinity,
+              color: Colors.white,
+              child: KundvagnView(),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+},
                       child: Text('Varukorg', style: TextStyle(fontSize: 26, color: AppTheme.white)),
                 ), 
                 ),                       
