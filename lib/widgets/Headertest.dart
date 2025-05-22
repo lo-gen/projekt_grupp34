@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
-import 'package:projekt_grupp34/widgets/Logo.dart';
 import 'package:projekt_grupp34/widgets/kategorierslider.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 class Headertest extends StatelessWidget {
   const Headertest({super.key});
 
