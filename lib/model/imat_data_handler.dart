@@ -229,7 +229,7 @@ class ImatDataHandler extends ChangeNotifier {
 
     bool imageFound = image != null;
 
-    return imageFound ? image : Image.asset('assets/images/placeholder.png');
+    return imageFound ? image : Image.asset('assets/images/IMat_logo_basket_right.png');
   }
 
   // Can be used to create desired images using
