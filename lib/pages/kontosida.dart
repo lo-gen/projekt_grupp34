@@ -3,6 +3,7 @@ import 'package:projekt_grupp34/model/imat/customer.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
+import 'package:provider/provider.dart';
 
 class Kontosida extends StatefulWidget {
   const Kontosida({Key? key}) : super(key: key);
@@ -21,32 +22,6 @@ class _KontosidaState extends State<Kontosida> {
   late String postal = "If you see this something went wrong - postal";
   late String postAddress =
       "If you see this something went wrong - postAddress";
-
-  @override
-  void initState() {
-    super.initState();
-    customer = ImatDataHandler().getCustomer();
-
-   /*  //UNDERNEATH IS TESTING!!!
-    customer.firstName = "Test";
-    customer.lastName = "Testsson";
-    customer.email = "testing@email.com";
-    customer.mobilePhoneNumber = "0705555555";
-    customer.address = "Timmerland 83";
-    customer.postCode = "56743";
-    customer.postAddress = "Postaddress 123";
-    ImatDataHandler().setCustomer(customer);
-    //THIS IS END OF TESTING!!! */
-
-    //THIS IS ACTUAL CODE AGAIN
-    firstName = customer.firstName;
-    lastName = customer.lastName;
-    email = customer.email;
-    phone = customer.mobilePhoneNumber;
-    address = customer.address;
-    postal = customer.postCode;
-    postAddress = customer.postAddress;
-  }
 
   ///Metod för att öppna en dialogruta för att redigera information
   ///Triggeras när användaren trycker på "Ändra" knappen
@@ -146,6 +121,18 @@ class _KontosidaState extends State<Kontosida> {
 
   @override
   Widget build(BuildContext context) {
+    //Setup för att hämta kundinformation ifrån server
+    var dataHandler = context.watch<ImatDataHandler>();
+    var customer = dataHandler.getCustomer();
+
+    firstName = customer.firstName;
+    lastName = customer.lastName;
+    email = customer.email;
+    phone = customer.mobilePhoneNumber;
+    address = customer.address;
+    postal = customer.postCode;
+    postAddress = customer.postAddress;
+
     return Scaffold(
       backgroundColor: const Color(0xFFFAF6F6),
       body: SafeArea(
