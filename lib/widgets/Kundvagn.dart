@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
+import 'package:projekt_grupp34/pages/betalsida.dart';
 import 'package:provider/provider.dart';
 import 'delete_button.dart';
 
@@ -68,7 +69,7 @@ class KundvagnView extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 // Navigera till betalsidan när den finns
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => CheckoutPage()));
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => Betalsida()));
               },
               child: const Text('Gå till kassan'),
             ),

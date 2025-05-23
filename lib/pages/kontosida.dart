@@ -141,271 +141,284 @@ class _KontosidaState extends State<Kontosida> {
         child: Column(
           children: [
             const Header(),
-            Padding(
-            padding: const EdgeInsets.only(top: 16.0, left: 16.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                width: 200,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: AppTheme.darkblue,
-                ),
-                child: 
-              InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                },
-                child: Center(
-                  child: Text(
-                    'Tillbaka till Startsida',
-                    style: TextStyle(
-                      fontSize: 28,
-                      color: AppTheme.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              ),
-            ),
-          ),
+
             Expanded(
               child: Container(
                 color: const Color(0xFFFAF6F6),
                 width: double.infinity,
                 child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 0,
-                      vertical: 0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        //"Dina uppgifter" rubrik
-                        const SizedBox(height: 24),
-                        const Text(
-                          "Dina uppgifter",
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.center,
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 0,
+                          vertical: 34,
                         ),
-                        const SizedBox(height: 24),
-
-                        //Container för kundens namn
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.85,
-                          padding: const EdgeInsets.symmetric(vertical: 24),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.03),
-                                blurRadius: 2,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-
-                          //Namn på kunden
-                          child: Center(
-                            child: Text(
-                              "${customer.firstName} ${customer.lastName}",
-                              style: const TextStyle(
-                                fontSize: 48,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            //"Dina uppgifter" rubrik
+                            const SizedBox(height: 24),
+                            const Text(
+                              "Dina uppgifter",
+                              style: TextStyle(
+                                fontSize: 36,
                                 fontWeight: FontWeight.w400,
+                                decoration: TextDecoration.underline,
                                 color: Colors.black,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 24),
+
+                            //Container för kundens namn
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.85,
+                              padding: const EdgeInsets.symmetric(vertical: 24),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(4),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.03),
+                                    blurRadius: 2,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+
+                              //Namn på kunden
+                              child: Center(
+                                child: Text(
+                                  "${customer.firstName} ${customer.lastName}",
+                                  style: const TextStyle(
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+
+                            //Container för kundens info:
+                            //E-post, telefon, adress och postnummer
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.85,
+                              child: Column(
+                                children: [
+                                  //Container epost
+                                  _infoCard(
+                                    icon: Icons.email_outlined,
+                                    title: "E-post",
+                                    info: email,
+                                    onEdit:
+                                        //Editar E-post både i databasen och i UI om den är giltig
+                                        () => _editInfo("E-post", (val) {
+                                          if (val.contains("@") &&
+                                              val.contains(".")) {
+                                            setState(() {
+                                              customer.email = val;
+                                              email = customer.email;
+                                              ImatDataHandler().setCustomer(
+                                                customer,
+                                              );
+                                            });
+                                          }
+                                          //Ger felmeddelande om e-post är ogiltig
+                                          else {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Ogiltig e-postadress',
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }),
+                                  ),
+
+                                  //Container telefon
+                                  _infoCard(
+                                    icon: Icons.phone_outlined,
+                                    title: "Telefon",
+                                    info: phone,
+                                    onEdit:
+                                        //Editar telefon både i databasen och i UI om den är giltig
+                                        () => _editInfo("Telefon", (val) {
+                                          if (val.isNotEmpty &&
+                                              val.runes.every(
+                                                (c) => c >= 48 && c <= 57,
+                                              )) {
+                                            setState(() {
+                                              customer.mobilePhoneNumber = val;
+                                              phone =
+                                                  customer.mobilePhoneNumber;
+                                              ImatDataHandler().setCustomer(
+                                                customer,
+                                              );
+                                            });
+                                          }
+                                          //Ger felmeddelande om telefon är ogiltig
+                                          else {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Ogiltigt telefonnummer',
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }),
+                                  ),
+
+                                  //Container adress
+                                  _infoCard(
+                                    icon: Icons.home_outlined,
+                                    title: "Address",
+                                    info: address,
+                                    onEdit:
+                                        () => _editInfo("Address", (val) {
+                                          //Editar adress både i databasen och i UI om den är giltig
+                                          if (val.isNotEmpty) {
+                                            setState(() {
+                                              customer.address = val;
+                                              address = customer.address;
+                                              ImatDataHandler().setCustomer(
+                                                customer,
+                                              );
+                                            });
+                                          }
+                                          //Ger felmeddelande om adress är ogiltig
+                                          else {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text('Ogiltig adress'),
+                                              ),
+                                            );
+                                          }
+                                        }),
+                                  ),
+
+                                  //Container postnummer
+                                  _infoCard(
+                                    icon: Icons.location_on_outlined,
+                                    title: "Postnummer",
+                                    info: postal,
+                                    onEdit:
+                                        () => _editInfo("Postnummer", (val) {
+                                          //Editar postnummer både i databasen och i UI om den är giltig
+                                          if (val.length == 5 &&
+                                              val.runes.every(
+                                                (c) => c >= 48 && c <= 57,
+                                              )) {
+                                            setState(() {
+                                              customer.postCode = val;
+                                              postal = customer.postCode;
+                                              ImatDataHandler().setCustomer(
+                                                customer,
+                                              );
+                                            });
+                                          }
+                                          //Ger felmeddelande om postnummer är ogiltig
+                                          else {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Ogiltigt postnummer',
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }),
+                                  ),
+
+                                  //Container postadress
+                                  _infoCard(
+                                    icon: Icons.inbox_outlined,
+                                    title: "Postaddress",
+                                    info: postAddress,
+                                    onEdit:
+                                        () => _editInfo("Postaddress", (val) {
+                                          //Editar adress både i databasen och i UI om den är giltig
+                                          if (val.isNotEmpty) {
+                                            setState(() {
+                                              customer.postAddress = val;
+                                              postAddress =
+                                                  customer.postAddress;
+                                              ImatDataHandler().setCustomer(
+                                                customer,
+                                              );
+                                            });
+                                          }
+                                          //Ger felmeddelande om adress är ogiltig
+                                          else {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Ogiltig postadress',
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 100),
+                            Footer(),
+                            const SizedBox(height: 32),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0, left: 16.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            width: 200,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: AppTheme.darkblue,
+                            ),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(16),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+                              },
+                              child: Center(
+                                child: Text(
+                                  'Tillbaka till Startsida',
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    color: AppTheme.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 24),
-
-                        //Container för kundens info:
-                        //E-post, telefon, adress och postnummer
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.85,
-                          child: Column(
-                            children: [
-                              //Container epost
-                              _infoCard(
-                                icon: Icons.email_outlined,
-                                title: "E-post",
-                                info: email,
-                                onEdit:
-                                    //Editar E-post både i databasen och i UI om den är giltig
-                                    () => _editInfo("E-post", (val) {
-                                      if (val.contains("@") &&
-                                          val.contains(".")) {
-                                        setState(() {
-                                          customer.email = val;
-                                          email = customer.email;
-                                          ImatDataHandler().setCustomer(
-                                            customer,
-                                          );
-                                        });
-                                      }
-                                      //Ger felmeddelande om e-post är ogiltig
-                                      else {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Ogiltig e-postadress',
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    }),
-                              ),
-
-                              //Container telefon
-                              _infoCard(
-                                icon: Icons.phone_outlined,
-                                title: "Telefon",
-                                info: phone,
-                                onEdit:
-                                    //Editar telefon både i databasen och i UI om den är giltig
-                                    () => _editInfo("Telefon", (val) {
-                                      if (val.isNotEmpty &&
-                                          val.runes.every(
-                                            (c) => c >= 48 && c <= 57,
-                                          )) {
-                                        setState(() {
-                                          customer.mobilePhoneNumber = val;
-                                          phone = customer.mobilePhoneNumber;
-                                          ImatDataHandler().setCustomer(
-                                            customer,
-                                          );
-                                        });
-                                      }
-                                      //Ger felmeddelande om telefon är ogiltig
-                                      else {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Ogiltigt telefonnummer',
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    }),
-                              ),
-
-                              //Container adress
-                              _infoCard(
-                                icon: Icons.home_outlined,
-                                title: "Address",
-                                info: address,
-                                onEdit:
-                                    () => _editInfo("Address", (val) {
-                                      //Editar adress både i databasen och i UI om den är giltig
-                                      if (val.isNotEmpty) {
-                                        setState(() {
-                                          customer.address = val;
-                                          address = customer.address;
-                                          ImatDataHandler().setCustomer(
-                                            customer,
-                                          );
-                                        });
-                                      }
-                                      //Ger felmeddelande om adress är ogiltig
-                                      else {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Ogiltig adress'),
-                                          ),
-                                        );
-                                      }
-                                    }),
-                              ),
-
-                              //Container postnummer
-                              _infoCard(
-                                icon: Icons.location_on_outlined,
-                                title: "Postnummer",
-                                info: postal,
-                                onEdit:
-                                    () => _editInfo("Postnummer", (val) {
-                                      //Editar postnummer både i databasen och i UI om den är giltig
-                                      if (val.length == 5 &&
-                                          val.runes.every(
-                                            (c) => c >= 48 && c <= 57,
-                                          )) {
-                                        setState(() {
-                                          customer.postCode = val;
-                                          postal = customer.postCode;
-                                          ImatDataHandler().setCustomer(
-                                            customer,
-                                          );
-                                        });
-                                      }
-                                      //Ger felmeddelande om postnummer är ogiltig
-                                      else {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Ogiltigt postnummer',
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    }),
-                              ),
-
-                              //Container postadress
-                              _infoCard(
-                                icon: Icons.inbox_outlined,
-                                title: "Postaddress",
-                                info: postAddress,
-                                onEdit:
-                                    () => _editInfo("Postaddress", (val) {
-                                      //Editar adress både i databasen och i UI om den är giltig
-                                      if (val.isNotEmpty) {
-                                        setState(() {
-                                          customer.postAddress = val;
-                                          postAddress = customer.postAddress;
-                                          ImatDataHandler().setCustomer(
-                                            customer,
-                                          );
-                                        });
-                                      }
-                                      //Ger felmeddelande om adress är ogiltig
-                                      else {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Ogiltig postadress'),
-                                          ),
-                                        );
-                                      }
-                                    }),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 100),
-                        Footer(),
-                        const SizedBox(height: 32),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
