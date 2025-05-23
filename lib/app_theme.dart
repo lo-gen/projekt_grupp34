@@ -63,3 +63,44 @@ class StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
 }
 
 
+
+
+class HoverableCategory extends StatefulWidget {
+  final String text;
+  final VoidCallback onTap;
+  const HoverableCategory({required this.text, required this.onTap});
+
+  @override
+  State<HoverableCategory> createState() => _HoverableCategoryState();
+}
+
+class _HoverableCategoryState extends State<HoverableCategory> {
+  bool _hovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovering = true),
+      onExit: (_) => setState(() => _hovering = false),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: widget.onTap,
+        child: Container(
+          color: _hovering ? Colors.black.withOpacity(0.2) : Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              fontSize: 22,
+              color: _hovering ? Colors.black : Colors.black,
+              fontWeight: _hovering ? FontWeight.bold : FontWeight.normal,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ),
+    );
+  }
+}
+

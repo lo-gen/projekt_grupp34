@@ -19,15 +19,16 @@ class ProductCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(bottom: 1),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
+              alignment: Alignment.center,
               height: 125,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: iMat.getImage(product),
               ),
-              clipBehavior: Clip.hardEdge,
-              child: iMat.getImage(product),
             ),
             SizedBox(height: AppTheme.paddingSmall),
             Padding(

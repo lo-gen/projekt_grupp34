@@ -117,6 +117,7 @@ class _KategorisidaState extends State<Kategorisida> {
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
+            pinned: true,
             delegate: StickyHeaderDelegate(
               child: Header(),
               height: 130,
