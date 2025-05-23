@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
     //Colors
+    static const Color darkestblue = Color.fromARGB(255, 22, 29, 74);
     static const Color darkblue = Color.fromARGB(255, 40, 80, 119);
     static const Color ligtblue = Color.fromARGB(255, 31, 111, 139);
     static const Color white = Color.fromARGB(255, 255, 255, 255);
@@ -62,4 +63,45 @@ class StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
+
+
+
+class HoverableCategory extends StatefulWidget {
+  final String text;
+  final VoidCallback onTap;
+  const HoverableCategory({required this.text, required this.onTap});
+
+  @override
+  State<HoverableCategory> createState() => _HoverableCategoryState();
+}
+
+class _HoverableCategoryState extends State<HoverableCategory> {
+  bool _hovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovering = true),
+      onExit: (_) => setState(() => _hovering = false),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: widget.onTap,
+        child: Container(
+          color: _hovering ? Colors.black.withOpacity(0.2) : Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              fontSize: 22,
+              color: _hovering ? Colors.black : Colors.black,
+              fontWeight: _hovering ? FontWeight.bold : FontWeight.normal,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ),
+    );
+  }
+}
 

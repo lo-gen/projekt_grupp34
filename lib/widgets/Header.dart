@@ -42,7 +42,8 @@ class Header extends StatelessWidget {
                   height: 40,
                   child: 
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: AppTheme.ligtblue),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.ligtblue,),
                       onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => LeveranstiderPage()));
                     }, 

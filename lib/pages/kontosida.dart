@@ -63,60 +63,73 @@ class _KontosidaState extends State<Kontosida> {
     required VoidCallback onEdit,
   }) {
     return Card(
+      
       color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
       elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      /* shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(2),
+      side: BorderSide(
+        color: AppTheme.darkestblue, 
+        width: 2, 
+      ),
+      ), */
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(width: 8),
-            Icon(icon, size: 36, color: Colors.black87),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      decoration: TextDecoration.underline,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    info,
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-            InkWell(
-              onTap: onEdit,
-              child: Row(
-                children: const [
-                  Icon(Icons.edit_outlined, color: Color(0xFF8B0000), size: 22),
-                  SizedBox(width: 2),
-                  Text(
-                    "Ändra",
-                    style: TextStyle(
-                      color: Color(0xFF8B0000),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-          ],
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+        const SizedBox(width: 8),
+        Icon(icon, size: 48, color: AppTheme.darkestblue),
+        const SizedBox(width: 10),
+        Container(
+          width: 2,
+          height: 80,
+          color: AppTheme.darkestblue,
         ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 26,
+              decoration: TextDecoration.underline,
+              color: AppTheme.darkestblue,
+            ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+            info,
+            style: const TextStyle(fontSize: 20, color: AppTheme.darkestblue),
+            ),
+          ],
+          ),
+        ),
+        InkWell(
+          onTap: onEdit,
+          child: Row(
+          children: const [
+            Icon(Icons.edit_outlined, color: Color(0xFF8B0000), size: 22),
+            SizedBox(width: 2),
+            Text(
+            "Ändra",
+            style: TextStyle(
+              color: Color(0xFF8B0000),
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              decoration: TextDecoration.underline,
+            ),
+            ),
+          ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        ],
+      ),
       ),
     );
   }
@@ -162,10 +175,10 @@ class _KontosidaState extends State<Kontosida> {
                             const Text(
                               "Dina uppgifter",
                               style: TextStyle(
-                                fontSize: 36,
+                                fontSize: 48,
                                 fontWeight: FontWeight.w400,
                                 decoration: TextDecoration.underline,
-                                color: Colors.black,
+                                color: AppTheme.darkestblue,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -194,7 +207,7 @@ class _KontosidaState extends State<Kontosida> {
                                   style: const TextStyle(
                                     fontSize: 48,
                                     fontWeight: FontWeight.w400,
-                                    color: Colors.black,
+                                    color: AppTheme.darkestblue,
                                   ),
                                 ),
                               ),

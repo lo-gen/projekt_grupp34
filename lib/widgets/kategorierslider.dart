@@ -80,22 +80,28 @@ class Kategorierslider extends StatelessWidget {
                   child: Center(child: CircularProgressIndicator()),
                 )
               else
-                ...categories.map((cat) => InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Kategorisida(categoryNames[cat] ?? cat.name),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
-                    child: Text(
-                      categoryNames[cat] ?? cat.name,
-                      style: TextStyle(fontSize: 22),
+                ...List.generate(categories.length, (i) => Column(
+                  children: [
+                    HoverableCategory(
+                      text: categoryNames[categories[i]] ?? categories[i].name,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Kategorisida(categoryNames[categories[i]] ?? categories[i].name),
+                          ),
+                        );
+                      },
                     ),
-                  ),
+                    if (i != categories.length - 1)
+                      Divider(
+                        color: Colors.grey.shade400,
+                        thickness: 1,
+                        height: 0,
+                        indent: 8,
+                        endIndent: 8,
+                      ),
+                  ],
                 )),
             ],
           ),
