@@ -18,6 +18,7 @@ class KundvagnView extends StatelessWidget {
       children: [
         // Header med titel och stäng-knapp
         Container(
+          height: 130,
           color: AppTheme.darkblue, // Ändrad till mörkblå
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
@@ -54,9 +55,19 @@ class KundvagnView extends StatelessWidget {
                       leading: SizedBox(
                         width: 48,
                         height: 48,
-                        child: dataHandler.getImage(item.product),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10), // Justera värdet för mer/mindre rundning
+                          child: dataHandler.getImage(item.product),
+                        ),
                       ),
-                      title: Text(item.product.name),
+                      title: Text(
+                        item.product.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       subtitle: Row(
                         children: [
                           IconButton(
@@ -77,6 +88,21 @@ class KundvagnView extends StatelessWidget {
                               );
                             },
                           ),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(width: 16), // Luft till höger om priset
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                       trailing: DeleteButton(
@@ -95,6 +121,29 @@ class KundvagnView extends StatelessWidget {
                   ),
               ],
             ),
+          ),
+        ),
+        // Lägg till detta innan Padding med knappen
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Totalt:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
         Padding(
