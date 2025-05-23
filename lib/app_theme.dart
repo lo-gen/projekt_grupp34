@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
     //Colors
+    static const Color darkestblue = Color.fromARGB(255, 22, 29, 74);
     static const Color darkblue = Color.fromARGB(255, 40, 80, 119);
     static const Color ligtblue = Color.fromARGB(255, 31, 111, 139);
     static const Color white = Color.fromARGB(255, 255, 255, 255);
