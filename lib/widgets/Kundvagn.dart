@@ -21,25 +21,58 @@ class KundvagnView extends StatelessWidget {
           height: 130,
           color: AppTheme.darkblue, // Ändrad till mörkblå
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  'Kundvagn (${items.fold<int>(0, (sum, item) => sum + (item.amount as int))} varor)',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white, // Gör rubriken vit för kontrast
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Kundvagn (${items.fold<int>(0, (sum, item) => sum + (item.amount as int))} varor)',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    tooltip: 'Stäng',
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
               ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                tooltip: 'Stäng',
-                color: Colors.white, // Gör även krysset vitt
+              const SizedBox(height: 8),
+              ElevatedButton(
+                style: ButtonStyle(
+                  mouseCursor: MaterialStateProperty.resolveWith<MouseCursor>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.hovered)) {
+                        return SystemMouseCursors.click;
+                      }
+                      return SystemMouseCursors.basic;
+                    },
+                  ),
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.hovered)) {
+                        return AppTheme.darkblue; // Färg vid hover
+                      }
+                      return AppTheme.ligtblue; // Standardfärg
+                    },
+                  ),
+                  foregroundColor: MaterialStateProperty.all(AppTheme.white),
+                  padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 24, vertical: 10)),
+                  textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  // Funktionalitet här
                 },
+                child: const Text('Lägg till som inköpslista'),
               ),
             ],
           ),
@@ -153,7 +186,12 @@ class KundvagnView extends StatelessWidget {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.ligtblue,
-                foregroundColor: AppTheme.white, // Gör texten vit
+                foregroundColor: AppTheme.white,
+                minimumSize: const Size(0, 56), // Gör knappen högre (t.ex. 56 px)
+                textStyle: const TextStyle(
+                  fontSize: 20, // Större text
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Betalsida()));
