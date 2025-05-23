@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:projekt_grupp34/model/imat_data_handler.dart';
+import 'package:projekt_grupp34/model/imat/shopping_item.dart';
 import 'package:projekt_grupp34/widgets/simple_header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
 
@@ -35,7 +38,7 @@ class _BetalsidaState extends State<Betalsida> {
                     _buildStepper(),
                     const SizedBox(height: 24),
                     if (step == 0) _buildLeveranssatt(),
-                    if (step == 1) _buildOversikt(),
+                    if (step == 1) _buildOversikt(context), // Pass context here
                     if (step == 2) _buildBetala(),
                     if (step == 3) _buildBekraftelse(),
                   ],
@@ -129,7 +132,15 @@ class _BetalsidaState extends State<Betalsida> {
     );
   }
 
-  Widget _buildOversikt() {
+  Widget _buildOversikt(BuildContext context) {
+    final imat = Provider.of<ImatDataHandler>(context);
+    final cart = imat.getShoppingCart();
+    final items = cart.items;
+    final total = items.fold<double>(
+      0,
+      (sum, item) => sum + (item.product.price * item.amount),
+    );
+
     return Column(
       children: [
         const SizedBox(height: 16),
@@ -142,19 +153,26 @@ class _BetalsidaState extends State<Betalsida> {
           color: Colors.white,
           padding: const EdgeInsets.all(16),
           child: Column(
-            children: const [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text("5x ägg.............................................50kr"),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text("1x fil.................................................30kr"),
-              ),
-              SizedBox(height: 8),
+            children: [
+              if (items.isEmpty)
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Kundvagnen är tom."),
+                )
+              else
+                ...items.map((item) => Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "${item.amount}x ${item.product.name} - ${(item.product.price * item.amount).toStringAsFixed(2)} kr",
+                      ),
+                    )),
+              const SizedBox(height: 8),
               Align(
                 alignment: Alignment.centerRight,
-                child: Text("Totalt: 330kr", style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Text(
+                  "Totalt: ${total.toStringAsFixed(2)} kr",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),

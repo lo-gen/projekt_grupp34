@@ -43,7 +43,16 @@ class Header extends StatelessWidget {
                   child: 
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.ligtblue,),
+                        backgroundColor: AppTheme.ligtblue,
+                        side: BorderSide(width: 0.5, color: AppTheme.white),
+                        elevation: 8,
+                        shadowColor: Colors.black54,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        foregroundColor: Colors.white.withOpacity(0.1),
+                        ),
                       onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => LeveranstiderPage()));
                     }, 
@@ -56,7 +65,18 @@ class Header extends StatelessWidget {
                   height: 40,
                   child: 
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: AppTheme.ligtblue,),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.ligtblue,
+                        side: BorderSide(width: 0.5, color: AppTheme.white),
+                        elevation: 8,
+                        shadowColor: Colors.black54,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        foregroundColor: Colors.white.withOpacity(0.1),
+                      ),
+
                       onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => Kontosida()));
                     }, 
@@ -71,7 +91,16 @@ class Header extends StatelessWidget {
                   height: 40,
                   child: 
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: AppTheme.ligtblue),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.ligtblue,
+                        side: BorderSide(width: 0.5, color: AppTheme.white),
+                        elevation: 8,
+                        shadowColor: Colors.black54,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        foregroundColor: Colors.white.withOpacity(0.1),                        ),
                       onPressed: () {
                       //Navigator.push(context, MaterialPageRoute(builder: (context) => Listor()));
                     }, 
@@ -84,7 +113,17 @@ class Header extends StatelessWidget {
                   height: 40,
                   child: 
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: AppTheme.ligtblue),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.ligtblue,
+                        side: BorderSide(width: 0.5, color: AppTheme.white),
+                        elevation: 8,
+                        shadowColor: Colors.black54,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        foregroundColor: Colors.white.withOpacity(0.1),
+                        ),
                       onPressed: () {
   showDialog(
     context: context,
