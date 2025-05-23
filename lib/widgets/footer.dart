@@ -18,6 +18,7 @@ class Footer extends StatelessWidget {
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(width: AppTheme.paddingHuge),
                 Column(
