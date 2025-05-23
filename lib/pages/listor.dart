@@ -57,36 +57,7 @@ class _ListorPageState extends State<ListorPage> {
     }
   }
 
-  Widget _buildItemsGrid(String listType) {
-    var imat = context.watch<ImatDataHandler>();
-  
-    // Choose the correct list based on listType
-    List<Product> products = [];
-    List<Order> orders = [];
-    if (listType == 'Favoriter') {
-      products = imat.favorites;
-      orders = []; // No orders for favorites
-    } else  if (listType == 'Inköpslistor') {
-      products = []; 
-      products;
-      //TODO - skapa widget för att visa ordrar och 
-      //inköpslistor (kan vara samma widget)
-      //Tänker sedan att man gör en popup som innehåller
-      //lista med varje produkt som finns med i ordern
-      //och med en knapp för att lägga till i varukorg (också knapp för 
-      //att lägga till hela order i varukorg)
-
-      //TODO - Se till att nedan Padding bara visas när Favorites är selectad.
-    } else if (listType == 'Tidigare köp') {
-      orders = imat.orders;
-    } else { 
-      products = []; // Default case
-    }
-
-    if (products.isEmpty && orders.isEmpty) {
-      return Center(child: Text('Finns inga $listType sparade.'));
-    }
-
+  Widget favorites(List<Product> products) {
     // Show a grid of ProductCards (Should only be displayed for favorites)
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
@@ -105,6 +76,75 @@ class _ListorPageState extends State<ListorPage> {
         },
       ),
     );
+  }
+
+  Widget _buildItemsGrid(String listType) {
+    var imat = context.watch<ImatDataHandler>();
+
+    // Choose the correct list based on listType
+    List<Product> products = [];
+    List<Order> orders = [];
+
+    if (listType == 'Favoriter') {
+      products = imat.favorites;
+      orders = []; // No orders for favorites
+      if (products.isEmpty && orders.isEmpty) {
+        return Center(child: Text('Det finns inga $listType sparade.'));
+      }
+
+      return favorites(products);
+    } else if (listType == 'Inköpslistor') {
+      products = [];
+      //TODO - Byt ut imat.orders till sätt att ta inköpslistor
+      orders = imat.orders;
+
+      return Padding(
+        //TEMPORARY THINGY!!!!!!!!!
+        //TODO - skapa widget för att visa ordrar och
+        //inköpslistor (kan vara samma widget)
+        //Tänker sedan att man gör en popup som innehåller
+        //lista med varje produkt som finns med i ordern
+        //och med en knapp för att lägga till i varukorg (också knapp för
+        //att lägga till hela order i varukorg)
+
+        //TODO - Se till att nedan Padding bara visas när Favorites är selectad.
+        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+        child: Text("Temporary thingy for orders"),
+      );
+    } else if (listType == 'Tidigare köp') {
+      orders = imat.orders;
+      products = [];
+
+      return Padding(
+        //TEMPORARY THINGY!!!!!!!!!
+        //TODO - skapa widget för att visa ordrar och
+        //inköpslistor (kan vara samma widget)
+        //Tänker sedan att man gör en popup som innehåller
+        //lista med varje produkt som finns med i ordern
+        //och med en knapp för att lägga till i varukorg (också knapp för
+        //att lägga till hela order i varukorg)
+
+        //TODO - Se till att nedan Padding bara visas när Favorites är selectad.
+        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+        child: Text("Temporary thingy for orders"),
+      );
+    } else {
+      products = []; // Default case
+      orders = []; // Default case
+      return Padding(
+        //TEMPORARY THINGY!!!!!!!!!
+        //TODO - skapa widget för att visa ordrar och
+        //inköpslistor (kan vara samma widget)
+        //Tänker sedan att man gör en popup som innehåller
+        //lista med varje produkt som finns med i ordern
+        //och med en knapp för att lägga till i varukorg (också knapp för
+        //att lägga till hela order i varukorg)
+
+        //TODO - Se till att nedan Padding bara visas när Favorites är selectad.
+        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+        child: Text("Temporary thingy for nothing selected"),
+      );
+    }
   }
 
   @override
