@@ -100,6 +100,92 @@ class _ListorPageState extends State<ListorPage> {
     );
   }
 
+  Widget showPreviousOrders(List<Order> orders) {
+    return Column(
+      children:
+          orders.map((order) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 16.0,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.red.shade100,
+                    radius: 32,
+                    child: Icon(Icons.assignment, color: Colors.red, size: 36),
+                  ),
+                  title: Text(
+                    '${order.date.day} ${_monthName(order.date.month)}',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.darkestblue,
+                    ),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      '${order.items.length} varor',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: AppTheme.darkestblue.withOpacity(0.7),
+                      ),
+                    ),
+                  ),
+                    trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red, size: 28),
+                    onPressed: () {
+                      setState(() {
+                      orders.remove(order);
+                      // NOTE!!! This does not delete the order from the database,
+                      // it only removes it from the local list.
+                      });
+                    },
+                    ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+    );
+  }
+
+  // Helper to get Swedish month name
+  String _monthName(int month) {
+    const months = [
+      '',
+      'jan',
+      'feb',
+      'mar',
+      'apr',
+      'maj',
+      'jun',
+      'jul',
+      'aug',
+      'sep',
+      'okt',
+      'nov',
+      'dec',
+    ];
+    return months[month];
+  }
+
   Widget _buildItemsGrid(String listType) {
     var imat = context.watch<ImatDataHandler>();
 
@@ -120,10 +206,10 @@ class _ListorPageState extends State<ListorPage> {
       //TODO - Byt ut imat.orders till sätt att ta inköpslistor
       orders = imat.orders;
 
-      return Padding(
+    return Padding(
         //TEMPORARY THINGY!!!!!!!!!
         //TODO - skapa widget för att visa ordrar och
-        //inköpslistor (kan vara samma widget)
+        //tidigare köp (kan vara samma widget)
         //Tänker sedan att man gör en popup som innehåller
         //lista med varje produkt som finns med i ordern
         //och med en knapp för att lägga till i varukorg (också knapp för
@@ -135,17 +221,8 @@ class _ListorPageState extends State<ListorPage> {
       orders = imat.orders;
       products = [];
 
-      return Padding(
-        //TEMPORARY THINGY!!!!!!!!!
-        //TODO - skapa widget för att visa ordrar och
-        //tidigare köp (kan vara samma widget)
-        //Tänker sedan att man gör en popup som innehåller
-        //lista med varje produkt som finns med i ordern
-        //och med en knapp för att lägga till i varukorg (också knapp för
-        //att lägga till hela order i varukorg)
-        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-        child: Text("Temporary thingy for orders"),
-      );
+      
+      return showPreviousOrders(orders);
     } else {
       products = []; // Default case
       orders = []; // Default case
