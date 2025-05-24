@@ -128,8 +128,6 @@ class _ListorPageState extends State<ListorPage> {
         //lista med varje produkt som finns med i ordern
         //och med en knapp för att lägga till i varukorg (också knapp för
         //att lägga till hela order i varukorg)
-
-        //TODO - Se till att nedan Padding bara visas när Favorites är selectad.
         padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
         child: Text("Temporary thingy for orders"),
       );
@@ -140,13 +138,11 @@ class _ListorPageState extends State<ListorPage> {
       return Padding(
         //TEMPORARY THINGY!!!!!!!!!
         //TODO - skapa widget för att visa ordrar och
-        //inköpslistor (kan vara samma widget)
+        //tidigare köp (kan vara samma widget)
         //Tänker sedan att man gör en popup som innehåller
         //lista med varje produkt som finns med i ordern
         //och med en knapp för att lägga till i varukorg (också knapp för
         //att lägga till hela order i varukorg)
-
-        //TODO - Se till att nedan Padding bara visas när Favorites är selectad.
         padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
         child: Text("Temporary thingy for orders"),
       );
@@ -154,17 +150,8 @@ class _ListorPageState extends State<ListorPage> {
       products = []; // Default case
       orders = []; // Default case
       return Padding(
-        //TEMPORARY THINGY!!!!!!!!!
-        //TODO - skapa widget för att visa ordrar och
-        //inköpslistor (kan vara samma widget)
-        //Tänker sedan att man gör en popup som innehåller
-        //lista med varje produkt som finns med i ordern
-        //och med en knapp för att lägga till i varukorg (också knapp för
-        //att lägga till hela order i varukorg)
-
-        //TODO - Se till att nedan Padding bara visas när Favorites är selectad.
         padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-        child: Text("Temporary thingy for nothing selected"),
+        child: Text("If you see this, something went wrong!"),
       );
     }
   }
@@ -182,7 +169,7 @@ class _ListorPageState extends State<ListorPage> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: SizedBox(
                 width: double.infinity,
-                height: 100, // Adjust as needed for your tab/button height
+                height: 100,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -237,7 +224,7 @@ class _ListorPageState extends State<ListorPage> {
               ),
             ),
             const Divider(thickness: 1),
-            // List content
+            // Rest of the page content & footer
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
