@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/model/imat/order.dart';
 import 'package:projekt_grupp34/model/imat/product.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/pages/kategorisida.dart';
+import 'package:projekt_grupp34/pages/startsida.dart';
+import 'package:projekt_grupp34/widgets/Header.dart';
+import 'package:projekt_grupp34/widgets/kategorierslider.dart';
 import 'package:projekt_grupp34/widgets/product_card.dart';
 import 'package:projekt_grupp34/widgets/startsida_bild_och_kategorier.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +37,10 @@ class _ListorPageState extends State<ListorPage> {
         style: TextStyle(
           fontSize: isSelected ? 36 : 28,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? Colors.black : Colors.black.withOpacity(0.4),
+          color:
+              isSelected
+                  ? AppTheme.darkestblue
+                  : AppTheme.darkestblue.withOpacity(0.4),
           decoration:
               isSelected ? TextDecoration.underline : TextDecoration.none,
         ),
@@ -57,24 +64,38 @@ class _ListorPageState extends State<ListorPage> {
     }
   }
 
-  Widget favorites(List<Product> products) {
+  Widget showFavorites(List<Product> products) {
     // Show a grid of ProductCards (Should only be displayed for favorites)
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          childAspectRatio: 0.7,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(children: [SizedBox(height: AppTheme.paddingSmall)]),
+
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 6,
+                    childAspectRatio: 0.75,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    return ProductCard(products[index]);
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          return ProductCard(products[index]);
-        },
-      ),
+      ],
     );
   }
 
@@ -85,14 +106,14 @@ class _ListorPageState extends State<ListorPage> {
     List<Product> products = [];
     List<Order> orders = [];
 
+    //Main function to show the different lists
     if (listType == 'Favoriter') {
-      products = imat.favorites;
+      products = imat.selectProducts;
       orders = []; // No orders for favorites
       if (products.isEmpty && orders.isEmpty) {
         return Center(child: Text('Det finns inga $listType sparade.'));
       }
-
-      return favorites(products);
+      return showFavorites(products);
     } else if (listType == 'Inköpslistor') {
       products = [];
       //TODO - Byt ut imat.orders till sätt att ta inköpslistor
@@ -155,23 +176,22 @@ class _ListorPageState extends State<ListorPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Header(),
+
             // Tabs
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 32.0,
-                left: 32.0,
-                bottom: 8.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 100,
-                children: [
-                  _buildTab('Favoriter', ListType.favoriter),
-                  _buildTab('Inköpslistor', ListType.inkopslistor),
-                  _buildTab('Tidigare Köp', ListType.tidigareKop),
-                ],
-              ),
+
+            // Centered tabs
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildTab('Inköpslistor', ListType.inkopslistor),
+                SizedBox(width: 40),
+                _buildTab('Favoriter', ListType.favoriter),
+                SizedBox(width: 40),
+                _buildTab('Tidigare Köp', ListType.tidigareKop),
+              ],
             ),
+
             const Divider(thickness: 1),
             // List content
             Expanded(child: SingleChildScrollView(child: _buildListContent())),
