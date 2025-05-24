@@ -7,6 +7,7 @@ import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/pages/kategorisida.dart';
 import 'package:projekt_grupp34/pages/startsida.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
+import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/widgets/kategorierslider.dart';
 import 'package:projekt_grupp34/widgets/product_card.dart';
 import 'package:projekt_grupp34/widgets/startsida_bild_och_kategorier.dart';
@@ -108,7 +109,7 @@ class _ListorPageState extends State<ListorPage> {
 
     //Main function to show the different lists
     if (listType == 'Favoriter') {
-      products = imat.selectProducts;
+      products = imat.favorites;
       orders = []; // No orders for favorites
       if (products.isEmpty && orders.isEmpty) {
         return Center(child: Text('Det finns inga $listType sparade.'));
@@ -194,7 +195,23 @@ class _ListorPageState extends State<ListorPage> {
 
             const Divider(thickness: 1),
             // List content
-            Expanded(child: SingleChildScrollView(child: _buildListContent())),
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [_buildListContent(), Footer()],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
