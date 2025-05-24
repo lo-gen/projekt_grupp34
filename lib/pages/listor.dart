@@ -178,21 +178,64 @@ class _ListorPageState extends State<ListorPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Header(),
-
-            // Tabs
-
-            // Centered tabs
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildTab('Inköpslistor', ListType.inkopslistor),
-                SizedBox(width: 40),
-                _buildTab('Favoriter', ListType.favoriter),
-                SizedBox(width: 40),
-                _buildTab('Tidigare Köp', ListType.tidigareKop),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 100, // Adjust as needed for your tab/button height
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Centered tabs
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildTab('Inköpslistor', ListType.inkopslistor),
+                        SizedBox(width: 40),
+                        _buildTab('Favoriter', ListType.favoriter),
+                        SizedBox(width: 40),
+                        _buildTab('Tidigare Köp', ListType.tidigareKop),
+                      ],
+                    ),
+                    // Left-aligned back button
+                    Positioned(
+                      left: 16,
+                      child: Container(
+                        width: 200,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: AppTheme.darkblue,
+                        ),
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          },
+                          child: Center(
+                            child: Text(
+                              'Tillbaka till Startsida',
+                              style: TextStyle(
+                                fontSize: 28,
+                                color: AppTheme.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-
             const Divider(thickness: 1),
             // List content
             Expanded(
