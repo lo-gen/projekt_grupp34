@@ -123,9 +123,13 @@ class _ListorPageState extends State<ListorPage> {
                 ),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Colors.red.shade100,
+                    backgroundColor: AppTheme.darkblue.withOpacity(0.05),
                     radius: 32,
-                    child: Icon(Icons.assignment, color: Colors.red, size: 36),
+                    child: Icon(
+                      Icons.assignment,
+                      color: AppTheme.darkblue,
+                      size: 36,
+                    ),
                   ),
                   title: Text(
                     '${order.date.day} ${_monthName(order.date.month)}',
@@ -137,24 +141,48 @@ class _ListorPageState extends State<ListorPage> {
                   ),
                   subtitle: Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      '${order.items.length} varor',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: AppTheme.darkestblue.withOpacity(0.7),
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${order.items.length} varor',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: AppTheme.darkestblue,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: AppTheme.darkestblue,
+                          ),
+                          '${order.items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                        ),
+                      ],
                     ),
                   ),
-                    trailing: IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red, size: 28),
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: AppTheme.darkblue,
+                      size: 28,
+                    ),
                     onPressed: () {
                       setState(() {
-                      orders.remove(order);
-                      // NOTE!!! This does not delete the order from the database,
-                      // it only removes it from the local list.
+                        orders.remove(order);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Order ${order.date.day} ${_monthName(order.date.month)} raderad!',
+                            ),
+                          ),
+                        );
+                        // NOTE!!! This does not delete the order from the database,
+                        // it only removes it from the local list.
                       });
                     },
-                    ),
+                  ),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 16,
                     horizontal: 16,
@@ -195,7 +223,7 @@ class _ListorPageState extends State<ListorPage> {
 
     //Main function to show the different lists
     if (listType == 'Favoriter') {
-      products = imat.favorites;
+      products = imat.selectProducts;
       orders = []; // No orders for favorites
       if (products.isEmpty && orders.isEmpty) {
         return Center(child: Text('Det finns inga $listType sparade.'));
@@ -206,7 +234,7 @@ class _ListorPageState extends State<ListorPage> {
       //TODO - Byt ut imat.orders till sätt att ta inköpslistor
       orders = imat.orders;
 
-    return Padding(
+      return Padding(
         //TEMPORARY THINGY!!!!!!!!!
         //TODO - skapa widget för att visa ordrar och
         //tidigare köp (kan vara samma widget)
@@ -221,8 +249,9 @@ class _ListorPageState extends State<ListorPage> {
       orders = imat.orders;
       products = [];
 
-      
-      return showPreviousOrders(orders);
+      return Column(
+        children: [showPreviousOrders(orders), SizedBox(height: 14)],
+      );
     } else {
       products = []; // Default case
       orders = []; // Default case
@@ -254,11 +283,26 @@ class _ListorPageState extends State<ListorPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildTab('Inköpslistor', ListType.inkopslistor),
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: _buildTab(
+                            'Inköpslistor',
+                            ListType.inkopslistor,
+                          ),
+                        ),
                         SizedBox(width: 40),
-                        _buildTab('Favoriter', ListType.favoriter),
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: _buildTab('Favoriter', ListType.favoriter),
+                        ),
                         SizedBox(width: 40),
-                        _buildTab('Tidigare Köp', ListType.tidigareKop),
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: _buildTab(
+                            'Tidigare Köp',
+                            ListType.tidigareKop,
+                          ),
+                        ),
                       ],
                     ),
                     // Left-aligned back button
