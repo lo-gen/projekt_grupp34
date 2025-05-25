@@ -187,12 +187,228 @@ class _ListorPageState extends State<ListorPage> {
                     vertical: 16,
                     horizontal: 16,
                   ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+
+                      builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: AppTheme.white,
+                          title: Text(
+                            'Köp ifrån den ${order.date.day} ${_monthName(order.date.month)}:',
+                            textAlign: TextAlign.center,
+                          ),
+                          content: SizedBox(
+                            width: 300,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: order.items.length,
+                                    itemBuilder: (context, idx) {
+                                      final item = order.items[idx];
+                                      return Column(
+                                        children: [
+                                          ListTile(
+                                            title: Text(item.product.name),
+                                            subtitle: Text('${item.amount} st'),
+                                            trailing: Text(
+                                              '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                            ),
+                                          ),
+
+                                          // Add a Divider below each ListTile
+                                          Divider(
+                                            thickness: 1,
+                                            color: Colors.grey[300],
+                                            height: 1,
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'Total kostnad: ${order.items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          actions: [
+                            TextButton(
+                              child: Text('Stäng'),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             );
           }).toList(),
     );
   }
+
+
+  Widget showPurchaseList(List<Order> orders) {
+    return Column(
+      children:
+          orders.map((order) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 16.0,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: AppTheme.darkblue.withOpacity(0.05),
+                    radius: 32,
+                    child: Icon(
+                      Icons.assignment,
+                      color: AppTheme.darkblue,
+                      size: 36,
+                    ),
+                  ),
+                  title: Text(
+                    '${order.date.day} ${_monthName(order.date.month)}',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.darkestblue,
+                    ),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${order.items.length} varor',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: AppTheme.darkestblue,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: AppTheme.darkestblue,
+                          ),
+                          '${order.items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                        ),
+                      ],
+                    ),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: AppTheme.darkblue,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        orders.remove(order);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Order ${order.date.day} ${_monthName(order.date.month)} raderad!',
+                            ),
+                          ),
+                        );
+                        // NOTE!!! This does not delete the order from the database,
+                        // it only removes it from the local list.
+                      });
+                    },
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+
+                      builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: AppTheme.white,
+                          title: Text(
+                            'Köp ifrån den ${order.date.day} ${_monthName(order.date.month)}:',
+                            textAlign: TextAlign.center,
+                          ),
+                          content: SizedBox(
+                            width: 300,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: order.items.length,
+                                    itemBuilder: (context, idx) {
+                                      final item = order.items[idx];
+                                      return Column(
+                                        children: [
+                                          ListTile(
+                                            title: Text(item.product.name),
+                                            subtitle: Text('${item.amount} st'),
+                                            trailing: Text(
+                                              '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                            ),
+                                          ),
+
+                                          // Add a Divider below each ListTile
+                                          Divider(
+                                            thickness: 1,
+                                            color: Colors.grey[300],
+                                            height: 1,
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'Total kostnad: ${order.items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          actions: [
+                            TextButton(
+                              child: Text('Stäng'),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            );
+          }).toList(),
+    );
+  }
+
 
   // Helper to get Swedish month name
   String _monthName(int month) {
@@ -223,7 +439,7 @@ class _ListorPageState extends State<ListorPage> {
 
     //Main function to show the different lists
     if (listType == 'Favoriter') {
-      products = imat.selectProducts;
+      products = imat.favorites;
       orders = []; // No orders for favorites
       if (products.isEmpty && orders.isEmpty) {
         return Center(child: Text('Det finns inga $listType sparade.'));
@@ -231,19 +447,13 @@ class _ListorPageState extends State<ListorPage> {
       return showFavorites(products);
     } else if (listType == 'Inköpslistor') {
       products = [];
-      //TODO - Byt ut imat.orders till sätt att ta inköpslistor
+      //TODO - Byt ut imat.orders till sätt att ta inköpslistor!!
+      //Se även till att "ta bort" knappen inom showPurchaseList
+      //faktiskt gör detta i backend också!!!
       orders = imat.orders;
 
-      return Padding(
-        //TEMPORARY THINGY!!!!!!!!!
-        //TODO - skapa widget för att visa ordrar och
-        //tidigare köp (kan vara samma widget)
-        //Tänker sedan att man gör en popup som innehåller
-        //lista med varje produkt som finns med i ordern
-        //och med en knapp för att lägga till i varukorg (också knapp för
-        //att lägga till hela order i varukorg)
-        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-        child: Text("Temporary thingy for orders"),
+      return Column(
+        children: [showPurchaseList(orders), SizedBox(height: 14)],
       );
     } else if (listType == 'Tidigare köp') {
       orders = imat.orders;
