@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/pages/kontosida.dart';
 import 'package:projekt_grupp34/pages/leveranstider.dart';
+import 'package:projekt_grupp34/pages/listor.dart';
 import 'package:projekt_grupp34/widgets/Kundvagn.dart';
 import 'package:projekt_grupp34/widgets/Logo.dart';
 
@@ -106,9 +107,9 @@ class Header extends StatelessWidget {
                         textStyle: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) => Listor()));
-                      }, 
-                      child: const Text('Listor', style: TextStyle(fontSize: 26, color: Colors.white)),
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ListorPage()));
+                    }, 
+                      child: Text('Listor', style: TextStyle(fontSize: 26, color: AppTheme.white)),
                 ), 
                 ), 
                 SizedBox(width: AppTheme.paddingSmall,), 

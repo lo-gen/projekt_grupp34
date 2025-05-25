@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/pages/kategorisida.dart';
 import 'package:projekt_grupp34/model/imat/product.dart';
+import 'package:projekt_grupp34/pages/listor.dart';
 
 class StartsidaBildOchKategorier extends StatelessWidget {
   const StartsidaBildOchKategorier({super.key});
@@ -147,7 +148,7 @@ class StartsidaBildOchKategorier extends StatelessWidget {
                     backgroundColor: AppTheme.ligtblue,
                   ),
                   onPressed: () {
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => Listor()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ListorPage()));
                   },
                   child: Text(
                     'Till dina inköpslistor',

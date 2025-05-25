@@ -8,7 +8,7 @@ import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:provider/provider.dart';
 
 class Kontosida extends StatefulWidget {
-  const Kontosida({Key? key}) : super(key: key);
+  const Kontosida({super.key});
 
   @override
   State<Kontosida> createState() => _KontosidaState();

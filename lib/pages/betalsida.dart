@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/widgets/simple_header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
+import 'package:provider/provider.dart';
 
 class Betalsida extends StatefulWidget {
   const Betalsida({super.key});
@@ -75,7 +77,10 @@ class _BetalsidaState extends State<Betalsida> {
       ),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -145,16 +150,23 @@ class _BetalsidaState extends State<Betalsida> {
             children: const [
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text("5x ägg.............................................50kr"),
+                child: Text(
+                  "5x ägg.............................................50kr",
+                ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text("1x fil.................................................30kr"),
+                child: Text(
+                  "1x fil.................................................30kr",
+                ),
               ),
               SizedBox(height: 8),
               Align(
                 alignment: Alignment.centerRight,
-                child: Text("Totalt: 330kr", style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Text(
+                  "Totalt: 330kr",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
@@ -212,13 +224,12 @@ class _BetalsidaState extends State<Betalsida> {
         const SizedBox(height: 16),
         Row(
           children: [
-            Image.asset(
-              "assets/images/bankid.png",
-              height: 40,
-            ),
+            Image.asset("assets/images/bankid.png", height: 40),
             const SizedBox(width: 8),
             ElevatedButton(
               onPressed: () {
+                var imat = Provider.of<ImatDataHandler>(context, listen: false);
+                imat.placeOrder();
                 setState(() {
                   step = 3;
                 });
@@ -251,15 +262,16 @@ class _BetalsidaState extends State<Betalsida> {
           child: const Center(
             child: Text(
               "Betalning genomförd!",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
           ),
         ),
         const SizedBox(height: 24),
-        Image.asset(
-          "assets/images/gubbe.png",
-          height: 120,
-        ),
+        Image.asset("assets/images/gubbe.png", height: 120),
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: () {
