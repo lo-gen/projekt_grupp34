@@ -162,27 +162,7 @@ class _ListorPageState extends State<ListorPage> {
                       ],
                     ),
                   ),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: AppTheme.darkblue,
-                      size: 28,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        orders.remove(order);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Order ${order.date.day} ${_monthName(order.date.month)} raderad!',
-                            ),
-                          ),
-                        );
-                        // NOTE!!! This does not delete the order from the database,
-                        // it only removes it from the local list.
-                      });
-                    },
-                  ),
+
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 16,
                     horizontal: 16,
@@ -199,7 +179,7 @@ class _ListorPageState extends State<ListorPage> {
                             textAlign: TextAlign.center,
                           ),
                           content: SizedBox(
-                            width: 300,
+                            width: 450,
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
@@ -254,8 +234,7 @@ class _ListorPageState extends State<ListorPage> {
     );
   }
 
-
-  Widget showPurchaseList(List<Order> orders) {
+  Widget showPurchaseList(List<Order> orders, ImatDataHandler imat) {
     return Column(
       children:
           orders.map((order) {
@@ -286,6 +265,8 @@ class _ListorPageState extends State<ListorPage> {
                       size: 36,
                     ),
                   ),
+                  //TODO - Byt ut order.date.day och order.date.month till
+                  //namn på inköpslistan!!!
                   title: Text(
                     '${order.date.day} ${_monthName(order.date.month)}',
                     style: TextStyle(
@@ -312,31 +293,166 @@ class _ListorPageState extends State<ListorPage> {
                             fontSize: 18,
                             color: AppTheme.darkestblue,
                           ),
-                          '${order.items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                          'Totalkostnad: ${order.items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
                         ),
                       ],
                     ),
                   ),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: AppTheme.darkblue,
-                      size: 28,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        orders.remove(order);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Order ${order.date.day} ${_monthName(order.date.month)} raderad!',
-                            ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          for (var item in order.items) {
+                            imat.shoppingCartAdd(item);
+                          }
+                          ;
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.darkblue,
+                          foregroundColor: AppTheme.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 16,
                           ),
-                        );
-                        // NOTE!!! This does not delete the order from the database,
-                        // it only removes it from the local list.
-                      });
-                    },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'lägg till listan i kundvagn',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+
+                      IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                          color: AppTheme.darkblue,
+                          size: 28,
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: AppTheme.white,
+                                title: Text(
+                                  'Är du säker på att du vill ta bort inköpslistan?',
+                                  textAlign: TextAlign.center,
+                                ),
+                                content: SizedBox(
+                                  width: 300,
+                                  height: 160,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Denna åtgärd kan inte ångras.',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 16),
+                                      Text(
+                                        //TODO BYT UT order.date.day och order.date.month till
+                                        //namn på inköpslistan!!!
+                                        'Inköpslistan från den ${order.date.day} ${_monthName(order.date.month)} kommer att raderas.',
+                                        textAlign: TextAlign.center,
+                                      ),
+
+                                      SizedBox(height: 16),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppTheme.darkblue,
+                                          foregroundColor: AppTheme.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 24,
+                                            vertical: 12,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            orders.remove(order);
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Order ${order.date.day} ${_monthName(order.date.month)} raderad!',
+                                                ),
+                                              ),
+                                            );
+                                            Navigator.of(context).pop();
+                                            //TODO!! Set up function here to
+                                            //remove the order from the backend
+                                            // This is where you would call the method to remove the order
+                                            // For example:
+                                            //imat.removeList(order);
+                                          });
+                                        },
+                                        child: const Text(
+                                          'Ta bort inköpslista',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(height: 16),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color.fromARGB(
+                                            255,
+                                            255,
+                                            0,
+                                            0,
+                                          ),
+                                          foregroundColor: AppTheme.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 24,
+                                            vertical: 12,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                        child: const Text(
+                                          'Ångra',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 16,
@@ -349,12 +465,14 @@ class _ListorPageState extends State<ListorPage> {
                       builder: (context) {
                         return AlertDialog(
                           backgroundColor: AppTheme.white,
+                          //TODO - Byt ut order.date.day och order.date.month till
+                          //namn på inköpslistan!!!
                           title: Text(
-                            'Köp ifrån den ${order.date.day} ${_monthName(order.date.month)}:',
+                            'Inköpslista ifrån den ${order.date.day} ${_monthName(order.date.month)}:',
                             textAlign: TextAlign.center,
                           ),
                           content: SizedBox(
-                            width: 300,
+                            width: 450,
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
@@ -368,8 +486,59 @@ class _ListorPageState extends State<ListorPage> {
                                           ListTile(
                                             title: Text(item.product.name),
                                             subtitle: Text('${item.amount} st'),
-                                            trailing: Text(
-                                              '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                            trailing: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                
+                                                
+
+                                                Text(
+                                                  '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                                ),
+                                                SizedBox(width: 16),
+                                                
+                                                ElevatedButton(
+                                                  onPressed: () {},
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        AppTheme.darkblue,
+                                                    foregroundColor:
+                                                        AppTheme.white,
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 16,
+                                                          vertical: 8,
+                                                        ),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            8,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'lägg till',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  icon: Icon(
+                                                    Icons.delete,
+                                                    color: AppTheme.darkblue,
+                                                    size: 24,
+                                                  ),
+                                                  onPressed: () {
+                                                    //TODO Lägg till funktionalitet för att ta bort 
+                                                    //en vara från inköpslistan.
+                                                    //Exempelvis:
+                                                    //order.removeItem(item);
+                                                  },
+                                                ),
+                                              ],
                                             ),
                                           ),
 
@@ -408,7 +577,6 @@ class _ListorPageState extends State<ListorPage> {
           }).toList(),
     );
   }
-
 
   // Helper to get Swedish month name
   String _monthName(int month) {
@@ -453,7 +621,7 @@ class _ListorPageState extends State<ListorPage> {
       orders = imat.orders;
 
       return Column(
-        children: [showPurchaseList(orders), SizedBox(height: 14)],
+        children: [showPurchaseList(orders, imat), SizedBox(height: 14)],
       );
     } else if (listType == 'Tidigare köp') {
       orders = imat.orders;
