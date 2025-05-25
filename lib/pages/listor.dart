@@ -344,11 +344,13 @@ class _ListorPageState extends State<ListorPage> {
                                 backgroundColor: AppTheme.white,
                                 title: Text(
                                   'Är du säker på att du vill ta bort inköpslistan?',
-                                  textAlign: TextAlign.center,
+                                  textAlign: TextAlign.center, style: TextStyle(
+                                    fontSize: 24,
+                                    color: AppTheme.darkestblue,),
                                 ),
                                 content: SizedBox(
                                   width: 300,
-                                  height: 160,
+                                  height: 165,
                                   child: Column(
                                     children: [
                                       Text(
@@ -359,12 +361,16 @@ class _ListorPageState extends State<ListorPage> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(height: 16),
+                                      SizedBox(height: 18),
                                       Text(
                                         //TODO BYT UT order.date.day och order.date.month till
                                         //namn på inköpslistan!!!
                                         'Inköpslistan från den ${order.date.day} ${_monthName(order.date.month)} kommer att raderas.',
                                         textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: AppTheme.darkestblue,
+                                        ),
                                       ),
 
                                       SizedBox(height: 16),
@@ -489,16 +495,15 @@ class _ListorPageState extends State<ListorPage> {
                                             trailing: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                
-                                                
-
                                                 Text(
                                                   '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
                                                 ),
                                                 SizedBox(width: 16),
-                                                
+
                                                 ElevatedButton(
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    imat.shoppingCartAdd(item);
+                                                  },
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         AppTheme.darkblue,
@@ -532,7 +537,7 @@ class _ListorPageState extends State<ListorPage> {
                                                     size: 24,
                                                   ),
                                                   onPressed: () {
-                                                    //TODO Lägg till funktionalitet för att ta bort 
+                                                    //TODO Lägg till funktionalitet för att ta bort
                                                     //en vara från inköpslistan.
                                                     //Exempelvis:
                                                     //order.removeItem(item);
@@ -610,7 +615,7 @@ class _ListorPageState extends State<ListorPage> {
       products = imat.favorites;
       orders = []; // No orders for favorites
       if (products.isEmpty && orders.isEmpty) {
-        return Center(child: Text('Det finns inga $listType sparade.'));
+        return Center(child: Text('Det finns inga $listType sparade', style: TextStyle(fontSize: 24, color: AppTheme.darkestblue)));
       }
       return showFavorites(products);
     } else if (listType == 'Inköpslistor') {
@@ -618,14 +623,22 @@ class _ListorPageState extends State<ListorPage> {
       //TODO - Byt ut imat.orders till sätt att ta inköpslistor!!
       //Se även till att "ta bort" knappen inom showPurchaseList
       //faktiskt gör detta i backend också!!!
-      orders = imat.orders;
+      orders = imat.orders.reversed.toList();
+
+      if (products.isEmpty && orders.isEmpty) {
+        return Center(child: Text('Det finns inga $listType sparade', style: TextStyle(fontSize: 24, color: AppTheme.darkestblue)));
+      }
 
       return Column(
         children: [showPurchaseList(orders, imat), SizedBox(height: 14)],
       );
     } else if (listType == 'Tidigare köp') {
-      orders = imat.orders;
+      orders = imat.orders.reversed.toList();
       products = [];
+
+      if (products.isEmpty && orders.isEmpty) {
+        return Center(child: Text('Det finns inga $listType', style: TextStyle(fontSize: 24, color: AppTheme.darkestblue)));
+      }
 
       return Column(
         children: [showPreviousOrders(orders), SizedBox(height: 14)],
