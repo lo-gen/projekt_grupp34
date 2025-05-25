@@ -11,6 +11,7 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
     return Container(
       color: AppTheme.darkblue,  //header
       width: screenwidth, 
@@ -44,19 +45,20 @@ class Header extends StatelessWidget {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.ligtblue,
-                        side: BorderSide(width: 0.5, color: AppTheme.white),
+                        side: const BorderSide(width: 2, color: Colors.white),
                         elevation: 8,
                         shadowColor: Colors.black54,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        foregroundColor: Colors.white.withOpacity(0.1),
-                        ),
+                        foregroundColor: Colors.white,
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LeveranstiderPage()));
-                    }, 
-                      child: Text('Lev. tider', style: TextStyle(fontSize: 26, color: AppTheme.white)),
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => LeveranstiderPage()));
+                      }, 
+                      child: const Text('Lev. tider', style: TextStyle(fontSize: 26, color: Colors.white)),
                   ), 
                 ),
                 SizedBox(width: AppTheme.paddingSmall,), 
@@ -67,20 +69,20 @@ class Header extends StatelessWidget {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.ligtblue,
-                        side: BorderSide(width: 0.5, color: AppTheme.white),
+                        side: const BorderSide(width: 2, color: Colors.white),
                         elevation: 8,
                         shadowColor: Colors.black54,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        foregroundColor: Colors.white.withOpacity(0.1),
+                        foregroundColor: Colors.white,
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-
                       onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Kontosida()));
-                    }, 
-                      child: Text('Konto', style: TextStyle(fontSize: 26, color: AppTheme.white)),
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Kontosida()));
+                      }, 
+                      child: const Text('Konto', style: TextStyle(fontSize: 26, color: Colors.white)),
                 ), 
                 ),],),
             SizedBox(height: AppTheme.paddingSmall,),
@@ -93,18 +95,20 @@ class Header extends StatelessWidget {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.ligtblue,
-                        side: BorderSide(width: 0.5, color: AppTheme.white),
+                        side: const BorderSide(width: 2, color: Colors.white),
                         elevation: 8,
                         shadowColor: Colors.black54,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        foregroundColor: Colors.white.withOpacity(0.1),                        ),
+                        foregroundColor: Colors.white,
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       onPressed: () {
-                      //Navigator.push(context, MaterialPageRoute(builder: (context) => Listor()));
-                    }, 
-                      child: Text('Listor', style: TextStyle(fontSize: 26, color: AppTheme.white)),
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => Listor()));
+                      }, 
+                      child: const Text('Listor', style: TextStyle(fontSize: 26, color: Colors.white)),
                 ), 
                 ), 
                 SizedBox(width: AppTheme.paddingSmall,), 
@@ -115,45 +119,43 @@ class Header extends StatelessWidget {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.ligtblue,
-                        side: BorderSide(width: 0.5, color: AppTheme.white),
+                        side: const BorderSide(width: 2, color: Colors.white),
                         elevation: 8,
                         shadowColor: Colors.black54,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        foregroundColor: Colors.white.withOpacity(0.1),
-                        ),
+                        foregroundColor: Colors.white,
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       onPressed: () {
-  showDialog(
-    context: context,
-    barrierDismissible: true, // Klick utanför stänger panelen
-    builder: (context) {
-      return Stack(
-        children: [
-          // Transparent bakgrund
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
-            child: Container(
-              color: Colors.black54, // Mörk bakgrund, valfritt
-            ),
-          ),
-          // Själva panelen
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              width: 400, // Justera bredd efter behov
-              height: double.infinity,
-              color: Colors.white,
-              child: KundvagnView(),
-            ),
-          ),
-        ],
-      );
-    },
-  );
-},
-                      child: Text('Varukorg', style: TextStyle(fontSize: 26, color: AppTheme.white)),
+                        showGeneralDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          barrierLabel: "Varukorg",
+                          barrierColor: Colors.black54,
+                          transitionDuration: const Duration(milliseconds: 200),
+                          pageBuilder: (context, animation, secondaryAnimation) {
+                            double screenHeight = MediaQuery.of(context).size.height;
+                            return Align(
+                              alignment: Alignment.centerRight,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: SizedBox(
+                                  width: 400,
+                                  height: screenHeight,
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: KundvagnView(),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: const Text('Varukorg', style: TextStyle(fontSize: 26, color: Colors.white)),
                 ), 
                 ),                       
               ],
