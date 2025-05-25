@@ -578,4 +578,20 @@ import 'package:http/http.dart' as http;
 
     notifyListeners();
   }
+
+  String? _selectedDeliveryTime;
+  String? get selectedDeliveryTime => _selectedDeliveryTime;
+
+  void setSelectedDeliveryTime(String time) {
+    _selectedDeliveryTime = time;
+    notifyListeners();
+  }
+
+  String? _selectedDeliveryType;
+String? get selectedDeliveryType => _selectedDeliveryType;
+void setSelectedDeliveryType(String? type) {
+  _selectedDeliveryType = type;
+  notifyListeners();
+}
+
 }
