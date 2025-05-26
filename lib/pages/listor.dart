@@ -273,19 +273,130 @@ class _ListorPageState extends State<ListorPage> {
   }
 
   Widget showPurchaseList(Map<String, dynamic> lists, ImatDataHandler imat) {
+    ProductCategory parseProductCategory(String? category) {
+      if (category == null) {
+        throw ArgumentError('Category cannot be null');
+      }
+      switch (category.toUpperCase()) {
+        case 'BREAD':
+          return ProductCategory.BREAD;
+        case 'POD':
+          return ProductCategory.POD;
+        case 'BERRY':
+          return ProductCategory.BERRY;
+        case 'CITRUS_FRUIT':
+          return ProductCategory.CITRUS_FRUIT;
+        case 'HOT_DRINKS':
+          return ProductCategory.HOT_DRINKS;
+        case 'COLD_DRINKS':
+          return ProductCategory.COLD_DRINKS;
+        case 'EXOTIC_FRUIT':
+          return ProductCategory.EXOTIC_FRUIT;
+        case 'FISH':
+          return ProductCategory.FISH;
+        case 'VEGETABLE_FRUIT':
+          return ProductCategory.VEGETABLE_FRUIT;
+        case 'CABBAGE':
+          return ProductCategory.CABBAGE;
+        case 'MEAT':
+          return ProductCategory.MEAT;
+        case 'DAIRIES':
+          return ProductCategory.DAIRIES;
+        case 'MELONS':
+          return ProductCategory.MELONS;
+        case 'FLOUR_SUGAR_SALT':
+          return ProductCategory.FLOUR_SUGAR_SALT;
+        case 'NUTS_AND_SEEDS':
+          return ProductCategory.NUTS_AND_SEEDS;
+        case 'PASTA':
+          return ProductCategory.PASTA;
+        case 'POTATO_RICE':
+          return ProductCategory.POTATO_RICE;
+        case 'ROOT_VEGETABLE':
+          return ProductCategory.ROOT_VEGETABLE;
+        case 'FRUIT':
+          return ProductCategory.FRUIT;
+        case 'SWEET':
+          return ProductCategory.SWEET;
+        case 'HERB':
+          return ProductCategory.HERB;
+        case 'UNDEFINED':
+          return ProductCategory.UNDEFINED;
+        default:
+          throw ArgumentError('Unknown category: $category');
+      }
+    }
+
     return Column(
       children:
           lists.entries.map<Widget>((entry) {
             final listName = entry.key;
             print('entries: $entry');
             print('entry.value: ${entry.value}');
-            final items =
-                (entry.value as List)
-                    .map(
-                      (item) =>
-                          ShoppingItem.fromJson(item as Map<String, dynamic>),
-                    )
-                    .toList();
+
+            // Convert items by MANUALLY creating ShoppingItem objects
+            final List<ShoppingItem> items = [];
+            if (entry.value is List) {
+              final jsonItems = entry.value as List;
+
+              for (int i = 0; i < jsonItems.length; i++) {
+                try {
+                  if (jsonItems[i] is ShoppingItem) {
+                    // Already a ShoppingItem (happens during hot reload)
+                    items.add(jsonItems[i]);
+                  } else if (jsonItems[i] is Map) {
+                    final itemMap = jsonItems[i] as Map;
+
+                    if (itemMap['product'] is Map) {
+                      try {
+                        final productMap = Map<String, dynamic>.from(
+                          itemMap['product'],
+                        );
+                        print(
+                          'productMap: $productMap',
+                        ); // Debug print to inspect the productMap
+
+                        // Manually create a Product object
+                        final product = Product(
+                          productMap['productId'] ?? 0,
+                          parseProductCategory(productMap['category']),
+                          productMap['name'] ?? 'Unknown',
+                          productMap['isEcological'] ?? false,
+
+                          productMap['price'],
+                          productMap['unit'] ?? '',
+                          productMap['imageName'] ?? '',
+                        );
+
+                        // Manually create a ShoppingItem with the product
+                        final amount =
+                            (itemMap['amount'] is int)
+                                ? (itemMap['amount'] as int).toDouble()
+                                : itemMap['amount']?.toDouble() ?? 1.0;
+
+                        final shoppingItem = ShoppingItem(
+                          product,
+                          amount: amount,
+                        );
+                        items.add(shoppingItem);
+                      } catch (e) {
+                        print('Error manually creating item at index $i: $e');
+                        if (itemMap['product'] is Map) {
+                          print(
+                            'Problematic productMap: ${itemMap['product']}',
+                          );
+                        }
+                      }
+                    }
+                  }
+                } catch (e) {
+                  print('Error manually creating item at index $i: $e');
+                  if (jsonItems[i] is Map) {
+                    print('Problematic item: ${jsonItems[i]}');
+                  }
+                }
+              }
+            }
 
             print('listName: $listName');
             print('items: $items');
@@ -432,6 +543,7 @@ class _ListorPageState extends State<ListorPage> {
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
+                                  Text("Lägg till varor igenom varukorgen!"),
                                   ListView.builder(
                                     shrinkWrap: true,
                                     itemCount: items.length,
@@ -499,56 +611,60 @@ class _ListorPageState extends State<ListorPage> {
                               ),
                             ),
                           ),
-                          actions: [
-                            TextButton(
-                              child: Text('Stäng'),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                            TextButton(
-                              child: Text('Byt namn'),
-                              onPressed: () {
-                                final renameController = TextEditingController(
-                                  text: listName,
-                                );
+                            actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                              TextButton(
+                                child: Text('Stäng'),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              TextButton(
+                                child: Text('Byt namn'),
+                                onPressed: () {
+                                final renameController =
+                                  TextEditingController(text: listName);
                                 showDialog(
                                   context: context,
-                                  builder:
-                                      (context) => AlertDialog(
-                                        title: Text('Byt namn på inköpslista'),
-                                        content: TextField(
-                                          controller: renameController,
-                                          autofocus: true,
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed:
-                                                () =>
-                                                    Navigator.of(context).pop(),
-                                            child: Text('Avbryt'),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              final newName =
-                                                  renameController.text.trim();
-                                              if (newName.isNotEmpty &&
-                                                  newName != listName) {
-                                                // Manual rename: remove old, add new with same items
-                                                final items =
-                                                    imat.getExtras()[listName];
-                                                if (items != null) {
-                                                  imat.removeExtra(listName);
-                                                  imat.addExtra(newName, items);
-                                                }
-                                              }
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Spara'),
-                                          ),
-                                        ],
-                                      ),
+                                  builder: (context) => AlertDialog(
+                                  title: Text('Byt namn på inköpslista'),
+                                  content: TextField(
+                                    controller: renameController,
+                                    autofocus: true,
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                    onPressed: () =>
+                                      Navigator.of(context).pop(),
+                                    child: Text('Avbryt'),
+                                    ),
+                                    ElevatedButton(
+                                    onPressed: () {
+                                      final newName =
+                                        renameController.text.trim();
+                                      if (newName.isNotEmpty &&
+                                        newName != listName) {
+                                      final items =
+                                        imat.getExtras()[listName];
+                                      if (items != null) {
+                                        imat.removeExtra(listName);
+                                        imat.addExtra(
+                                        newName,
+                                        items,
+                                        );
+                                      }
+                                      }
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Spara'),
+                                    ),
+                                  ],
+                                  ),
                                 );
-                              },
+                                },
+                              ),
+                              ],
                             ),
                           ],
                         );
@@ -706,7 +822,6 @@ class _ListorPageState extends State<ListorPage> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(16),
                           onTap: () {
-                            imat.removeExtra('shoppinglist');
                             Navigator.push(
                               context,
                               MaterialPageRoute(
