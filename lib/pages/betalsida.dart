@@ -109,7 +109,7 @@ class _BetalsidaState extends State<Betalsida> {
     String? selectedType = imat.selectedDeliveryType;
     bool showTable = selectedType != null;
 
-    final newStartDate = leveransStartDate.subtract(const Duration(days: 3));
+    final newStartDate = startDate.subtract(const Duration(days: 3));
     final today = DateTime.now();
     final newStartDateDateOnly = DateTime(newStartDate.year, newStartDate.month, newStartDate.day);
     final todayDateOnly = DateTime(today.year, today.month, today.day);

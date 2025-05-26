@@ -709,6 +709,7 @@ class _ListorPageState extends State<ListorPage> {
                           title: Text(
                             'Inköpslista: $listName',
                             textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.darkestblue)
                           ),
                           content: SizedBox(
                             width: 600,
@@ -933,11 +934,43 @@ class _ListorPageState extends State<ListorPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 TextButton(
-                                  child: Text('Stäng'),
+                                  child: Text(style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),'Stäng'),
                                   onPressed: () => Navigator.of(context).pop(),
                                 ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    for (var item in items) {
+                                      imat.shoppingCartAdd(item);
+                                    }
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Alla produkter har lagts till i kundvagnen!'),
+                                        duration: Duration(seconds: 2),
+                                        backgroundColor: AppTheme.darkblue,
+                                        behavior: SnackBarBehavior.floating,
+                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppTheme.darkblue,
+                                    foregroundColor: AppTheme.white,
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Lägg till alla produkter i kundvagnen',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                                 TextButton(
-                                  child: Text('Byt namn'),
+                                  child: Text(style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),'Byt namn'),
                                   onPressed: () {
                                     final renameController =
                                         TextEditingController(text: listName);
