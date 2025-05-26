@@ -116,7 +116,7 @@ class _LeveranstiderPageState extends State<LeveranstiderPage> {
               timeIntervals: timeIntervals,
               slots: slots,
               onSelectSlot: (String slotValue) {
-                final imat = Provider.of<ImatDataHandler>(context, listen: false);
+                //final imat = Provider.of<ImatDataHandler>(context, listen: false);
                 imat.setSelectedDeliveryTime(slotValue);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("Leveranstid vald!")),

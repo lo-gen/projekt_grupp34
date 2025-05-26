@@ -77,7 +77,8 @@ class LeveranstiderGrid extends StatelessWidget {
                                 onTap: () {
                                   String slotValue =
                                       "${startDate.add(Duration(days: day)).toIso8601String()} ${timeIntervals[i]}";
-                                  onSelectSlot(slotValue);
+                                    onSelectSlot(slotValue);
+                                    
                                 },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,

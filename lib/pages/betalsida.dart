@@ -3,6 +3,7 @@ import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/widgets/simple_header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:provider/provider.dart';
+import '../widgets/LeveranstiderGrid.dart';
 
 class Betalsida extends StatefulWidget {
   const Betalsida({super.key});
@@ -43,7 +44,7 @@ class _BetalsidaState extends State<Betalsida> {
             child: Align(
               alignment: Alignment.topCenter,
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 500),
+                constraints: const BoxConstraints(maxWidth: 1000),
                 padding: const EdgeInsets.all(24),
                 color: const Color(0xFFF9F7F7),
                 child: Column(
@@ -108,12 +109,10 @@ class _BetalsidaState extends State<Betalsida> {
 
     // Generera tider: 10:00-10:30, 10:30-11:00, ..., 16:30-17:00
     List<String> timeIntervals = [];
-    for (int h = 10; h < 17; h++) {
-      timeIntervals.add(
-          '${h.toString().padLeft(2, '0')}:00-${h.toString().padLeft(2, '0')}:30');
-      timeIntervals.add(
-          '${h.toString().padLeft(2, '0')}:30-${(h + 1).toString().padLeft(2, '0')}:00');
+    for (int h = 8; h < 16; h += 2) {
+      timeIntervals.add('${h.toString().padLeft(2, '0')}:00-${(h + 2).toString().padLeft(2, '0')}:00');
     }
+
     final List<List<Map<String, dynamic>>> slots = List.generate(
       3,
       (_) => List.generate(
@@ -128,6 +127,12 @@ class _BetalsidaState extends State<Betalsida> {
     String? selectedDeliveryTime = imat.selectedDeliveryTime;
     String? selectedType = imat.selectedDeliveryType;
     bool showTable = selectedType != null;
+
+    final newStartDate = startDate.subtract(const Duration(days: 3));
+    final today = DateTime.now();
+    final newStartDateDateOnly = DateTime(newStartDate.year, newStartDate.month, newStartDate.day);
+    final todayDateOnly = DateTime(today.year, today.month, today.day);
+    final canGoBack = !newStartDateDateOnly.isBefore(todayDateOnly);
 
     return Column(
       children: [
@@ -177,7 +182,7 @@ class _BetalsidaState extends State<Betalsida> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back),
-                    onPressed: _showPreviousDays,
+                    onPressed: canGoBack ? _showPreviousDays : null, // <-- Viktigt!
                   ),
                   const SizedBox(width: 8),
                   const Text('Välj leveranstid', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -189,107 +194,42 @@ class _BetalsidaState extends State<Betalsida> {
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Table(
-                      border: TableBorder.all(),
-                      defaultColumnWidth: const FixedColumnWidth(140.0),
-                      children: [
-                        TableRow(
-                          children: [
-                            const TableCell(
-                              child: Center(child: Text('Tid', style: TextStyle(fontWeight: FontWeight.bold))),
-                            ),
-                            for (int day = 0; day < 3; day++)
-                              TableCell(
-                                child: Center(
-                                  child: Text(
-                                    "${weekdays[(startDate.add(Duration(days: day)).weekday - 1) % 7]} "
-                                    "${startDate.add(Duration(days: day)).day.toString().padLeft(2, '0')}/"
-                                    "${startDate.add(Duration(days: day)).month.toString().padLeft(2, '0')}",
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        for (int i = 0; i < timeIntervals.length; i++)
-                          TableRow(
-                            children: [
-                              TableCell(
-                                child: Center(child: Text(timeIntervals[i])),
-                              ),
-                              for (int day = 0; day < 3; day++)
-                                TableCell(
-                                  child: Center(
-                                    child: slots[day][i]['ledig']
-                                        ? InkWell(
-                                            borderRadius: BorderRadius.circular(8),
-                                            onTap: () {
-                                              String slotValue =
-                                                  "${startDate.add(Duration(days: day)).toIso8601String()} ${timeIntervals[i]}";
-                                              imat.setSelectedDeliveryTime(slotValue);
-                                              setState(() {});
-                                            },
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  selectedDeliveryTime ==
-                                                          "${startDate.add(Duration(days: day)).toIso8601String()} ${timeIntervals[i]}"
-                                                      ? Icons.check_circle
-                                                      : Icons.radio_button_unchecked,
-                                                  color: selectedDeliveryTime ==
-                                                          "${startDate.add(Duration(days: day)).toIso8601String()} ${timeIntervals[i]}"
-                                                      ? Colors.amber
-                                                      : Colors.green,
-                                                ),
-                                                Text('${slots[day][i]['pris']} kr'),
-                                              ],
-                                            ),
-                                          )
-                                        : const Icon(Icons.cancel, color: Colors.red),
-                                  ),
-                                ),
-                            ],
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
+              // Använd LeveranstiderGrid här:
+              LeveranstiderGrid(
+                startDate: startDate,
+                timeIntervals: timeIntervals,
+                slots: slots,
+                onSelectSlot: (String slotValue) {
+                  //final imat = Provider.of<ImatDataHandler>(context, listen: false);
+                  imat.setSelectedDeliveryTime(slotValue);
+                  setState(() {});
+                },
               ),
             ],
           ),
         const SizedBox(height: 32),
-        if (selectedDeliveryTime != null && selectedDeliveryTime.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Vald leveranstid: $selectedDeliveryTime",
-              style: const TextStyle(fontWeight: FontWeight.bold),
+        
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+              child: const Text("Tillbaka till startsidan"),
             ),
-          ),
-          Row( children: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
-          child: const Text("Tillbaka till startsidan"),
-        ),
-        SizedBox(width: 16),
-        if (selectedDeliveryTime != null && selectedDeliveryTime.isNotEmpty)
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                step = 1;
-              });
-            },
-            child: const Text("Fortsätt"),
-          ),
+            const SizedBox(width: 16),
+            if (selectedDeliveryTime != null && selectedDeliveryTime.isNotEmpty)
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    step = 1;
+                  });
+                },
+                child: const Text("Fortsätt"),
+              ),
           ],
-          ),
+        ),
       ],
     );
   }
