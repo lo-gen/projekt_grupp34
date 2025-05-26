@@ -181,7 +181,7 @@ class _ListorPageState extends State<ListorPage> {
                             textAlign: TextAlign.center,
                           ),
                           content: SizedBox(
-                            width: 450,
+                            width: 600,
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
@@ -198,7 +198,7 @@ class _ListorPageState extends State<ListorPage> {
                                             trailing: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                Text(
+                                                Text(style: TextStyle(fontSize: 16, color: AppTheme.darkestblue),
                                                   '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
                                                 ),
                                                 SizedBox(width: 16),
@@ -274,159 +274,145 @@ class _ListorPageState extends State<ListorPage> {
 
   Widget inkapsLista(listName, items, imat, context) {
     showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          backgroundColor: AppTheme.white,
-                          title: Text(
-                            'Inköpslista: $listName',
-                            textAlign: TextAlign.center,
-                          ),
-                          content: SizedBox(
-                            width: 450,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: items.length,
-                                    itemBuilder: (context, idx) {
-                                      final item = items[idx];
-                                      return Column(
-                                        children: [
-                                          ListTile(
-                                            title: Text(item.product.name),
-                                            subtitle: Text('${item.amount} st'),
-                                            trailing: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
-                                                ),
-                                                SizedBox(width: 16),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    imat.shoppingCartAdd(item);
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        AppTheme.darkblue,
-                                                    foregroundColor:
-                                                        AppTheme.white,
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 8,
-                                                        ),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            8,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    'lägg till',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  icon: Icon(Icons.delete, color: Colors.red),
-                                                  tooltip: 'Ta bort vara',
-                                                  onPressed: () {
-                                                    items.removeAt(idx);
-                                                    imat.addExtra(listName, List<ShoppingItem>.from(items));
-                                                    setState(() {});
-                                                    
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Divider(
-                                            thickness: 1,
-                                            color: Colors.grey[300],
-                                            height: 1,
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    'Total kostnad: ${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                            actions: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppTheme.white,
+          title: Text('Inköpslista: $listName', textAlign: TextAlign.center),
+          content: SizedBox(
+            width: 450,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: items.length,
+                    itemBuilder: (context, idx) {
+                      final item = items[idx];
+                      return Column(
+                        children: [
+                          ListTile(
+                            title: Text(item.product.name),
+                            subtitle: Text('${item.amount} st'),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                              TextButton(
-                                child: Text('Stäng'),
-                                onPressed: () => Navigator.of(context).pop(),
-                              ),
-                              TextButton(
-                                child: Text('Byt namn'),
-                                onPressed: () {
-                                final renameController =
-                                  TextEditingController(text: listName);
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                  title: Text('Byt namn på inköpslista'),
-                                  content: TextField(
-                                    controller: renameController,
-                                    autofocus: true,
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                    onPressed: () =>
-                                      Navigator.of(context).pop(),
-                                    child: Text('Avbryt'),
+                                Text(
+                                  '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                ),
+                                SizedBox(width: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    imat.shoppingCartAdd(item);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppTheme.darkblue,
+                                    foregroundColor: AppTheme.white,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
                                     ),
-                                    ElevatedButton(
-                                    onPressed: () {
-                                      final newName =
-                                        renameController.text.trim();
-                                      if (newName.isNotEmpty &&
-                                        newName != listName) {
-                                      final items =
-                                        imat.getExtras()[listName];
-                                      if (items != null) {
-                                        imat.removeExtra(listName);
-                                        imat.addExtra(
-                                        newName,
-                                        items,
-                                        );
-                                      }
-                                      }
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('Spara'),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                  ],
                                   ),
-                                );
-                                },
-                              ),
+                                  child: const Text(
+                                    'lägg till',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  tooltip: 'Ta bort vara',
+                                  onPressed: () {
+                                    items.removeAt(idx);
+                                    imat.addExtra(
+                                      listName,
+                                      List<ShoppingItem>.from(items),
+                                    );
+                                    setState(() {});
+                                  },
+                                ),
                               ],
                             ),
-                          ],
-                        );
-                      },
+                          ),
+                          Divider(
+                            thickness: 1,
+                            color: Colors.grey[300],
+                            height: 1,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Total kostnad: ${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  child: Text('Stäng'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: Text('Byt namn'),
+                  onPressed: () {
+                    final renameController = TextEditingController(
+                      text: listName,
                     );
-                    return Container(); // Return an empty container if this function is called
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: Text('Byt namn på inköpslista'),
+                            content: TextField(
+                              controller: renameController,
+                              autofocus: true,
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text('Avbryt'),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  final newName = renameController.text.trim();
+                                  if (newName.isNotEmpty &&
+                                      newName != listName) {
+                                    final items = imat.getExtras()[listName];
+                                    if (items != null) {
+                                      imat.removeExtra(listName);
+                                      imat.addExtra(newName, items);
+                                    }
+                                  }
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Spara'),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+    return Container(); // Return an empty container if this function is called
   }
-
 
   Widget showPurchaseList(Map<String, dynamic> lists, ImatDataHandler imat) {
     ProductCategory parseProductCategory(String? category) {
@@ -695,11 +681,10 @@ class _ListorPageState extends State<ListorPage> {
                             textAlign: TextAlign.center,
                           ),
                           content: SizedBox(
-                            width: 450,
+                            width: 600,
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  
                                   ListView.builder(
                                     shrinkWrap: true,
                                     itemCount: items.length,
@@ -713,8 +698,95 @@ class _ListorPageState extends State<ListorPage> {
                                             trailing: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                Text(
+                                                Text(style: TextStyle(fontSize: 16, color: AppTheme.darkestblue),
                                                   '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                                ),
+                                                SizedBox(width: 85),
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    // Increase amount by 1
+                                                    items[idx].amount -= 1;
+                                                    if (items[idx].amount < 1) {
+                                                      items.removeAt(idx);
+                                                    }
+                                                    // Update the list in imat
+                                                    imat.addExtra(
+                                                      listName,
+                                                      List<ShoppingItem>.from(
+                                                        items,
+                                                      ),
+                                                    );
+                                                    // Update the UI
+                                                    setState(() {});
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    
+                                                    backgroundColor:
+                                                        AppTheme.darkblue,
+                                                    foregroundColor:
+                                                        AppTheme.white,
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 12,
+                                                          vertical: 6,
+                                                        ),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            5,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    '-1', // Changed text to reflect new functionality
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 4),
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    // Increase amount by 1
+                                                    items[idx].amount += 1;
+                                                    // Update the list in imat
+                                                    imat.addExtra(
+                                                      listName,
+                                                      List<ShoppingItem>.from(
+                                                        items,
+                                                      ),
+                                                    );
+                                                    // Update the UI
+                                                    setState(() {});
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    
+                                                    backgroundColor:
+                                                        AppTheme.darkblue,
+                                                    foregroundColor:
+                                                        AppTheme.white,
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 12,
+                                                          vertical: 6,
+                                                        ),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            5,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    '+1', // Changed text to reflect new functionality
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
                                                 ),
                                                 SizedBox(width: 16),
                                                 ElevatedButton(
@@ -748,15 +820,22 @@ class _ListorPageState extends State<ListorPage> {
                                                   ),
                                                 ),
                                                 IconButton(
-                                                  icon: Icon(Icons.delete, color: Colors.red),
+                                                  icon: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  ),
                                                   tooltip: 'Ta bort vara',
                                                   onPressed: () {
                                                     items.removeAt(idx);
-                                                    imat.addExtra(listName, List<ShoppingItem>.from(items));
+                                                    imat.addExtra(
+                                                      listName,
+                                                      List<ShoppingItem>.from(
+                                                        items,
+                                                      ),
+                                                    );
                                                     setState(() {});
                                                     //TODO Eventuellt försöka få listan att förbli öppen
-                                                    Navigator.of(context).pop(); 
-                                                    
+                                                    Navigator.of(context).pop();
                                                   },
                                                 ),
                                               ],
@@ -779,59 +858,68 @@ class _ListorPageState extends State<ListorPage> {
                               ),
                             ),
                           ),
-                            actions: [
+                          actions: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                              TextButton(
-                                child: Text('Stäng'),
-                                onPressed: () => Navigator.of(context).pop(),
-                              ),
-                              TextButton(
-                                child: Text('Byt namn'),
-                                onPressed: () {
-                                final renameController =
-                                  TextEditingController(text: listName);
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                  title: Text('Byt namn på inköpslista'),
-                                  content: TextField(
-                                    controller: renameController,
-                                    autofocus: true,
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                    onPressed: () =>
-                                      Navigator.of(context).pop(),
-                                    child: Text('Avbryt'),
-                                    ),
-                                    ElevatedButton(
-                                    onPressed: () {
-                                      final newName =
-                                        renameController.text.trim();
-                                      if (newName.isNotEmpty &&
-                                        newName != listName) {
-                                      final items =
-                                        imat.getExtras()[listName];
-                                      if (items != null) {
-                                        imat.removeExtra(listName);
-                                        imat.addExtra(
-                                        newName,
-                                        items,
-                                        );
-                                      }
-                                      }
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('Spara'),
-                                    ),
-                                  ],
-                                  ),
-                                );
-                                },
-                              ),
+                                TextButton(
+                                  child: Text('Stäng'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                TextButton(
+                                  child: Text('Byt namn'),
+                                  onPressed: () {
+                                    final renameController =
+                                        TextEditingController(text: listName);
+                                    showDialog(
+                                      context: context,
+                                      builder:
+                                          (context) => AlertDialog(
+                                            title: Text(
+                                              'Byt namn på inköpslista',
+                                            ),
+                                            content: TextField(
+                                              controller: renameController,
+                                              autofocus: true,
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed:
+                                                    () =>
+                                                        Navigator.of(
+                                                          context,
+                                                        ).pop(),
+                                                child: Text('Avbryt'),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  final newName =
+                                                      renameController.text
+                                                          .trim();
+                                                  if (newName.isNotEmpty &&
+                                                      newName != listName) {
+                                                    final items =
+                                                        imat.getExtras()[listName];
+                                                    if (items != null) {
+                                                      imat.removeExtra(
+                                                        listName,
+                                                      );
+                                                      imat.addExtra(
+                                                        newName,
+                                                        items,
+                                                      );
+                                                    }
+                                                  }
+                                                  Navigator.of(context).pop();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Spara'),
+                                              ),
+                                            ],
+                                          ),
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ],
@@ -1040,7 +1128,6 @@ class _ListorPageState extends State<ListorPage> {
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
-                                          
                                           imat.addExtra(controller.text, []);
                                           Navigator.pop(context);
                                         },

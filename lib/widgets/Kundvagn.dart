@@ -115,7 +115,7 @@ class KundvagnView extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     if (_nameController.text.isNotEmpty) {
-                                      // Här lägger du till logik för att spara listan
+                                      dataHandler.addExtra(_nameController.text, items);
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                           content: Text('Inköpslistan "${_nameController.text}" har sparats!'),
