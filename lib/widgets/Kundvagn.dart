@@ -70,7 +70,7 @@ class KundvagnView extends StatelessWidget {
                   textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
                 onPressed: () {
-                  // Funktionalitet här
+                  dataHandler.addExtra("shoppinglist", List<ShoppingItem>.from(items));
                 },
                 child: const Text('Lägg till som inköpslista'),
               ),
