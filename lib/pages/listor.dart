@@ -205,6 +205,16 @@ class _ListorPageState extends State<ListorPage> {
                                                 ElevatedButton(
                                                   onPressed: () {
                                                     imat.shoppingCartAdd(item);
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text('${item.product.name} har lagts till i kundvagnen!'),
+                                                        duration: Duration(seconds: 2),
+                                                        backgroundColor: AppTheme.darkblue,
+                                                        behavior: SnackBarBehavior.floating,
+                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                                      ),
+                                                    );
                                                   },
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
@@ -304,6 +314,16 @@ class _ListorPageState extends State<ListorPage> {
                                 ElevatedButton(
                                   onPressed: () {
                                     imat.shoppingCartAdd(item);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('${item.product.name} har lagts till i kundvagnen!'),
+                                        duration: Duration(seconds: 2),
+                                        backgroundColor: AppTheme.darkblue,
+                                        behavior: SnackBarBehavior.floating,
+                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      ),
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.darkblue,
@@ -609,6 +629,16 @@ class _ListorPageState extends State<ListorPage> {
                           for (var item in items) {
                             imat.shoppingCartAdd(item);
                           }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Listan "$listName" har lagts till i kundvagnen!'),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: AppTheme.darkblue,
+                              behavior: SnackBarBehavior.floating,
+                              margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.darkblue,
@@ -716,6 +746,16 @@ class _ListorPageState extends State<ListorPage> {
                                                         items,
                                                       ),
                                                     );
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text('${item.product.name} har minskat med 1!'),
+                                                        duration: Duration(seconds: 2),
+                                                        backgroundColor: AppTheme.darkblue,
+                                                        behavior: SnackBarBehavior.floating,
+                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                                      ),
+                                                    );
                                                     // Update the UI
                                                     setState(() {});
                                                   },
@@ -758,6 +798,16 @@ class _ListorPageState extends State<ListorPage> {
                                                         items,
                                                       ),
                                                     );
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text('${item.product.name} har ökat med 1!'),
+                                                        duration: Duration(seconds: 2),
+                                                        backgroundColor: AppTheme.darkblue,
+                                                        behavior: SnackBarBehavior.floating,
+                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                                      ),
+                                                    );
                                                     // Update the UI
                                                     setState(() {});
                                                   },
@@ -792,6 +842,16 @@ class _ListorPageState extends State<ListorPage> {
                                                 ElevatedButton(
                                                   onPressed: () {
                                                     imat.shoppingCartAdd(item);
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text('${item.product.name} har lagts till i kundvagnen!'),
+                                                        duration: Duration(seconds: 2),
+                                                        backgroundColor: AppTheme.darkblue,
+                                                        behavior: SnackBarBehavior.floating,
+                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                                      ),
+                                                    );
                                                   },
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
@@ -831,6 +891,16 @@ class _ListorPageState extends State<ListorPage> {
                                                       listName,
                                                       List<ShoppingItem>.from(
                                                         items,
+                                                      ),
+                                                    );
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text('${item.product.name} har tagits bort från listan!'),
+                                                        duration: Duration(seconds: 2),
+                                                        backgroundColor: AppTheme.darkblue,
+                                                        behavior: SnackBarBehavior.floating,
+                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                                       ),
                                                     );
                                                     setState(() {});
