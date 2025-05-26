@@ -4,6 +4,7 @@ import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/model/imat/order.dart';
 import 'package:projekt_grupp34/model/imat/product.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
+import 'package:projekt_grupp34/model/internet_handler.dart';
 import 'package:projekt_grupp34/pages/kategorisida.dart';
 import 'package:projekt_grupp34/pages/startsida.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
@@ -53,15 +54,15 @@ class _ListorPageState extends State<ListorPage> {
     );
   }
 
-  Widget _buildListContent() {
+  Widget _buildListContent(ImatDataHandler imat) {
     // Replace with your own logic for fetching items for each list type
     switch (selectedList) {
       case ListType.favoriter:
-        return _buildItemsGrid('Favoriter');
+        return _buildItemsGrid('Favoriter', imat);
       case ListType.inkopslistor:
-        return _buildItemsGrid('Inköpslistor');
+        return _buildItemsGrid('Inköpslistor', imat);
       case ListType.tidigareKop:
-        return _buildItemsGrid('Tidigare köp');
+        return _buildItemsGrid('Tidigare köp', imat);
     }
   }
 
@@ -100,7 +101,7 @@ class _ListorPageState extends State<ListorPage> {
     );
   }
 
-  Widget showPreviousOrders(List<Order> orders) {
+  Widget showPreviousOrders(List<Order> orders, ImatDataHandler imat) {
     return Column(
       children:
           orders.map((order) {
@@ -193,8 +194,44 @@ class _ListorPageState extends State<ListorPage> {
                                           ListTile(
                                             title: Text(item.product.name),
                                             subtitle: Text('${item.amount} st'),
-                                            trailing: Text(
-                                              '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                            trailing: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                                ),
+                                                SizedBox(width: 16),
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    imat.shoppingCartAdd(item);
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        AppTheme.darkblue,
+                                                    foregroundColor:
+                                                        AppTheme.white,
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 16,
+                                                          vertical: 8,
+                                                        ),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            8,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'lägg till',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
 
@@ -344,13 +381,15 @@ class _ListorPageState extends State<ListorPage> {
                                 backgroundColor: AppTheme.white,
                                 title: Text(
                                   'Är du säker på att du vill ta bort inköpslistan?',
-                                  textAlign: TextAlign.center, style: TextStyle(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
                                     fontSize: 24,
-                                    color: AppTheme.darkestblue,),
+                                    color: AppTheme.darkestblue,
+                                  ),
                                 ),
                                 content: SizedBox(
                                   width: 300,
-                                  height: 165,
+                                  height: 135,
                                   child: Column(
                                     children: [
                                       Text(
@@ -359,24 +398,19 @@ class _ListorPageState extends State<ListorPage> {
                                         style: TextStyle(
                                           color: Colors.red,
                                           fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 18),
-                                      Text(
-                                        //TODO BYT UT order.date.day och order.date.month till
-                                        //namn på inköpslistan!!!
-                                        'Inköpslistan från den ${order.date.day} ${_monthName(order.date.month)} kommer att raderas.',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
                                           fontSize: 18,
-                                          color: AppTheme.darkestblue,
                                         ),
                                       ),
 
-                                      SizedBox(height: 16),
+                                      SizedBox(height: 25),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: AppTheme.darkblue,
+                                          backgroundColor: Color.fromARGB(
+                                            255,
+                                            255,
+                                            0,
+                                            0,
+                                          ),
                                           foregroundColor: AppTheme.white,
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 24,
@@ -420,12 +454,7 @@ class _ListorPageState extends State<ListorPage> {
                                       SizedBox(height: 16),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color.fromARGB(
-                                            255,
-                                            255,
-                                            0,
-                                            0,
-                                          ),
+                                          backgroundColor: AppTheme.darkblue,
                                           foregroundColor: AppTheme.white,
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 24,
@@ -603,8 +632,7 @@ class _ListorPageState extends State<ListorPage> {
     return months[month];
   }
 
-  Widget _buildItemsGrid(String listType) {
-    var imat = context.watch<ImatDataHandler>();
+  Widget _buildItemsGrid(String listType, ImatDataHandler imat) {
 
     // Choose the correct list based on listType
     List<Product> products = [];
@@ -615,7 +643,12 @@ class _ListorPageState extends State<ListorPage> {
       products = imat.favorites;
       orders = []; // No orders for favorites
       if (products.isEmpty && orders.isEmpty) {
-        return Center(child: Text('Det finns inga $listType sparade', style: TextStyle(fontSize: 24, color: AppTheme.darkestblue)));
+        return Center(
+          child: Text(
+            'Det finns inga $listType sparade',
+            style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),
+          ),
+        );
       }
       return showFavorites(products);
     } else if (listType == 'Inköpslistor') {
@@ -624,24 +657,36 @@ class _ListorPageState extends State<ListorPage> {
       //Se även till att "ta bort" knappen inom showPurchaseList
       //faktiskt gör detta i backend också!!!
       orders = imat.orders.reversed.toList();
-
+      var extras = imat.getExtras();
+      
       if (products.isEmpty && orders.isEmpty) {
-        return Center(child: Text('Det finns inga $listType sparade', style: TextStyle(fontSize: 24, color: AppTheme.darkestblue)));
+        return Center(
+          child: Text(
+            'Det finns inga $listType sparade',
+            style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),
+          ),
+        );
       }
 
       return Column(
         children: [showPurchaseList(orders, imat), SizedBox(height: 14)],
       );
     } else if (listType == 'Tidigare köp') {
-      orders = imat.orders.reversed.toList();
+      
+      orders = orders.reversed.toList();
       products = [];
 
       if (products.isEmpty && orders.isEmpty) {
-        return Center(child: Text('Det finns inga $listType', style: TextStyle(fontSize: 24, color: AppTheme.darkestblue)));
+        return Center(
+          child: Text(
+            'Det finns inga $listType',
+            style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),
+          ),
+        );
       }
 
       return Column(
-        children: [showPreviousOrders(orders), SizedBox(height: 14)],
+        children: [showPreviousOrders(orders, imat), SizedBox(height: 14)],
       );
     } else {
       products = []; // Default case
@@ -655,6 +700,9 @@ class _ListorPageState extends State<ListorPage> {
 
   @override
   Widget build(BuildContext context) {
+        var imat = context.watch<ImatDataHandler>();
+
+
     return Scaffold(
       backgroundColor: const Color(0xFAF7F7F7),
       body: SafeArea(
@@ -731,6 +779,68 @@ class _ListorPageState extends State<ListorPage> {
                         ),
                       ),
                     ),
+                    Positioned(
+                      right: 16,
+                      child: Container(
+                        width: 200,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: AppTheme.darkblue,
+                        ),
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            
+
+
+
+final controller = TextEditingController();
+showDialog(
+  
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            //Ändra titel och innehåll i dialogrutan
+            title: Text('Namn på inköpslista:'),
+            content: TextField(controller: controller, autofocus: true),
+            actions: [
+              //Avbryt och spara knappar
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Avbryt'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  //TODO Lägg till funktionalitet för att spara inköpslistan 
+                  //(via extras)
+                  imat.addExtra(controller.text, []);
+                  Navigator.pop(context);
+                },
+                child: const Text('Spara'),
+              ),
+            ],
+          ),
+    );
+
+
+
+                          },
+                          child: Center(
+                            child: Text(
+                              'Skapa ny inköpslista',
+                              style: TextStyle(
+                                fontSize: 28,
+                                color: AppTheme.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -747,7 +857,7 @@ class _ListorPageState extends State<ListorPage> {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [_buildListContent(), Footer()],
+                        children: [_buildListContent(imat), Footer()],
                       ),
                     ),
                   );
