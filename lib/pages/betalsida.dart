@@ -4,6 +4,7 @@ import 'package:projekt_grupp34/widgets/simple_header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/widgets/LeveranstiderGrid.dart';
 import 'package:provider/provider.dart';
+import '../widgets/LeveranstiderGrid.dart';
 
 class Betalsida extends StatefulWidget {
   const Betalsida({super.key});
@@ -44,7 +45,7 @@ class _BetalsidaState extends State<Betalsida> {
             child: Align(
               alignment: Alignment.topCenter,
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 500),
+                constraints: const BoxConstraints(maxWidth: 1000),
                 padding: const EdgeInsets.all(24),
                 color: const Color(0xFFF9F7F7),
                 child: Column(
@@ -107,6 +108,12 @@ class _BetalsidaState extends State<Betalsida> {
     String? selectedDeliveryTime = imat.selectedDeliveryTime;
     String? selectedType = imat.selectedDeliveryType;
     bool showTable = selectedType != null;
+
+    final newStartDate = startDate.subtract(const Duration(days: 3));
+    final today = DateTime.now();
+    final newStartDateDateOnly = DateTime(newStartDate.year, newStartDate.month, newStartDate.day);
+    final todayDateOnly = DateTime(today.year, today.month, today.day);
+    final canGoBack = !newStartDateDateOnly.isBefore(todayDateOnly);
 
     return Column(
       children: [

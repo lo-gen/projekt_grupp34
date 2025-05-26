@@ -3,7 +3,9 @@ import 'package:http/http.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/model/imat/order.dart';
 import 'package:projekt_grupp34/model/imat/product.dart';
+import 'package:projekt_grupp34/model/imat/shopping_item.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
+import 'package:projekt_grupp34/model/internet_handler.dart';
 import 'package:projekt_grupp34/pages/kategorisida.dart';
 import 'package:projekt_grupp34/pages/startsida.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
@@ -53,15 +55,15 @@ class _ListorPageState extends State<ListorPage> {
     );
   }
 
-  Widget _buildListContent() {
+  Widget _buildListContent(ImatDataHandler imat) {
     // Replace with your own logic for fetching items for each list type
     switch (selectedList) {
       case ListType.favoriter:
-        return _buildItemsGrid('Favoriter');
+        return _buildItemsGrid('Favoriter', imat);
       case ListType.inkopslistor:
-        return _buildItemsGrid('Inköpslistor');
+        return _buildItemsGrid('Inköpslistor', imat);
       case ListType.tidigareKop:
-        return _buildItemsGrid('Tidigare köp');
+        return _buildItemsGrid('Tidigare köp', imat);
     }
   }
 
@@ -100,7 +102,7 @@ class _ListorPageState extends State<ListorPage> {
     );
   }
 
-  Widget showPreviousOrders(List<Order> orders) {
+  Widget showPreviousOrders(List<Order> orders, ImatDataHandler imat) {
     return Column(
       children:
           orders.map((order) {
@@ -193,305 +195,6 @@ class _ListorPageState extends State<ListorPage> {
                                           ListTile(
                                             title: Text(item.product.name),
                                             subtitle: Text('${item.amount} st'),
-                                            trailing: Text(
-                                              '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
-                                            ),
-                                          ),
-
-                                          // Add a Divider below each ListTile
-                                          Divider(
-                                            thickness: 1,
-                                            color: Colors.grey[300],
-                                            height: 1,
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    'Total kostnad: ${order.items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          actions: [
-                            TextButton(
-                              child: Text('Stäng'),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            );
-          }).toList(),
-    );
-  }
-
-  Widget showPurchaseList(List<Order> orders, ImatDataHandler imat) {
-    return Column(
-      children:
-          orders.map((order) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 16.0,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 8,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: AppTheme.darkblue.withOpacity(0.05),
-                    radius: 32,
-                    child: Icon(
-                      Icons.assignment,
-                      color: AppTheme.darkblue,
-                      size: 36,
-                    ),
-                  ),
-                  //TODO - Byt ut order.date.day och order.date.month till
-                  //namn på inköpslistan!!!
-                  title: Text(
-                    '${order.date.day} ${_monthName(order.date.month)}',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.darkestblue,
-                    ),
-                  ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${order.items.length} varor',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: AppTheme.darkestblue,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: AppTheme.darkestblue,
-                          ),
-                          'Totalkostnad: ${order.items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
-                        ),
-                      ],
-                    ),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          for (var item in order.items) {
-                            imat.shoppingCartAdd(item);
-                          }
-                          ;
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.darkblue,
-                          foregroundColor: AppTheme.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 16,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text(
-                          'lägg till listan i kundvagn',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 8),
-
-                      IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                          color: AppTheme.darkblue,
-                          size: 28,
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-
-                            builder: (context) {
-                              return AlertDialog(
-                                backgroundColor: AppTheme.white,
-                                title: Text(
-                                  'Är du säker på att du vill ta bort inköpslistan?',
-                                  textAlign: TextAlign.center, style: TextStyle(
-                                    fontSize: 24,
-                                    color: AppTheme.darkestblue,),
-                                ),
-                                content: SizedBox(
-                                  width: 300,
-                                  height: 165,
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Denna åtgärd kan inte ångras.',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 18),
-                                      Text(
-                                        //TODO BYT UT order.date.day och order.date.month till
-                                        //namn på inköpslistan!!!
-                                        'Inköpslistan från den ${order.date.day} ${_monthName(order.date.month)} kommer att raderas.',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: AppTheme.darkestblue,
-                                        ),
-                                      ),
-
-                                      SizedBox(height: 16),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: AppTheme.darkblue,
-                                          foregroundColor: AppTheme.white,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 24,
-                                            vertical: 12,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            orders.remove(order);
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'Order ${order.date.day} ${_monthName(order.date.month)} raderad!',
-                                                ),
-                                              ),
-                                            );
-                                            Navigator.of(context).pop();
-                                            //TODO!! Set up function here to
-                                            //remove the order from the backend
-                                            // This is where you would call the method to remove the order
-                                            // For example:
-                                            //imat.removeList(order);
-                                          });
-                                        },
-                                        child: const Text(
-                                          'Ta bort inköpslista',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-
-                                      SizedBox(height: 16),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color.fromARGB(
-                                            255,
-                                            255,
-                                            0,
-                                            0,
-                                          ),
-                                          foregroundColor: AppTheme.white,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 24,
-                                            vertical: 12,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            Navigator.of(context).pop();
-                                          });
-                                        },
-                                        child: const Text(
-                                          'Ångra',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 16,
-                  ),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-
-                      builder: (context) {
-                        return AlertDialog(
-                          backgroundColor: AppTheme.white,
-                          //TODO - Byt ut order.date.day och order.date.month till
-                          //namn på inköpslistan!!!
-                          title: Text(
-                            'Inköpslista ifrån den ${order.date.day} ${_monthName(order.date.month)}:',
-                            textAlign: TextAlign.center,
-                          ),
-                          content: SizedBox(
-                            width: 450,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: order.items.length,
-                                    itemBuilder: (context, idx) {
-                                      final item = order.items[idx];
-                                      return Column(
-                                        children: [
-                                          ListTile(
-                                            title: Text(item.product.name),
-                                            subtitle: Text('${item.amount} st'),
                                             trailing: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
@@ -499,7 +202,6 @@ class _ListorPageState extends State<ListorPage> {
                                                   '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
                                                 ),
                                                 SizedBox(width: 16),
-
                                                 ElevatedButton(
                                                   onPressed: () {
                                                     imat.shoppingCartAdd(item);
@@ -529,19 +231,6 @@ class _ListorPageState extends State<ListorPage> {
                                                           FontWeight.bold,
                                                     ),
                                                   ),
-                                                ),
-                                                IconButton(
-                                                  icon: Icon(
-                                                    Icons.delete,
-                                                    color: AppTheme.darkblue,
-                                                    size: 24,
-                                                  ),
-                                                  onPressed: () {
-                                                    //TODO Lägg till funktionalitet för att ta bort
-                                                    //en vara från inköpslistan.
-                                                    //Exempelvis:
-                                                    //order.removeItem(item);
-                                                  },
                                                 ),
                                               ],
                                             ),
@@ -583,6 +272,412 @@ class _ListorPageState extends State<ListorPage> {
     );
   }
 
+  Widget showPurchaseList(Map<String, dynamic> lists, ImatDataHandler imat) {
+    ProductCategory parseProductCategory(String? category) {
+      if (category == null) {
+        throw ArgumentError('Category cannot be null');
+      }
+      switch (category.toUpperCase()) {
+        case 'BREAD':
+          return ProductCategory.BREAD;
+        case 'POD':
+          return ProductCategory.POD;
+        case 'BERRY':
+          return ProductCategory.BERRY;
+        case 'CITRUS_FRUIT':
+          return ProductCategory.CITRUS_FRUIT;
+        case 'HOT_DRINKS':
+          return ProductCategory.HOT_DRINKS;
+        case 'COLD_DRINKS':
+          return ProductCategory.COLD_DRINKS;
+        case 'EXOTIC_FRUIT':
+          return ProductCategory.EXOTIC_FRUIT;
+        case 'FISH':
+          return ProductCategory.FISH;
+        case 'VEGETABLE_FRUIT':
+          return ProductCategory.VEGETABLE_FRUIT;
+        case 'CABBAGE':
+          return ProductCategory.CABBAGE;
+        case 'MEAT':
+          return ProductCategory.MEAT;
+        case 'DAIRIES':
+          return ProductCategory.DAIRIES;
+        case 'MELONS':
+          return ProductCategory.MELONS;
+        case 'FLOUR_SUGAR_SALT':
+          return ProductCategory.FLOUR_SUGAR_SALT;
+        case 'NUTS_AND_SEEDS':
+          return ProductCategory.NUTS_AND_SEEDS;
+        case 'PASTA':
+          return ProductCategory.PASTA;
+        case 'POTATO_RICE':
+          return ProductCategory.POTATO_RICE;
+        case 'ROOT_VEGETABLE':
+          return ProductCategory.ROOT_VEGETABLE;
+        case 'FRUIT':
+          return ProductCategory.FRUIT;
+        case 'SWEET':
+          return ProductCategory.SWEET;
+        case 'HERB':
+          return ProductCategory.HERB;
+        case 'UNDEFINED':
+          return ProductCategory.UNDEFINED;
+        default:
+          throw ArgumentError('Unknown category: $category');
+      }
+    }
+
+    return Column(
+      children:
+          lists.entries.map<Widget>((entry) {
+            final listName = entry.key;
+            print('entries: $entry');
+            print('entry.value: ${entry.value}');
+
+            // Convert items by MANUALLY creating ShoppingItem objects
+            final List<ShoppingItem> items = [];
+            if (entry.value is List) {
+              final jsonItems = entry.value as List;
+
+              for (int i = 0; i < jsonItems.length; i++) {
+                try {
+                  if (jsonItems[i] is ShoppingItem) {
+                    // Already a ShoppingItem (happens during hot reload)
+                    items.add(jsonItems[i]);
+                  } else if (jsonItems[i] is Map) {
+                    final itemMap = jsonItems[i] as Map;
+
+                    if (itemMap['product'] is Map) {
+                      try {
+                        final productMap = Map<String, dynamic>.from(
+                          itemMap['product'],
+                        );
+                        print(
+                          'productMap: $productMap',
+                        ); // Debug print to inspect the productMap
+
+                        // Manually create a Product object
+                        final product = Product(
+                          productMap['productId'] ?? 0,
+                          parseProductCategory(productMap['category']),
+                          productMap['name'] ?? 'Unknown',
+                          productMap['isEcological'] ?? false,
+
+                          productMap['price'],
+                          productMap['unit'] ?? '',
+                          productMap['imageName'] ?? '',
+                        );
+
+                        // Manually create a ShoppingItem with the product
+                        final amount =
+                            (itemMap['amount'] is int)
+                                ? (itemMap['amount'] as int).toDouble()
+                                : itemMap['amount']?.toDouble() ?? 1.0;
+
+                        final shoppingItem = ShoppingItem(
+                          product,
+                          amount: amount,
+                        );
+                        items.add(shoppingItem);
+                      } catch (e) {
+                        print('Error manually creating item at index $i: $e');
+                        if (itemMap['product'] is Map) {
+                          print(
+                            'Problematic productMap: ${itemMap['product']}',
+                          );
+                        }
+                      }
+                    }
+                  }
+                } catch (e) {
+                  print('Error manually creating item at index $i: $e');
+                  if (jsonItems[i] is Map) {
+                    print('Problematic item: ${jsonItems[i]}');
+                  }
+                }
+              }
+            }
+
+            print('listName: $listName');
+            print('items: $items');
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 16.0,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: AppTheme.darkblue.withOpacity(0.05),
+                    radius: 32,
+                    child: Icon(
+                      Icons.assignment,
+                      color: AppTheme.darkblue,
+                      size: 36,
+                    ),
+                  ),
+                  title: Text(
+                    listName, // Use the map key as the title
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.darkestblue,
+                    ),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${items.length} varor',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: AppTheme.darkestblue,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Totalkostnad: ${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: AppTheme.darkestblue,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          for (var item in items) {
+                            imat.shoppingCartAdd(item);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.darkblue,
+                          foregroundColor: AppTheme.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 16,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'lägg till listan i kundvagn',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        tooltip: 'Ta bort listan',
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) => AlertDialog(
+                                  title: Text('Ta bort inköpslista'),
+                                  content: Text(
+                                    'Är du säker på att du vill ta bort listan "$listName"?',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed:
+                                          () => Navigator.of(context).pop(),
+                                      child: Text('Avbryt'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        imat.removeExtra(listName);
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        foregroundColor: Colors.white,
+                                      ),
+                                      child: Text('Ta bort'),
+                                    ),
+                                  ],
+                                ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: AppTheme.white,
+                          title: Text(
+                            'Inköpslista: $listName',
+                            textAlign: TextAlign.center,
+                          ),
+                          content: SizedBox(
+                            width: 450,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Text("Lägg till varor igenom varukorgen!"),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: items.length,
+                                    itemBuilder: (context, idx) {
+                                      final item = items[idx];
+                                      return Column(
+                                        children: [
+                                          ListTile(
+                                            title: Text(item.product.name),
+                                            subtitle: Text('${item.amount} st'),
+                                            trailing: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                                ),
+                                                SizedBox(width: 16),
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    imat.shoppingCartAdd(item);
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        AppTheme.darkblue,
+                                                    foregroundColor:
+                                                        AppTheme.white,
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 16,
+                                                          vertical: 8,
+                                                        ),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            8,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'lägg till',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Divider(
+                                            thickness: 1,
+                                            color: Colors.grey[300],
+                                            height: 1,
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'Total kostnad: ${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                            actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                              TextButton(
+                                child: Text('Stäng'),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              TextButton(
+                                child: Text('Byt namn'),
+                                onPressed: () {
+                                final renameController =
+                                  TextEditingController(text: listName);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                  title: Text('Byt namn på inköpslista'),
+                                  content: TextField(
+                                    controller: renameController,
+                                    autofocus: true,
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                    onPressed: () =>
+                                      Navigator.of(context).pop(),
+                                    child: Text('Avbryt'),
+                                    ),
+                                    ElevatedButton(
+                                    onPressed: () {
+                                      final newName =
+                                        renameController.text.trim();
+                                      if (newName.isNotEmpty &&
+                                        newName != listName) {
+                                      final items =
+                                        imat.getExtras()[listName];
+                                      if (items != null) {
+                                        imat.removeExtra(listName);
+                                        imat.addExtra(
+                                        newName,
+                                        items,
+                                        );
+                                      }
+                                      }
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Spara'),
+                                    ),
+                                  ],
+                                  ),
+                                );
+                                },
+                              ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            );
+          }).toList(),
+    );
+  }
+
   // Helper to get Swedish month name
   String _monthName(int month) {
     const months = [
@@ -603,9 +698,7 @@ class _ListorPageState extends State<ListorPage> {
     return months[month];
   }
 
-  Widget _buildItemsGrid(String listType) {
-    var imat = context.watch<ImatDataHandler>();
-
+  Widget _buildItemsGrid(String listType, ImatDataHandler imat) {
     // Choose the correct list based on listType
     List<Product> products = [];
     List<Order> orders = [];
@@ -615,7 +708,12 @@ class _ListorPageState extends State<ListorPage> {
       products = imat.favorites;
       orders = []; // No orders for favorites
       if (products.isEmpty && orders.isEmpty) {
-        return Center(child: Text('Det finns inga $listType sparade', style: TextStyle(fontSize: 24, color: AppTheme.darkestblue)));
+        return Center(
+          child: Text(
+            'Det finns inga $listType sparade',
+            style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),
+          ),
+        );
       }
       return showFavorites(products);
     } else if (listType == 'Inköpslistor') {
@@ -624,24 +722,36 @@ class _ListorPageState extends State<ListorPage> {
       //Se även till att "ta bort" knappen inom showPurchaseList
       //faktiskt gör detta i backend också!!!
       orders = imat.orders.reversed.toList();
+      var extras = imat.getExtras();
+      print('Extras: $extras');
 
-      if (products.isEmpty && orders.isEmpty) {
-        return Center(child: Text('Det finns inga $listType sparade', style: TextStyle(fontSize: 24, color: AppTheme.darkestblue)));
+      if (products.isEmpty && extras.isEmpty) {
+        return Center(
+          child: Text(
+            'Det finns inga $listType sparade',
+            style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),
+          ),
+        );
       }
 
       return Column(
-        children: [showPurchaseList(orders, imat), SizedBox(height: 14)],
+        children: [showPurchaseList(extras, imat), SizedBox(height: 14)],
       );
     } else if (listType == 'Tidigare köp') {
       orders = imat.orders.reversed.toList();
       products = [];
 
       if (products.isEmpty && orders.isEmpty) {
-        return Center(child: Text('Det finns inga $listType', style: TextStyle(fontSize: 24, color: AppTheme.darkestblue)));
+        return Center(
+          child: Text(
+            'Det finns inga $listType',
+            style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),
+          ),
+        );
       }
 
       return Column(
-        children: [showPreviousOrders(orders), SizedBox(height: 14)],
+        children: [showPreviousOrders(orders, imat), SizedBox(height: 14)],
       );
     } else {
       products = []; // Default case
@@ -655,6 +765,8 @@ class _ListorPageState extends State<ListorPage> {
 
   @override
   Widget build(BuildContext context) {
+    var imat = context.watch<ImatDataHandler>();
+
     return Scaffold(
       backgroundColor: const Color(0xFAF7F7F7),
       body: SafeArea(
@@ -731,6 +843,99 @@ class _ListorPageState extends State<ListorPage> {
                         ),
                       ),
                     ),
+                    Positioned(
+                      right: 16,
+                      child: Container(
+                        width: 200,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: AppTheme.darkblue,
+                        ),
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            final controller = TextEditingController();
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    //Ändra titel och innehåll i dialogrutan
+                                    title: Text('Namn på inköpslista:'),
+                                    content: TextField(
+                                      controller: controller,
+                                      autofocus: true,
+                                    ),
+                                    actions: [
+                                      //Avbryt och spara knappar
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Avbryt'),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          //TODO Lägg till funktionalitet för att spara inköpslistan
+                                          //(via extras)
+                                          imat.addExtra(controller.text, []);
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Spara'),
+                                      ),
+                                    ],
+                                  ),
+                            );
+                          },
+                          child: Center(
+                            child: Text(
+                              'Skapa ny inköpslista',
+                              style: TextStyle(
+                                fontSize: 28,
+                                color: AppTheme.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0,
+                        ),
+                        child: Builder(
+                          builder: (context) {
+                            final extras =
+                                context.read<ImatDataHandler>().getExtras();
+                            if (extras.isEmpty) {
+                              return Text(
+                                'Inga inköpslistor finns.',
+                                style: TextStyle(
+                                  color: AppTheme.darkestblue,
+                                  fontSize: 18,
+                                ),
+                                textAlign: TextAlign.center,
+                              );
+                            }
+                            return Text(
+                              'Alla inköpslistor: ${extras.keys.join(", ")}',
+                              style: TextStyle(
+                                color: AppTheme.darkestblue,
+                                fontSize: 18,
+                              ),
+                              textAlign: TextAlign.center,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -747,7 +952,7 @@ class _ListorPageState extends State<ListorPage> {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [_buildListContent(), Footer()],
+                        children: [_buildListContent(imat), Footer()],
                       ),
                     ),
                   );

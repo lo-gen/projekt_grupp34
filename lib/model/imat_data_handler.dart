@@ -582,7 +582,7 @@ import 'package:http/http.dart' as http;
   String? _selectedDeliveryTime;
   String? get selectedDeliveryTime => _selectedDeliveryTime;
 
-  void setSelectedDeliveryTime(String time) {
+  void setSelectedDeliveryTime(String? time) {
     _selectedDeliveryTime = time;
     notifyListeners();
   }
