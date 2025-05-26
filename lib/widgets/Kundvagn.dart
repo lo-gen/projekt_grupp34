@@ -59,19 +59,78 @@ class KundvagnView extends StatelessWidget {
                   ),
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.hovered)) {
-                        return AppTheme.darkblue; // Färg vid hover
+                      if (items.isEmpty) {
+                        return Colors.grey[700]!; // Mörkgrå när tom
                       }
-                      return AppTheme.ligtblue; // Standardfärg
+                      if (states.contains(MaterialState.hovered)) {
+                        return AppTheme.darkblue;
+                      }
+                      return AppTheme.ligtblue;
                     },
                   ),
                   foregroundColor: MaterialStateProperty.all(AppTheme.white),
                   padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 24, vertical: 10)),
                   textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  side: MaterialStateProperty.all(
+                    const BorderSide(color: Colors.white, width: 2), // <-- Vit kant
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
-                onPressed: () {
-                  // Funktionalitet här
-                },
+                onPressed: items.isEmpty
+                    ? null // Inaktiv om tom
+                    : () {
+                        final TextEditingController _nameController = TextEditingController();
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Spara inköpslista'),
+                              content: TextField(
+                                controller: _nameController,
+                                decoration: const InputDecoration(
+                                  hintText: 'Ange namn på inköpslistan',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Colors.grey[300],
+                                    foregroundColor: Colors.black,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Avbryt'),
+                                ),
+                                const SizedBox(width: 8),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    if (_nameController.text.isNotEmpty) {
+                                      // Här lägger du till logik för att spara listan
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Inköpslistan "${_nameController.text}" har sparats!'),
+                                        ),
+                                      );
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  child: const Text('Spara'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                 child: const Text('Lägg till som inköpslista'),
               ),
             ],
@@ -187,15 +246,17 @@ class KundvagnView extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.ligtblue,
                 foregroundColor: AppTheme.white,
-                minimumSize: const Size(0, 56), // Gör knappen högre (t.ex. 56 px)
+                minimumSize: const Size(0, 56),
                 textStyle: const TextStyle(
-                  fontSize: 20, // Större text
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Betalsida()));
-              },
+              onPressed: items.isEmpty
+                  ? null // Gör knappen inaktiv om varukorgen är tom
+                  : () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Betalsida()));
+                    },
               child: const Text('Gå till kassan'),
             ),
           ),

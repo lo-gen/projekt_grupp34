@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/widgets/simple_header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
+import 'package:projekt_grupp34/widgets/LeveranstiderGrid.dart';
 import 'package:provider/provider.dart';
 
 class Betalsida extends StatefulWidget {
@@ -103,28 +104,6 @@ class _BetalsidaState extends State<Betalsida> {
 
   Widget _buildLeveranssatt() {
     final imat = Provider.of<ImatDataHandler>(context);
-    const weekdays = ['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön'];
-    DateTime startDate = leveransStartDate;
-
-    // Generera tider: 10:00-10:30, 10:30-11:00, ..., 16:30-17:00
-    List<String> timeIntervals = [];
-    for (int h = 10; h < 17; h++) {
-      timeIntervals.add(
-          '${h.toString().padLeft(2, '0')}:00-${h.toString().padLeft(2, '0')}:30');
-      timeIntervals.add(
-          '${h.toString().padLeft(2, '0')}:30-${(h + 1).toString().padLeft(2, '0')}:00');
-    }
-    final List<List<Map<String, dynamic>>> slots = List.generate(
-      3,
-      (_) => List.generate(
-        timeIntervals.length,
-        (i) => {
-          'ledig': true,
-          'pris': 39 + (i % 3) * 10,
-        },
-      ),
-    );
-
     String? selectedDeliveryTime = imat.selectedDeliveryTime;
     String? selectedType = imat.selectedDeliveryType;
     bool showTable = selectedType != null;
@@ -169,98 +148,11 @@ class _BetalsidaState extends State<Betalsida> {
         ),
         const SizedBox(height: 24),
         if (showTable)
-          Column(
-            children: [
-              // Paginering och rubrik
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: _showPreviousDays,
-                  ),
-                  const SizedBox(width: 8),
-                  const Text('Välj leveranstid', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward),
-                    onPressed: _showNextDays,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Table(
-                      border: TableBorder.all(),
-                      defaultColumnWidth: const FixedColumnWidth(140.0),
-                      children: [
-                        TableRow(
-                          children: [
-                            const TableCell(
-                              child: Center(child: Text('Tid', style: TextStyle(fontWeight: FontWeight.bold))),
-                            ),
-                            for (int day = 0; day < 3; day++)
-                              TableCell(
-                                child: Center(
-                                  child: Text(
-                                    "${weekdays[(startDate.add(Duration(days: day)).weekday - 1) % 7]} "
-                                    "${startDate.add(Duration(days: day)).day.toString().padLeft(2, '0')}/"
-                                    "${startDate.add(Duration(days: day)).month.toString().padLeft(2, '0')}",
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        for (int i = 0; i < timeIntervals.length; i++)
-                          TableRow(
-                            children: [
-                              TableCell(
-                                child: Center(child: Text(timeIntervals[i])),
-                              ),
-                              for (int day = 0; day < 3; day++)
-                                TableCell(
-                                  child: Center(
-                                    child: slots[day][i]['ledig']
-                                        ? InkWell(
-                                            borderRadius: BorderRadius.circular(8),
-                                            onTap: () {
-                                              String slotValue =
-                                                  "${startDate.add(Duration(days: day)).toIso8601String()} ${timeIntervals[i]}";
-                                              imat.setSelectedDeliveryTime(slotValue);
-                                              setState(() {});
-                                            },
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  selectedDeliveryTime ==
-                                                          "${startDate.add(Duration(days: day)).toIso8601String()} ${timeIntervals[i]}"
-                                                      ? Icons.check_circle
-                                                      : Icons.radio_button_unchecked,
-                                                  color: selectedDeliveryTime ==
-                                                          "${startDate.add(Duration(days: day)).toIso8601String()} ${timeIntervals[i]}"
-                                                      ? Colors.amber
-                                                      : Colors.green,
-                                                ),
-                                                Text('${slots[day][i]['pris']} kr'),
-                                              ],
-                                            ),
-                                          )
-                                        : const Icon(Icons.cancel, color: Colors.red),
-                                  ),
-                                ),
-                            ],
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          LeveranstiderGrid(
+            onSelectSlot: (String slotValue) {
+              imat.setSelectedDeliveryTime(slotValue);
+              setState(() {});
+            },
           ),
         const SizedBox(height: 32),
         if (selectedDeliveryTime != null && selectedDeliveryTime.isNotEmpty)
@@ -271,25 +163,26 @@ class _BetalsidaState extends State<Betalsida> {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          Row( children: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
-          child: const Text("Tillbaka till startsidan"),
-        ),
-        SizedBox(width: 16),
-        if (selectedDeliveryTime != null && selectedDeliveryTime.isNotEmpty)
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                step = 1;
-              });
-            },
-            child: const Text("Fortsätt"),
-          ),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+              child: const Text("Tillbaka till startsidan"),
+            ),
+            const SizedBox(width: 16),
+            if (selectedDeliveryTime != null && selectedDeliveryTime.isNotEmpty)
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    step = 1;
+                  });
+                },
+                child: const Text("Fortsätt"),
+              ),
           ],
-          ),
+        ),
       ],
     );
   }

@@ -30,32 +30,7 @@ class _LeveranstiderPageState extends State<LeveranstiderPage> {
 
   @override
   Widget build(BuildContext context) {
-    const weekdays = ['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön'];
     final imat = Provider.of<ImatDataHandler>(context);
-
-    // Generera tider: 08:00-10:00, 10:00-12:00, ..., 14:00-16:00
-    List<String> timeIntervals = [];
-    for (int h = 8; h < 16; h += 2) {
-      timeIntervals.add('${h.toString().padLeft(2, '0')}:00-${(h + 2).toString().padLeft(2, '0')}:00');
-    }
-
-    final List<List<Map<String, dynamic>>> slots = List.generate(
-      3,
-      (_) => List.generate(
-        timeIntervals.length,
-        (i) => {
-          'ledig': true,
-          'pris': 39 + (i % 3) * 10,
-        },
-      ),
-    );
-
-    // Lägg till denna logik innan du bygger Row med pilarna:
-    final newStartDate = startDate.subtract(const Duration(days: 3));
-    final today = DateTime.now();
-    final newStartDateDateOnly = DateTime(newStartDate.year, newStartDate.month, newStartDate.day);
-    final todayDateOnly = DateTime(today.year, today.month, today.day);
-    final canGoBack = !newStartDateDateOnly.isBefore(todayDateOnly);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -94,35 +69,35 @@ class _LeveranstiderPageState extends State<LeveranstiderPage> {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: canGoBack ? _showPreviousDays : null, // <-- Viktigt!
+            // Lägg till Center och Container här:
+            Center(
+              child: Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 1000,
                 ),
-                const SizedBox(width: 8),
-                const Text('Välj leveranstid', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward),
-                  onPressed: _showNextDays,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            LeveranstiderGrid(
-              startDate: startDate,
-              timeIntervals: timeIntervals,
-              slots: slots,
-              onSelectSlot: (String slotValue) {
-                final imat = Provider.of<ImatDataHandler>(context, listen: false);
-                imat.setSelectedDeliveryTime(slotValue);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Leveranstid vald!")),
-                );
-                setState(() {});
-              },
+                child: LeveranstiderGrid(
+                  onSelectSlot: (String slotValue) {
+                    final imat = Provider.of<ImatDataHandler>(context, listen: false);
+                    imat.setSelectedDeliveryTime(slotValue);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Leveranstid vald!")),
+                    );
+                    setState(() {});
+                  },
+                ),
+              ),
             ),
             const SizedBox(height: 32),
           ],
