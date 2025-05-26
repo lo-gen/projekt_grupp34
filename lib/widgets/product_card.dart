@@ -3,11 +3,22 @@ import 'package:projekt_grupp34/model/imat/product.dart';
 import 'package:projekt_grupp34/model/imat/shopping_item.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/app_theme.dart';
+import 'package:projekt_grupp34/widgets/produkt_pop_up.dart';
 import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
   const ProductCard(this.product, {super.key});
+
+  void _showProductPopUp(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        insetPadding: const EdgeInsets.all(24),
+        child: ProduktPopUp(product: product),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +37,12 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                GestureDetector(
+                  onTap: () => _showProductPopUp(context),
+                  child: 
+                  MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                    child: 
                 Container(
                   alignment: Alignment.center,
                   height: 125,
@@ -34,13 +51,24 @@ class ProductCard extends StatelessWidget {
                     child: iMat.getImage(product),
                   ),
                 ),
+                  ),
+                ),
                 SizedBox(height: AppTheme.paddingSmall),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
+                  child: 
+                  GestureDetector(
+                    onTap: () => _showProductPopUp(context),
+                    child:
+                    MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                      child:  
+                  Text(
                     product.name.isNotEmpty ? product.name : 'Okänd produkt',
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
+                  ),
+                    ),
                   ),
                 ),
                 SizedBox(height: AppTheme.paddingTiny),
