@@ -434,8 +434,11 @@ class _BetalsidaState extends State<Betalsida> {
       children: [
         const SizedBox(height: 16),
         Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.green,
+          ),
           width: double.infinity,
-          color: Colors.green,
           padding: const EdgeInsets.all(8),
           child: const Center(
             child: Text(
@@ -449,13 +452,19 @@ class _BetalsidaState extends State<Betalsida> {
           ),
         ),
         const SizedBox(height: 24),
-        Image.asset("assets/images/gubbe.png", height: 120),
-        const SizedBox(height: 16),
+        Image.asset("assets/images/thumbsup.jpg", height: 250),
+        const SizedBox(height: AppTheme.paddingHuge),
+        
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppTheme.darkblue,
+            foregroundColor: Colors.white,
+            minimumSize: const Size(300, 60),
+          ),
           onPressed: () {
             Navigator.of(context).popUntil((route) => route.isFirst);
           },
-          child: const Text("Återgå till startsidan"),
+          child: const Text("Tack för att du handlar hos oss!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
         ),
       ],
     );
