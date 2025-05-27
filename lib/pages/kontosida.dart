@@ -22,36 +22,111 @@ class _KontosidaState extends State<Kontosida> {
   late String phone = "If you see this something went wrong - phone";
   late String address = "If you see this something went wrong - address";
   late String postal = "If you see this something went wrong - postal";
-  late String postAddress =
-      "If you see this something went wrong - postAddress";
+  late String postAddress = "If you see this something went wrong - postAddress";
 
   ///Metod för att öppna en dialogruta för att redigera information
   ///Triggeras när användaren trycker på "Ändra" knappen
   ///Tar emot en titel och en callback-funktion som körs när informationen ändras
-  Future<void> _editInfo(String title, ValueChanged<String> onChanged) async {
-    final controller = TextEditingController();
+  Future<void> _editInfo(String title, ValueChanged<String> onChanged, {String initialValue = ""}) async {
+    final controller = TextEditingController(text: initialValue);
+    String? errorText;
+
     await showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            //Ändra titel och innehåll i dialogrutan
-            title: Text('Ändra $title'),
-            content: TextField(controller: controller, autofocus: true),
-            actions: [
-              //Avbryt och spara knappar
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Avbryt'),
+      barrierDismissible: false,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            void trySave() {
+              final val = controller.text;
+              bool valid = true;
+
+              // Validering beroende på fält
+              if (title == "E-post") {
+                valid = val.contains("@") && val.contains(".");
+              } else if (title == "Telefon") {
+                valid = val.isNotEmpty && val.runes.every((c) => c >= 48 && c <= 57);
+              } else if (title == "Postnummer") {
+                valid = val.length == 5 && val.runes.every((c) => c >= 48 && c <= 57);
+              } else {
+                valid = val.isNotEmpty;
+              }
+
+              if (valid) {
+                onChanged(val);
+                Navigator.pop(context);
+              } else {
+                setState(() {
+                  errorText = "Fel format";
+                });
+              }
+            }
+
+            return AlertDialog(
+              title: Text('Ändra $title'),
+              content: SizedBox(
+                width: 400, // Fast bredd
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      controller: controller,
+                      autofocus: true,
+                      onSubmitted: (_) => trySave(),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: errorText != null ? Colors.red : Colors.grey,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: errorText != null ? Colors.red : Colors.grey,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: errorText != null ? Colors.red : Theme.of(context).colorScheme.primary,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Alltid reservera plats för felmeddelandet
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, left: 4.0),
+                      child: SizedBox(
+                        height: 22,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: errorText != null && errorText!.isNotEmpty
+                              ? Text(
+                                  errorText!,
+                                  style: const TextStyle(color: Colors.red),
+                                  textAlign: TextAlign.left,
+                                )
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  onChanged(controller.text);
-                  Navigator.pop(context);
-                },
-                child: const Text('Spara'),
-              ),
-            ],
-          ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Avbryt'),
+                ),
+                ElevatedButton(
+                  onPressed: trySave,
+                  child: const Text('Spara'),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
@@ -250,7 +325,7 @@ class _KontosidaState extends State<Kontosida> {
                                               ),
                                             );
                                           }
-                                        }),
+                                        }, initialValue: email),
                                   ),
 
                                   //Container telefon
@@ -286,7 +361,7 @@ class _KontosidaState extends State<Kontosida> {
                                               ),
                                             );
                                           }
-                                        }),
+                                        }, initialValue: phone),
                                   ),
 
                                   //Container adress
@@ -316,7 +391,7 @@ class _KontosidaState extends State<Kontosida> {
                                               ),
                                             );
                                           }
-                                        }),
+                                        }, initialValue: address),
                                   ),
 
                                   //Container postnummer
@@ -351,7 +426,7 @@ class _KontosidaState extends State<Kontosida> {
                                               ),
                                             );
                                           }
-                                        }),
+                                        }, initialValue: postal),
                                   ),
 
                                   //Container postadress
@@ -384,7 +459,7 @@ class _KontosidaState extends State<Kontosida> {
                                               ),
                                             );
                                           }
-                                        }),
+                                        }, initialValue: postAddress),
                                   ),
                                 ],
                               ),
