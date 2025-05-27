@@ -399,6 +399,10 @@ class _KontosidaState extends State<Kontosida> {
     var dataHandler = context.watch<ImatDataHandler>();
     var customer = dataHandler.getCustomer();
 
+    customer.firstName = "Test";
+    customer.lastName = "Testsson";
+    dataHandler.setCustomer(customer);
+
     firstName = customer.firstName;
     lastName = customer.lastName;
     email = customer.email;
