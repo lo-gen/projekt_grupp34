@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
+import 'package:projekt_grupp34/model/imat/credit_card.dart';
 import 'package:projekt_grupp34/model/imat/customer.dart';
 import 'package:projekt_grupp34/pages/startsida.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
@@ -111,6 +112,189 @@ class _KontosidaState extends State<Kontosida> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Avbryt'),
+                ),
+                ElevatedButton(
+                  onPressed: trySave,
+                  child: const Text('Spara'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _editCardInfo() async {
+    final dataHandler = Provider.of<ImatDataHandler>(context, listen: false);
+    CreditCard? savedCard = dataHandler.getCreditCard();
+    final cardTypes = ['Visa', 'Mastercard', 'Amex'];
+    String selectedType = cardTypes.contains(savedCard?.cardType)
+        ? savedCard!.cardType
+        : cardTypes[0];
+    final nameController = TextEditingController(text: savedCard?.holdersName ?? "");
+    final monthController = TextEditingController(text: savedCard?.validMonth != null ? savedCard!.validMonth.toString().padLeft(2, '0') : "");
+    final yearController = TextEditingController(text: savedCard?.validYear != null ? savedCard!.validYear.toString().padLeft(2, '0') : "");
+    final numberController = TextEditingController(text: savedCard?.cardNumber ?? "");
+    final cvcController = TextEditingController(text: savedCard?.verificationCode != null ? savedCard!.verificationCode.toString().padLeft(3, '0') : "");
+    String? errorText;
+
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            void trySave() {
+              final name = nameController.text.trim();
+              final month = monthController.text.trim();
+              final year = yearController.text.trim();
+              final number = numberController.text.trim();
+              final cvc = cvcController.text.trim();
+              bool valid = true;
+
+              if (name.isEmpty ||
+                  month.length != 2 ||
+                  int.tryParse(month) == null ||
+                  year.length != 2 ||
+                  int.tryParse(year) == null ||
+                  number.length < 13 ||
+                  number.length > 19 ||
+                  int.tryParse(number) == null ||
+                  cvc.length < 3 ||
+                  cvc.length > 4 ||
+                  int.tryParse(cvc) == null) {
+                valid = false;
+              }
+
+              if (valid) {
+                final card = CreditCard(
+                  selectedType,
+                  name,
+                  int.parse(month),
+                  int.parse(year),
+                  number,
+                  int.parse(cvc),
+                );
+                dataHandler.setCreditCard(card);
+
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Kortuppgifter sparade!')),
+                );
+              } else {
+                setState(() {
+                  errorText = "Fel format på en eller flera fält";
+                });
+              }
+            }
+
+            return AlertDialog(
+              title: const Text('Spara kortuppgifter'),
+              content: SizedBox(
+                width: 400,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DropdownButtonFormField<String>(
+                        value: selectedType,
+                        items: cardTypes
+                            .map((type) => DropdownMenuItem(
+                                  value: type,
+                                  child: Text(type),
+                                ))
+                            .toList(),
+                        onChanged: (val) {
+                          if (val != null) setState(() => selectedType = val);
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Korttyp',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: nameController,
+                        onSubmitted: (_) => trySave(),
+                        decoration: const InputDecoration(
+                          labelText: 'Namn på kortet',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: monthController,
+                              keyboardType: TextInputType.number,
+                              onSubmitted: (_) => trySave(),
+                              decoration: const InputDecoration(
+                                labelText: 'Månad (MM)',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextField(
+                              controller: yearController,
+                              keyboardType: TextInputType.number,
+                              onSubmitted: (_) => trySave(),
+                              decoration: const InputDecoration(
+                                labelText: 'År (YY)',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: numberController,
+                        keyboardType: TextInputType.number,
+                        onSubmitted: (_) => trySave(),
+                        decoration: const InputDecoration(
+                          labelText: 'Kortnummer',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: cvcController,
+                        keyboardType: TextInputType.number,
+                        onSubmitted: (_) => trySave(),
+                        decoration: const InputDecoration(
+                          labelText: 'Verifikationskod (CVC)',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0, left: 4.0),
+                        child: SizedBox(
+                          height: 22,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: errorText != null && errorText!.isNotEmpty
+                                ? Text(
+                                    errorText!,
+                                    style: const TextStyle(color: Colors.red),
+                                    textAlign: TextAlign.left,
+                                  )
+                                : null,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               actions: [
@@ -460,6 +644,14 @@ class _KontosidaState extends State<Kontosida> {
                                             );
                                           }
                                         }, initialValue: postAddress),
+                                  ),
+
+                                  //Container kortuppgifter
+                                  _infoCard(
+                                    icon: Icons.credit_card,
+                                    title: "Kortuppgifter",
+                                    info: "Visa dina sparade kortuppgifter",
+                                    onEdit: () => _editCardInfo(),
                                   ),
                                 ],
                               ),
