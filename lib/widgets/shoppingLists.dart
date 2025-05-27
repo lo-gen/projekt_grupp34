@@ -74,225 +74,247 @@ class ShoppingLists extends StatelessWidget {
       }
     }
 
-    return Column (children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24.0),
-        child: Text(
-          'Välj inköpslista att lägga till ${selectedItemProduct.name} i:',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: AppTheme.darkestblue,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24.0),
+          child: Text(
+            'Välj inköpslista att lägga till ${selectedItemProduct.name} i:',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.darkestblue,
+            ),
           ),
         ),
-      ),
-      Column(
-      children: 
-          lists.entries.map<Widget>((entry) {
-            final listName = entry.key;
-            print('entries: $entry');
-            print('entry.value: ${entry.value}');
+        Column(
+          children:
+              lists.entries.map<Widget>((entry) {
+                final listName = entry.key;
+                print('entries: $entry');
+                print('entry.value: ${entry.value}');
 
-            // Convert items by MANUALLY creating ShoppingItem objects
-            final List<ShoppingItem> items = [];
-            if (entry.value is List) {
-              final jsonItems = entry.value as List;
+                // Convert items by MANUALLY creating ShoppingItem objects
+                final List<ShoppingItem> items = [];
+                if (entry.value is List) {
+                  final jsonItems = entry.value as List;
 
-              for (int i = 0; i < jsonItems.length; i++) {
-                try {
-                  if (jsonItems[i] is ShoppingItem) {
-                    // Already a ShoppingItem (happens during hot reload)
-                    items.add(jsonItems[i]);
-                  } else if (jsonItems[i] is Map) {
-                    final itemMap = jsonItems[i] as Map;
+                  for (int i = 0; i < jsonItems.length; i++) {
+                    try {
+                      if (jsonItems[i] is ShoppingItem) {
+                        // Already a ShoppingItem (happens during hot reload)
+                        items.add(jsonItems[i]);
+                      } else if (jsonItems[i] is Map) {
+                        final itemMap = jsonItems[i] as Map;
 
-                    if (itemMap['product'] is Map) {
-                      try {
-                        final productMap = Map<String, dynamic>.from(
-                          itemMap['product'],
-                        );
-                        print(
-                          'productMap: $productMap',
-                        ); // Debug print to inspect the productMap
-
-                        // Manually create a Product object
-                        final product = Product(
-                          productMap['productId'] ?? 0,
-                          parseProductCategory(productMap['category']),
-                          productMap['name'] ?? 'Unknown',
-                          productMap['isEcological'] ?? false,
-
-                          productMap['price'],
-                          productMap['unit'] ?? '',
-                          productMap['imageName'] ?? '',
-                        );
-
-                        // Manually create a ShoppingItem with the product
-                        final amount =
-                            (itemMap['amount'] is int)
-                                ? (itemMap['amount'] as int).toDouble()
-                                : itemMap['amount']?.toDouble() ?? 1.0;
-
-                        final shoppingItem = ShoppingItem(
-                          product,
-                          amount: amount,
-                        );
-                        items.add(shoppingItem);
-                      } catch (e) {
-                        print('Error manually creating item at index $i: $e');
                         if (itemMap['product'] is Map) {
-                          print(
-                            'Problematic productMap: ${itemMap['product']}',
-                          );
+                          try {
+                            final productMap = Map<String, dynamic>.from(
+                              itemMap['product'],
+                            );
+                            print(
+                              'productMap: $productMap',
+                            ); // Debug print to inspect the productMap
+
+                            // Manually create a Product object
+                            final product = Product(
+                              productMap['productId'] ?? 0,
+                              parseProductCategory(productMap['category']),
+                              productMap['name'] ?? 'Unknown',
+                              productMap['isEcological'] ?? false,
+
+                              productMap['price'],
+                              productMap['unit'] ?? '',
+                              productMap['imageName'] ?? '',
+                            );
+
+                            // Manually create a ShoppingItem with the product
+                            final amount =
+                                (itemMap['amount'] is int)
+                                    ? (itemMap['amount'] as int).toDouble()
+                                    : itemMap['amount']?.toDouble() ?? 1.0;
+
+                            final shoppingItem = ShoppingItem(
+                              product,
+                              amount: amount,
+                            );
+                            items.add(shoppingItem);
+                          } catch (e) {
+                            print(
+                              'Error manually creating item at index $i: $e',
+                            );
+                            if (itemMap['product'] is Map) {
+                              print(
+                                'Problematic productMap: ${itemMap['product']}',
+                              );
+                            }
+                          }
                         }
+                      }
+                    } catch (e) {
+                      print('Error manually creating item at index $i: $e');
+                      if (jsonItems[i] is Map) {
+                        print('Problematic item: ${jsonItems[i]}');
                       }
                     }
                   }
-                } catch (e) {
-                  print('Error manually creating item at index $i: $e');
-                  if (jsonItems[i] is Map) {
-                    print('Problematic item: ${jsonItems[i]}');
-                  }
                 }
-              }
-            }
 
-            print('listName: $listName');
-            print('items: $items');
+                print('listName: $listName');
+                print('items: $items');
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 16.0,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 8,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: AppTheme.darkblue.withOpacity(0.05),
-                    radius: 32,
-                    child: Icon(
-                      Icons.assignment,
-                      color: AppTheme.darkblue,
-                      size: 36,
-                    ),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 16.0,
                   ),
-                  title: Text(
-                    listName, // Use the map key as the title
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.darkestblue,
-                    ),
-                  ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${items.length} olika varor',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: AppTheme.darkestblue,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          'Totalkostnad: ${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: AppTheme.darkestblue,
-                          ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 8,
+                          offset: Offset(0, 2),
                         ),
                       ],
                     ),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          final List<ShoppingItem> allItems =
-                              List<ShoppingItem>.from(items);
-                          allItems.add(newShoppingItem);
-                          imat.addExtra(listName, allItems);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                '${newShoppingItem.product.name} har lagts till i listan "$listName"!',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: AppTheme.white,
-                                ),
-                              ),
-                              duration: Duration(seconds: 2),
-                              backgroundColor: AppTheme.darkblue,
-                              behavior: SnackBarBehavior.fixed,
-
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          );
-                          Navigator.of(context).pop();
-                          // Now you can use itemsToAdd as a list of ShoppingItem
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.darkblue,
-                          foregroundColor: AppTheme.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 16,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 24,
-                              
-                              color: AppTheme.white,
-                            ),
-                            children: [
-                              TextSpan(text: 'Lägg till '),
-                              TextSpan(
-                                text: '${selectedItemProduct.name}',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: ' i listan '),
-                              TextSpan(
-                                text: listName,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              
-                            ],
-                          ),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: AppTheme.darkblue.withOpacity(0.05),
+                        radius: 32,
+                        child: Icon(
+                          Icons.assignment,
+                          color: AppTheme.darkblue,
+                          size: 36,
                         ),
                       ),
-                    ],
+                      title: Text(
+                        listName, // Use the map key as the title
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.darkestblue,
+                        ),
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${items.length} olika varor',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: AppTheme.darkestblue,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              'Totalkostnad: ${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: AppTheme.darkestblue,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              final List<ShoppingItem> allItems =
+                                  List<ShoppingItem>.from(items);
+                              allItems.add(newShoppingItem);
+                              imat.addExtra(listName, allItems);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Container(
+                                    height: 80,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '${selectedItemProduct.name} har lagts till i listan $listName',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        color: AppTheme.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: AppTheme.darkblue,
+                                  behavior: SnackBarBehavior.floating,
+                                  margin: EdgeInsets.only(
+                                    top: 100,
+                                    bottom: 580,
+                                    left:
+                                        MediaQuery.of(context).size.width *
+                                        0.735, // Increased left margin to make it less wide
+                                    right: 15,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  dismissDirection: DismissDirection.horizontal,
+                                ),
+                              );
+
+                              Navigator.of(context).pop();
+                              // Now you can use itemsToAdd as a list of ShoppingItem
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.darkblue,
+                              foregroundColor: AppTheme.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 16,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontSize: 24,
+
+                                  color: AppTheme.white,
+                                ),
+                                children: [
+                                  TextSpan(text: 'Lägg till '),
+                                  TextSpan(
+                                    text: '${selectedItemProduct.name}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(text: ' i listan '),
+                                  TextSpan(
+                                    text: listName,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 16,
+                      ),
+                    ),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 16,
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-    ),],
-      );
+                );
+              }).toList(),
+        ),
+      ],
+    );
   }
 }

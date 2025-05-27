@@ -49,30 +49,37 @@ class KundvagnView extends StatelessWidget {
               const SizedBox(height: 8),
               ElevatedButton(
                 style: ButtonStyle(
-                  mouseCursor: MaterialStateProperty.resolveWith<MouseCursor>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.hovered)) {
-                        return SystemMouseCursors.click;
-                      }
-                      return SystemMouseCursors.basic;
-                    },
-                  ),
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (items.isEmpty) {
-                        return Colors.grey[700]!; // Mörkgrå när tom
-                      }
-                      if (states.contains(MaterialState.hovered)) {
-                        return AppTheme.darkblue;
-                      }
-                      return AppTheme.ligtblue;
-                    },
-                  ),
+                  mouseCursor: MaterialStateProperty.resolveWith<MouseCursor>((
+                    Set<MaterialState> states,
+                  ) {
+                    if (states.contains(MaterialState.hovered)) {
+                      return SystemMouseCursors.click;
+                    }
+                    return SystemMouseCursors.basic;
+                  }),
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>((
+                    Set<MaterialState> states,
+                  ) {
+                    if (items.isEmpty) {
+                      return Colors.grey[700]!; // Mörkgrå när tom
+                    }
+                    if (states.contains(MaterialState.hovered)) {
+                      return AppTheme.darkblue;
+                    }
+                    return AppTheme.ligtblue;
+                  }),
                   foregroundColor: MaterialStateProperty.all(AppTheme.white),
-                  padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 24, vertical: 10)),
-                  textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                  ),
+                  textStyle: MaterialStateProperty.all(
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                   side: MaterialStateProperty.all(
-                    const BorderSide(color: Colors.white, width: 2), // <-- Vit kant
+                    const BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ), // <-- Vit kant
                   ),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
@@ -80,57 +87,74 @@ class KundvagnView extends StatelessWidget {
                     ),
                   ),
                 ),
-                onPressed: items.isEmpty
-                    ? null // Inaktiv om tom
-                    : () {
-                        final TextEditingController _nameController = TextEditingController();
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Spara inköpslista'),
-                              content: TextField(
-                                controller: _nameController,
-                                decoration: const InputDecoration(
-                                  hintText: 'Ange namn på inköpslistan',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: Colors.grey[300],
-                                    foregroundColor: Colors.black,
+                onPressed:
+                    items.isEmpty
+                        ? null // Inaktiv om tom
+                        : () {
+                          final TextEditingController _nameController =
+                              TextEditingController();
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Spara inköpslista'),
+                                content: TextField(
+                                  controller: _nameController,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Ange namn på inköpslistan',
+                                    border: OutlineInputBorder(),
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Avbryt'),
                                 ),
-                                const SizedBox(width: 8),
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: Colors.green,
-                                    foregroundColor: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    if (_nameController.text.isNotEmpty) {
-                                      dataHandler.addExtra(_nameController.text, items);
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('Inköpslistan "${_nameController.text}" har sparats!'),
-                                        ),
-                                      );
+                                actions: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.grey[300],
+                                      foregroundColor: Colors.black,
+                                    ),
+                                    onPressed: () {
                                       Navigator.of(context).pop();
-                                    }
-                                  },
-                                  child: const Text('Spara'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
+                                    },
+                                    child: const Text('Avbryt'),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      if (_nameController.text.isNotEmpty) {
+                                        //List<ShoppingItem> addItems = items;
+                                        dataHandler.addExtra(
+                                          _nameController.text,
+                                          items
+                                              .map(
+                                                (item) => ShoppingItem(
+                                                  item.product,
+                                                  amount: item.amount,
+                                                ),
+                                              )
+                                              .toList(),
+                                        );
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Inköpslistan "${_nameController.text}" har sparats!',
+                                            ),
+                                          ),
+                                        );
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                    child: const Text('Spara'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                 child: const Text('Lägg till som inköpslista'),
               ),
             ],
@@ -148,7 +172,9 @@ class KundvagnView extends StatelessWidget {
                         width: 48,
                         height: 48,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10), // Justera värdet för mer/mindre rundning
+                          borderRadius: BorderRadius.circular(
+                            10,
+                          ), // Justera värdet för mer/mindre rundning
                           child: dataHandler.getImage(item.product),
                         ),
                       ),
@@ -165,10 +191,7 @@ class KundvagnView extends StatelessWidget {
                           IconButton(
                             icon: const Icon(Icons.remove),
                             onPressed: () {
-                              dataHandler.shoppingCartUpdate(
-                                item,
-                                delta: -1,
-                              );
+                              dataHandler.shoppingCartUpdate(item, delta: -1);
                             },
                           ),
                           Text('${item.amount}'),
@@ -176,7 +199,7 @@ class KundvagnView extends StatelessWidget {
                             icon: const Icon(Icons.add),
                             onPressed: () {
                               dataHandler.shoppingCartAdd(
-                                ShoppingItem(item.product, amount: 1)
+                                ShoppingItem(item.product, amount: 1),
                               );
                             },
                           ),
@@ -191,7 +214,9 @@ class KundvagnView extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                SizedBox(width: 16), // Luft till höger om priset
+                                SizedBox(
+                                  width: 16,
+                                ), // Luft till höger om priset
                               ],
                             ),
                           ),
@@ -223,10 +248,7 @@ class KundvagnView extends StatelessWidget {
             children: [
               const Text(
                 'Totalt:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(
                 '${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
@@ -252,11 +274,15 @@ class KundvagnView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onPressed: items.isEmpty
-                  ? null // Gör knappen inaktiv om varukorgen är tom
-                  : () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Betalsida()));
-                    },
+              onPressed:
+                  items.isEmpty
+                      ? null // Gör knappen inaktiv om varukorgen är tom
+                      : () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Betalsida()),
+                        );
+                      },
               child: const Text('Gå till kassan'),
             ),
           ),
