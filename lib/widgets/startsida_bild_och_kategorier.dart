@@ -100,6 +100,10 @@ class StartsidaBildOchKategorier extends StatelessWidget {
                           width: 250,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1,
+                            ),
                             image: DecorationImage(
                               image: AssetImage(
                                 categoryImages[cat] ??
@@ -135,6 +139,10 @@ class StartsidaBildOchKategorier extends StatelessWidget {
           width: screenwidth - 315,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.black,
+              width: 1,
+            ),
             image: DecorationImage(
               image: AssetImage(
                 'assets/images/glada_pension--rer.jpg',
@@ -145,6 +153,7 @@ class StartsidaBildOchKategorier extends StatelessWidget {
           alignment: Alignment.center,
           child: Container(
             alignment: Alignment.bottomCenter,
+            
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -159,6 +168,8 @@ class StartsidaBildOchKategorier extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.ligtblue,
+                    side: BorderSide(width: 0.5, color: Colors.black),
+                    
                   ),
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => ListorPage()));
