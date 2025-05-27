@@ -124,7 +124,13 @@ class _BetalsidaState extends State<Betalsida> {
       ),
           ),
           SliverToBoxAdapter(child: SizedBox(height: 50)),
-          SliverToBoxAdapter(child: Footer()),
+            SliverFillRemaining(
+            hasScrollBody: false,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Footer(),
+            ),
+            ),
         ],
       ),
     );
