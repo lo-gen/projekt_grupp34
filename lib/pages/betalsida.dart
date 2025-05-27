@@ -22,6 +22,12 @@ class _BetalsidaState extends State<Betalsida> {
   final TextEditingController kontonummerController = TextEditingController();
   final TextEditingController cvvController = TextEditingController();
   final TextEditingController utgangsdatumController = TextEditingController();
+  final TextEditingController korttypController = TextEditingController();
+  final TextEditingController namnController = TextEditingController();
+  final TextEditingController manadController = TextEditingController();
+  final TextEditingController arController = TextEditingController();
+  final TextEditingController kortnummerController = TextEditingController();
+  final TextEditingController cvcController = TextEditingController();
 
   DateTime leveransStartDate = DateTime.now();
 
@@ -35,6 +41,21 @@ class _BetalsidaState extends State<Betalsida> {
     setState(() {
       leveransStartDate = leveransStartDate.add(const Duration(days: 3));
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final imat = Provider.of<ImatDataHandler>(context, listen: false);
+    final card = imat.getCreditCard();
+    if (card.cardNumber.isNotEmpty) {
+      korttypController.text = card.cardType;
+      namnController.text = card.holdersName;
+      manadController.text = card.validMonth.toString().padLeft(2, '0');
+      arController.text = card.validYear.toString().padLeft(2, '0');
+      kortnummerController.text = card.cardNumber;
+      cvcController.text = card.verificationCode.toString().padLeft(3, '0');
+    }
   }
 
   @override
@@ -323,18 +344,45 @@ class _BetalsidaState extends State<Betalsida> {
         ),
         const SizedBox(height: 16),
         TextField(
-          controller: kontonummerController,
-          decoration: const InputDecoration(labelText: "Kontonummer"),
+          controller: korttypController,
+          decoration: const InputDecoration(labelText: "Korttyp"),
         ),
         const SizedBox(height: 8),
         TextField(
-          controller: cvvController,
-          decoration: const InputDecoration(labelText: "CVV2"),
+          controller: namnController,
+          decoration: const InputDecoration(labelText: "Namn på kortet"),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: manadController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: "Månad (MM)"),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: TextField(
+                controller: arController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: "År (YY)"),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
         TextField(
-          controller: utgangsdatumController,
-          decoration: const InputDecoration(labelText: "Utgångsdatum"),
+          controller: kortnummerController,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: "Kortnummer"),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: cvcController,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: "Verifikationskod (CVC)"),
         ),
         const SizedBox(height: 16),
           
