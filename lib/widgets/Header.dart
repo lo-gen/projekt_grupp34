@@ -157,13 +157,10 @@ class _HeaderState extends State<Header> {
                         textStyle: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
-                        showGeneralDialog(
+                        showDialog(
                           context: context,
                           barrierDismissible: true,
-                          barrierLabel: "Varukorg",
-                          barrierColor: Colors.black54,
-                          transitionDuration: const Duration(milliseconds: 200),
-                          pageBuilder: (context, animation, secondaryAnimation) {
+                          builder: (dialogContext) {
                             double screenHeight = MediaQuery.of(context).size.height;
                             return Align(
                               alignment: Alignment.centerRight,

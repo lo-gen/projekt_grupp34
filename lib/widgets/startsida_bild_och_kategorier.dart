@@ -20,14 +20,27 @@ class StartsidaBildOchKategorier extends StatelessWidget {
     // För demo: mappa kategori till bild (lägg till fler bilder om du har)
     final Map<ProductCategory, String> categoryImages = {
       ProductCategory.MEAT: 'assets/images/Kött.jpg',
-      //ProductCategory.FISH: 'assets/images/Fisk.jpg',
-      //ProductCategory.VEGETABLE_FRUIT: 'assets/images/Gront.jpg',
-      //ProductCategory.COLD_DRINKS: 'assets/images/Dryck.jpg',
-      //ProductCategory.BREAD: 'assets/images/Brod.jpg',
-      //ProductCategory.DAIRIES: 'assets/images/Mejeri.jpg',
-      //ProductCategory.FLOUR_SUGAR_SALT: 'assets/images/Skafferi.jpg',
-      //ProductCategory.POTATO_RICE: 'assets/images/Kolhydrater.jpg',
-      // Lägg till fler om du har bilder
+      ProductCategory.FISH: 'assets/images/Fisk.jpg',
+      ProductCategory.VEGETABLE_FRUIT: 'assets/images/Frukt & Grönt.jpg',
+      ProductCategory.COLD_DRINKS: 'assets/images/Dryck.jpg',
+      ProductCategory.BREAD: 'assets/images/Bröd.jpg',
+      ProductCategory.DAIRIES: 'assets/images/Mejeri.jpg',
+      ProductCategory.FLOUR_SUGAR_SALT: 'assets/images/Skafferi.jpg',
+      ProductCategory.POTATO_RICE: 'assets/images/Kolhydrater.jpg',
+      ProductCategory.PASTA: 'assets/images/Pasta.jpg',
+      ProductCategory.ROOT_VEGETABLE: 'assets/images/Rotfrukter.jpg',
+      ProductCategory.BERRY: 'assets/images/Bär.jpg',
+      ProductCategory.CITRUS_FRUIT: 'assets/images/Citrus.jpg',
+      ProductCategory.NUTS_AND_SEEDS: 'assets/images/Nötter.jpg',
+      ProductCategory.SWEET: 'assets/images/Sött.jpg',
+      ProductCategory.CABBAGE: 'assets/images/Kål.jpg',
+      ProductCategory.MELONS: 'assets/images/Frukt.jpg', // Ingen Melon-bild, använder Frukt
+      ProductCategory.EXOTIC_FRUIT: 'assets/images/Exotisk frukt.jpg',
+      ProductCategory.POD: 'assets/images/Baljväxter.jpg',
+      ProductCategory.HERB: 'assets/images/Ört.jpg',
+      ProductCategory.HOT_DRINKS: 'assets/images/Varm dryck.jpg',
+      ProductCategory.FRUIT: 'assets/images/Frukt.jpg',
+      // Lägg till fler om du har fler kategorier/bilder
     };
 
     // Mappa enum till svenska namn
@@ -90,7 +103,7 @@ class StartsidaBildOchKategorier extends StatelessWidget {
                             image: DecorationImage(
                               image: AssetImage(
                                 categoryImages[cat] ??
-                                    'assets/images/Kött.jpg', // fallback
+                                    'assets/images/$cat.jpg', // fallback
                               ),
                               fit: BoxFit.cover,
                             ),
@@ -124,7 +137,7 @@ class StartsidaBildOchKategorier extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             image: DecorationImage(
               image: AssetImage(
-                'assets/images/Kött.jpg',
+                'assets/images/glada_pension--rer.jpg',
               ),
               fit: BoxFit.cover,
             ),

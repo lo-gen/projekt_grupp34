@@ -28,7 +28,7 @@ class KundvagnView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      'Kundvagn (${items.fold<int>(0, (sum, item) => sum + (item.amount as int))} varor)',
+                      'Kundvagn (${items.fold<int>(0, (sum, item) => sum + (item.amount.toInt()))} varor)',
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,

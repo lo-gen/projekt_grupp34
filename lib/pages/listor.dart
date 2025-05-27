@@ -206,15 +206,29 @@ class _ListorPageState extends State<ListorPage> {
                                                   onPressed: () {
                                                     imat.shoppingCartAdd(item);
                                                     ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text('${item.product.name} har lagts till i kundvagnen!'),
-                                                        duration: Duration(seconds: 2),
-                                                        backgroundColor: AppTheme.darkblue,
-                                                        behavior: SnackBarBehavior.floating,
-                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                                      ),
-                                                    );
+                                        SnackBar(
+                                          content: Container(
+                                          height: 80,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            '${item.product.name} har \n lagts till i kundvagnen!',
+                                            style: TextStyle(fontSize: 24, color: AppTheme.white, fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          ),
+                                          duration: Duration(seconds: 2),
+                                          backgroundColor: AppTheme.darkblue,
+                                          behavior: SnackBarBehavior.floating,
+                                          margin: EdgeInsets.only(
+                                          top: 100,
+                                          bottom: 580,
+                                          left: MediaQuery.of(context).size.width * 0.735, // Increased left margin to make it less wide
+                                          right: 15,
+                                          ),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                          dismissDirection: DismissDirection.horizontal,
+                                        ),
+                                        );
                                                   },
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
@@ -630,15 +644,29 @@ class _ListorPageState extends State<ListorPage> {
                             imat.shoppingCartAdd(item);
                           }
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Listan "$listName" har lagts till i kundvagnen!'),
-                              duration: Duration(seconds: 2),
-                              backgroundColor: AppTheme.darkblue,
-                              behavior: SnackBarBehavior.floating,
-                              margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            ),
-                          );
+                                        SnackBar(
+                                          content: Container(
+                                          height: 80,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Listan $listName har \n lagts till i kundvagnen!',
+                                            style: TextStyle(fontSize: 24, color: AppTheme.white, fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          ),
+                                          duration: Duration(seconds: 2),
+                                          backgroundColor: AppTheme.darkblue,
+                                          behavior: SnackBarBehavior.floating,
+                                          margin: EdgeInsets.only(
+                                          top: 100,
+                                          bottom: 580,
+                                          left: MediaQuery.of(context).size.width * 0.735, // Increased left margin to make it less wide
+                                          right: 15,
+                                          ),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                          dismissDirection: DismissDirection.horizontal,
+                                        ),
+                                        );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.darkblue,
@@ -704,329 +732,295 @@ class _ListorPageState extends State<ListorPage> {
                     showDialog(
                       context: context,
                       builder: (context) {
+                      // Use StatefulBuilder to refresh dialog UI on setState
+                      return StatefulBuilder(
+                        builder: (context, setStateDialog) {
                         return AlertDialog(
                           backgroundColor: AppTheme.white,
                           title: Text(
-                            'Inköpslista: $listName',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.darkestblue)
+                          'Inköpslista: $listName',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.darkestblue)
                           ),
                           content: SizedBox(
-                            width: 600,
-                            child: SingleChildScrollView(
-                              child: Column(
+                          width: 600,
+                          child: SingleChildScrollView(
+                            child: Column(
+                            children: [
+                              ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: items.length,
+                              itemBuilder: (context, idx) {
+                                final item = items[idx];
+                                return Column(
                                 children: [
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: items.length,
-                                    itemBuilder: (context, idx) {
-                                      final item = items[idx];
-                                      return Column(
-                                        children: [
-                                          ListTile(
-                                            title: Text(item.product.name),
-                                            subtitle: Text('${item.amount} st'),
-                                            trailing: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(style: TextStyle(fontSize: 16, color: AppTheme.darkestblue),
-                                                  '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
-                                                ),
-                                                SizedBox(width: 85),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    // Increase amount by 1
-                                                    items[idx].amount -= 1;
-                                                    if (items[idx].amount < 1) {
-                                                      items.removeAt(idx);
-                                                    }
-                                                    // Update the list in imat
-                                                    imat.addExtra(
-                                                      listName,
-                                                      List<ShoppingItem>.from(
-                                                        items,
-                                                      ),
-                                                    );
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text('${item.product.name} har minskat med 1!'),
-                                                        duration: Duration(seconds: 2),
-                                                        backgroundColor: AppTheme.darkblue,
-                                                        behavior: SnackBarBehavior.floating,
-                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                                      ),
-                                                    );
-                                                    // Update the UI
-                                                    setState(() {});
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    
-                                                    backgroundColor:
-                                                        AppTheme.darkblue,
-                                                    foregroundColor:
-                                                        AppTheme.white,
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 12,
-                                                          vertical: 6,
-                                                        ),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            5,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    '-1', // Changed text to reflect new functionality
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(width: 4),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    // Increase amount by 1
-                                                    items[idx].amount += 1;
-                                                    // Update the list in imat
-                                                    imat.addExtra(
-                                                      listName,
-                                                      List<ShoppingItem>.from(
-                                                        items,
-                                                      ),
-                                                    );
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text('${item.product.name} har ökat med 1!'),
-                                                        duration: Duration(seconds: 2),
-                                                        backgroundColor: AppTheme.darkblue,
-                                                        behavior: SnackBarBehavior.floating,
-                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                                      ),
-                                                    );
-                                                    // Update the UI
-                                                    setState(() {});
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    
-                                                    backgroundColor:
-                                                        AppTheme.darkblue,
-                                                    foregroundColor:
-                                                        AppTheme.white,
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 12,
-                                                          vertical: 6,
-                                                        ),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            5,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    '+1', // Changed text to reflect new functionality
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(width: 16),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    imat.shoppingCartAdd(item);
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text('${item.product.name} har lagts till i kundvagnen!'),
-                                                        duration: Duration(seconds: 2),
-                                                        backgroundColor: AppTheme.darkblue,
-                                                        behavior: SnackBarBehavior.floating,
-                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                                      ),
-                                                    );
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        AppTheme.darkblue,
-                                                    foregroundColor:
-                                                        AppTheme.white,
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 8,
-                                                        ),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            8,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    'lägg till',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  icon: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.red,
-                                                  ),
-                                                  tooltip: 'Ta bort vara',
-                                                  onPressed: () {
-                                                    items.removeAt(idx);
-                                                    imat.addExtra(
-                                                      listName,
-                                                      List<ShoppingItem>.from(
-                                                        items,
-                                                      ),
-                                                    );
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text('${item.product.name} har tagits bort från listan!'),
-                                                        duration: Duration(seconds: 2),
-                                                        backgroundColor: AppTheme.darkblue,
-                                                        behavior: SnackBarBehavior.floating,
-                                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                                      ),
-                                                    );
-                                                    setState(() {});
-                                                    //TODO Eventuellt försöka få listan att förbli öppen
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Divider(
-                                            thickness: 1,
-                                            color: Colors.grey[300],
-                                            height: 1,
-                                          ),
-                                        ],
+                                  ListTile(
+                                  title: Text(item.product.name),
+                                  subtitle: Text('${item.amount} st'),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                    Text(
+                                      style: TextStyle(fontSize: 16, color: AppTheme.darkestblue),
+                                      '${(item.product.price * item.amount).toStringAsFixed(2)} kr',
+                                    ),
+                                    SizedBox(width: 85),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                      items[idx].amount -= 1;
+                                      if (items[idx].amount < 1) {
+                                        items.removeAt(idx);
+                                      }
+                                      imat.addExtra(
+                                        listName,
+                                        List<ShoppingItem>.from(items),
                                       );
-                                    },
+                                      
+                                      setStateDialog(() {});
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppTheme.darkblue,
+                                      foregroundColor: AppTheme.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      ),
+                                      child: const Text(
+                                      '-1',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 4),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                      items[idx].amount += 1;
+                                      imat.addExtra(
+                                        listName,
+                                        List<ShoppingItem>.from(items),
+                                      );
+                                      
+                                      setStateDialog(() {});
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppTheme.darkblue,
+                                      foregroundColor: AppTheme.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      ),
+                                      child: const Text(
+                                      '+1',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 16),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        imat.shoppingCartAdd(item);
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Container(
+                                          height: 80,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            '${item.product.name} har \n lagts till i kundvagnen!',
+                                            style: TextStyle(fontSize: 24, color: AppTheme.white, fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          ),
+                                          duration: Duration(seconds: 2),
+                                          backgroundColor: AppTheme.darkblue,
+                                          behavior: SnackBarBehavior.floating,
+                                          margin: EdgeInsets.only(
+                                          top: 100,
+                                          bottom: 580,
+                                          left: MediaQuery.of(context).size.width * 0.735, // Increased left margin to make it less wide
+                                          right: 15,
+                                          ),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                          dismissDirection: DismissDirection.horizontal,
+                                        ),
+                                        );
+                                      setStateDialog(() {});
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppTheme.darkblue,
+                                      foregroundColor: AppTheme.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 8,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      ),
+                                      child: const Text(
+                                      'lägg till',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                      ),
+                                      tooltip: 'Ta bort vara',
+                                      onPressed: () {
+                                      items.removeAt(idx);
+                                      imat.addExtra(
+                                        listName,
+                                        List<ShoppingItem>.from(items),
+                                      );
+                                      
+                                      setStateDialog(() {});
+                                      },
+                                    ),
+                                    ],
                                   ),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    'Total kostnad: ${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                                  ),
+                                  Divider(
+                                  thickness: 1,
+                                  color: Colors.grey[300],
+                                  height: 1,
                                   ),
                                 ],
+                                );
+                              },
                               ),
+                              SizedBox(height: 16),
+                              Text(
+                              'Total kostnad: ${items.fold<double>(0, (sum, item) => sum + (item.product.price * item.amount)).toStringAsFixed(2)} kr',
+                              ),
+                              if (items.isEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    'Listan är tom.',
+                                    style: TextStyle(fontSize: 18, color: Colors.red),
+                                  ),
+                                ),
+                            ],
                             ),
                           ),
+                          ),
                           actions: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                  child: Text(style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),'Stäng'),
-                                  onPressed: () => Navigator.of(context).pop(),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    for (var item in items) {
-                                      imat.shoppingCartAdd(item);
-                                    }
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Alla produkter har lagts till i kundvagnen!'),
-                                        duration: Duration(seconds: 2),
-                                        backgroundColor: AppTheme.darkblue,
-                                        behavior: SnackBarBehavior.floating,
-                                        margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppTheme.darkblue,
-                                    foregroundColor: AppTheme.white,
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Lägg till alla produkter i kundvagnen',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                TextButton(
-                                  child: Text(style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),'Byt namn'),
-                                  onPressed: () {
-                                    final renameController =
-                                        TextEditingController(text: listName);
-                                    showDialog(
-                                      context: context,
-                                      builder:
-                                          (context) => AlertDialog(
-                                            title: Text(
-                                              'Byt namn på inköpslista',
-                                            ),
-                                            content: TextField(
-                                              controller: renameController,
-                                              autofocus: true,
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed:
-                                                    () =>
-                                                        Navigator.of(
-                                                          context,
-                                                        ).pop(),
-                                                child: Text('Avbryt'),
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  final newName =
-                                                      renameController.text
-                                                          .trim();
-                                                  if (newName.isNotEmpty &&
-                                                      newName != listName) {
-                                                    final items =
-                                                        imat.getExtras()[listName];
-                                                    if (items != null) {
-                                                      imat.removeExtra(
-                                                        listName,
-                                                      );
-                                                      imat.addExtra(
-                                                        newName,
-                                                        items,
-                                                      );
-                                                    }
-                                                  }
-                                                  Navigator.of(context).pop();
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text('Spara'),
-                                              ),
-                                            ],
-                                          ),
-                                    );
-                                  },
-                                ),
-                              ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                            TextButton(
+                              child: Text(style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),'Stäng'),
+                              onPressed: () => Navigator.of(context).pop(),
                             ),
+                            ElevatedButton(
+                              onPressed: () {
+                              for (var item in items) {
+                                imat.shoppingCartAdd(item);
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Container(
+                                          height: 80,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Alla produkter har lagts till i kundvagnen!',
+                                            style: TextStyle(fontSize: 24, color: AppTheme.white, fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          ),
+                                          duration: Duration(seconds: 2),
+                                          backgroundColor: AppTheme.darkblue,
+                                          behavior: SnackBarBehavior.floating,
+                                          margin: EdgeInsets.only(
+                                          top: 100,
+                                          bottom: 580,
+                                          left: MediaQuery.of(context).size.width * 0.735, // Increased left margin to make it less wide
+                                          right: 15,
+                                          ),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                          dismissDirection: DismissDirection.horizontal,
+                                        ),
+                                        );
+                              setStateDialog(() {});
+                              },
+                              style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.darkblue,
+                              foregroundColor: AppTheme.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              ),
+                              child: const Text(
+                              'Lägg till alla produkter i kundvagnen',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              ),
+                            ),
+                            TextButton(
+                              child: Text(style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),'Byt namn'),
+                              onPressed: () {
+                              final renameController =
+                                TextEditingController(text: listName);
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                title: Text(
+                                  'Byt namn på inköpslista',
+                                ),
+                                content: TextField(
+                                  controller: renameController,
+                                  autofocus: true,
+                                ),
+                                actions: [
+                                  TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text('Avbryt'),
+                                  ),
+                                  ElevatedButton(
+                                  onPressed: () {
+                                    final newName = renameController.text.trim();
+                                    if (newName.isNotEmpty && newName != listName) {
+                                    final items = imat.getExtras()[listName];
+                                    if (items != null) {
+                                      imat.removeExtra(listName);
+                                      imat.addExtra(newName, items);
+                                    }
+                                    }
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Spara'),
+                                  ),
+                                ],
+                                ),
+                              );
+                              },
+                            ),
+                            ],
+                          ),
                           ],
                         );
+                        },
+                      );
                       },
                     );
                   },
