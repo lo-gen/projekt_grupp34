@@ -14,13 +14,11 @@ class Footer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Divider(thickness: 2, color: Colors.grey[400], height: 0),
-          SizedBox(height: AppTheme.paddingTiny),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: AppTheme.paddingHuge),
                 Column(
                   children: [
                     Text(
@@ -52,6 +50,8 @@ class Footer extends StatelessWidget {
                     Text('Swish: 123456, kung e du'),
                   ],
                 ),
+                SizedBox(width: 70),
+
               ],
             ),
           ),

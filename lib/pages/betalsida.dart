@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
+import 'package:projekt_grupp34/pages/startsida.dart';
 import 'package:projekt_grupp34/widgets/simple_header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/widgets/LeveranstiderGrid.dart';
@@ -42,12 +44,46 @@ class _BetalsidaState extends State<Betalsida> {
         slivers: [
           SliverToBoxAdapter(child: SimpleHeader()),
           SliverToBoxAdapter(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+            
+           Padding(
+              padding: const EdgeInsets.only(top: 16.0, left: 16.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  width: 200,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: AppTheme.darkblue,
+                  ),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                    },
+                    child: Center(
+                      child: Text(
+                        'Tillbaka till Startsida',
+                        style: TextStyle(
+                          fontSize: 28,
+                          color: AppTheme.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          
+         Column(
+              children: [ Container(
                 constraints: const BoxConstraints(maxWidth: 1000),
                 padding: const EdgeInsets.all(24),
-                color: const Color(0xFFF9F7F7),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -60,7 +96,11 @@ class _BetalsidaState extends State<Betalsida> {
                   ],
                 ),
               ),
+              ]
             ),
+          
+        ],
+      ),
           ),
           SliverToBoxAdapter(child: SizedBox(height: 50)),
           SliverToBoxAdapter(child: Footer()),
@@ -76,6 +116,7 @@ class _BetalsidaState extends State<Betalsida> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+
         _stepButton("1. Leveranssätt", step == 0 ? active : inactive),
         const Icon(Icons.arrow_forward, size: 28),
         _stepButton("2. Översikt", step == 1 ? active : inactive),
@@ -109,7 +150,7 @@ class _BetalsidaState extends State<Betalsida> {
     String? selectedType = imat.selectedDeliveryType;
     bool showTable = selectedType != null;
 
-    final newStartDate = startDate.subtract(const Duration(days: 3));
+    final newStartDate = leveransStartDate.subtract(const Duration(days: 3));
     final today = DateTime.now();
     final newStartDateDateOnly = DateTime(newStartDate.year, newStartDate.month, newStartDate.day);
     final todayDateOnly = DateTime(today.year, today.month, today.day);
@@ -126,30 +167,30 @@ class _BetalsidaState extends State<Betalsida> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor:
-                    selectedType == "hem" ? Colors.green : Colors.grey[200],
+                    selectedType == "hem" ? Colors.green : const Color(0xFF3F4257),
                 foregroundColor: Colors.black,
-                minimumSize: const Size(140, 40),
+                minimumSize: const Size(200, 40),
               ),
               onPressed: () {
                 imat.setSelectedDeliveryType("hem");
                 setState(() {});
               },
-              child: const Text("Hemleverans"),
+              child: const Text("Hemleverans", style: TextStyle(color: AppTheme.white),),
             ),
             const SizedBox(width: 24),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: selectedType == "upphämtning"
                     ? Colors.green
-                    : Colors.grey[200],
+                    : const Color(0xFF3F4257),
                 foregroundColor: Colors.black,
-                minimumSize: const Size(140, 40),
+                minimumSize: const Size(200, 40),
               ),
               onPressed: () {
                 imat.setSelectedDeliveryType("upphämtning");
                 setState(() {});
               },
-              child: const Text("Upphämtning i butik"),
+              child: const Text("Upphämtning i butik", style: TextStyle(color: AppTheme.white),),
             ),
           ],
         ),
@@ -162,31 +203,23 @@ class _BetalsidaState extends State<Betalsida> {
             },
           ),
         const SizedBox(height: 32),
-        if (selectedDeliveryTime != null && selectedDeliveryTime.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Vald leveranstid: $selectedDeliveryTime",
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
+        
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-              child: const Text("Tillbaka till startsidan"),
-            ),
-            const SizedBox(width: 16),
+            SizedBox(width: 790,),
             if (selectedDeliveryTime != null && selectedDeliveryTime.isNotEmpty)
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: () {
                   setState(() {
                     step = 1;
                   });
                 },
-                child: const Text("Fortsätt"),
+                child: const Text("Fortsätt", style: TextStyle(fontSize: 30, color: AppTheme.white),),
               ),
           ],
         ),
@@ -212,7 +245,7 @@ class _BetalsidaState extends State<Betalsida> {
         ),
         const SizedBox(height: 16),
         Container(
-          color: Colors.white,
+          color: Colors.grey[200],
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
@@ -224,8 +257,14 @@ class _BetalsidaState extends State<Betalsida> {
               else
                 ...items.map((item) => Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
+                      child: 
+                      Column(
+                        children: [
+                      Text(
                         "${item.amount}x ${item.product.name} - ${(item.product.price * item.amount).toStringAsFixed(2)} kr",
+                      ),
+                      const SizedBox(height: 10),
+                        ],
                       ),
                     )),
               const SizedBox(height: 8),
@@ -244,21 +283,29 @@ class _BetalsidaState extends State<Betalsida> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.darkblue,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 setState(() {
                   step = 0;
                 });
               },
-              child: const Text("Gå tillbaka"),
+              child: const Text("Gå tillbaka", style: TextStyle(fontSize: 30, color: AppTheme.white),),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 600),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 setState(() {
                   step = 2;
                 });
               },
-              child: const Text("Fortsätt"),
+              child: const Text("Fortsätt", style: TextStyle(fontSize: 30, color: AppTheme.white),),
             ),
           ],
         ),
@@ -290,11 +337,29 @@ class _BetalsidaState extends State<Betalsida> {
           decoration: const InputDecoration(labelText: "Utgångsdatum"),
         ),
         const SizedBox(height: 16),
+          
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset("assets/images/bankid.png", height: 40),
-            const SizedBox(width: 8),
+            SizedBox(width: 2,),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppTheme.darkblue,
+            foregroundColor: Colors.white,
+          ),
+          onPressed: () {
+            setState(() {
+              step = 1;
+            });
+          },
+          child: const Text("Gå tillbaka", style: TextStyle(fontSize: 30, color: AppTheme.white),),
+        ),
+        const SizedBox(width: 400),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 var imat = Provider.of<ImatDataHandler>(context, listen: false);
                 imat.placeOrder();
@@ -302,20 +367,11 @@ class _BetalsidaState extends State<Betalsida> {
                   step = 3;
                 });
               },
-              child: const Text("Identifiera med bank-ID"),
+              child: const Text("Identifiera med bank-ID", style: TextStyle(fontSize: 30, color: AppTheme.white),),
             ),
-          ],
-        ),
-        const SizedBox(height: 24),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              step = 1;
-            });
-          },
-          child: const Text("Gå tillbaka"),
-        ),
       ],
+        ),
+      ]
     );
   }
 
