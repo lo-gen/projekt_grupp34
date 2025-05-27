@@ -16,7 +16,7 @@ class ProduktPopUp extends StatefulWidget {
 class _ProduktPopUpState extends State<ProduktPopUp> {
   @override
   Widget build(BuildContext context) {
-    final iMat = Provider.of<ImatDataHandler>(context); // listen: true by default
+    var iMat = Provider.of<ImatDataHandler>(context); // listen: true by default
 
     return Container(
       width: 600,
@@ -26,6 +26,7 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Stack(
+        alignment: Alignment.center,
         children: [
           Row(
             children: [
@@ -34,8 +35,8 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: SizedBox(
-                  width: 140,
-                  height: 140,
+                  width: 200,
+                  height: 200,
                   child: iMat.getImage(widget.product),
                 ),
               ),
@@ -48,7 +49,7 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
                   children: [
                     const SizedBox(height: 24),
                     Text(widget.product.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Text('Pris: ${widget.product.price} kr', style: const TextStyle(fontSize: 18)),
                     if (widget.product.isEcological) 
                       Text('${widget.product.name} är ekologisk', style: const TextStyle(fontSize: 16))
@@ -59,9 +60,37 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
                       child: Text(widget.product.category.name.toLowerCase(), style: const TextStyle(fontSize: 15)),
                     ),
                     // Favoritstjärna
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: IconButton(
+                    
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                    ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.darkblue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      final item = ShoppingItem(widget.product);
+                      iMat.shoppingCartAdd(item);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${widget.product.name} har lagts till i din inköpslista!'),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      '    Lägg till    ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: AppTheme.white,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: AppTheme.paddingHuge),
+                  IconButton(
                         icon: Icon(
                           iMat.isFavorite(widget.product) ? Icons.star : Icons.star_border,
                           color: iMat.isFavorite(widget.product) ? Colors.amber : Colors.black,
@@ -72,15 +101,7 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
                           iMat.toggleFavorite(widget.product);
                         },
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        final item = ShoppingItem(widget.product);
-                        iMat.shoppingCartAdd(item);
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Lägg till'),
+                      ],
                     ),
                   ],
                 ),
