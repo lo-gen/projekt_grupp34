@@ -4,6 +4,7 @@ import 'package:projekt_grupp34/model/imat/product.dart';
 import 'package:projekt_grupp34/model/imat/shopping_item.dart';
 import 'package:provider/provider.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
+import 'package:projekt_grupp34/model/imat/product_detail.dart';
 
 class ProduktPopUp extends StatefulWidget {
   final Product product;
@@ -16,7 +17,8 @@ class ProduktPopUp extends StatefulWidget {
 class _ProduktPopUpState extends State<ProduktPopUp> {
   @override
   Widget build(BuildContext context) {
-    var iMat = Provider.of<ImatDataHandler>(context); // listen: true by default
+    var iMat = Provider.of<ImatDataHandler>(context);
+    final ProductDetail? detail = iMat.getDetail(widget.product);
 
     return Container(
       width: 600,
@@ -26,87 +28,153 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         children: [
-          Row(
-            children: [
-              SizedBox(width: AppTheme.paddingTiny),
-              // Bilden till vänster
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: iMat.getImage(widget.product),
-                ),
-              ),
-              const SizedBox(width: 32),
-              // Info och knapp till höger
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+          // Make the whole popup scrollable
+          SingleChildScrollView(
+            child: Column(
+              
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: AppTheme.paddingSmall),
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 24),
-                    Text(widget.product.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    Text('Pris: ${widget.product.price} kr', style: const TextStyle(fontSize: 18)),
-                    if (widget.product.isEcological) 
-                      Text('${widget.product.name} är ekologisk', style: const TextStyle(fontSize: 16))
-                    else
-                      Text('${widget.product.name} är inte ekologisk', style: const TextStyle(fontSize: 16)),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(widget.product.category.name.toLowerCase(), style: const TextStyle(fontSize: 15)),
-                    ),
-                    // Favoritstjärna
-                    
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                    ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.darkblue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                    SizedBox(width: AppTheme.paddingTiny),
+                    // Bilden till vänster
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: iMat.getImage(widget.product),
                       ),
                     ),
-                    onPressed: () {
-                      final item = ShoppingItem(widget.product);
-                      iMat.shoppingCartAdd(item);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${widget.product.name} har lagts till i din inköpslista!'),
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      '    Lägg till    ',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: AppTheme.white,
+                    const SizedBox(width: 32),
+                    // Info och knapp till höger
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //const SizedBox(height: 24),
+                          Text(widget.product.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 8),
+                          Text(
+                            detail != null && detail.brand.isNotEmpty
+                                ? 'Produkt från ${detail.brand}'
+                                : 'Inget varumärke tillgänglig',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 4),
+                          Text('Pris: ${widget.product.price.toStringAsFixed(2)} ${widget.product.unit}', style: const TextStyle(fontSize: 16)),
+                          const SizedBox(height: 4),
+                          if (widget.product.isEcological)
+                            Text('${widget.product.name} är ekologisk', style: const TextStyle(fontSize: 16))
+                          else
+                            Text('${widget.product.name} är inte ekologisk', style: const TextStyle(fontSize: 16)),
+                          const SizedBox(height: 4),
+                          Text(
+                            detail != null && detail.origin.isNotEmpty
+                                ? 'Ursprung: ${detail.origin}'
+                                : 'Ursprung saknas',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 100),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.darkblue,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  final item = ShoppingItem(widget.product);
+                                  iMat.shoppingCartAdd(item);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('${widget.product.name} har lagts till i din inköpslista!'),
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  '    Lägg till    ',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: AppTheme.white,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: AppTheme.paddingHuge),
+                              IconButton(
+                                icon: Icon(
+                                  iMat.isFavorite(widget.product) ? Icons.star : Icons.star_border,
+                                  color: iMat.isFavorite(widget.product) ? Colors.amber : Colors.black,
+                                  size: 32,
+                                ),
+                                tooltip: iMat.isFavorite(widget.product) ? 'Ta bort från favoriter' : 'Lägg till som favorit',
+                                onPressed: () {
+                                  iMat.toggleFavorite(widget.product);
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                        ],
                       ),
-                    ),
-                  ),
-                  SizedBox(width: AppTheme.paddingHuge),
-                  IconButton(
-                        icon: Icon(
-                          iMat.isFavorite(widget.product) ? Icons.star : Icons.star_border,
-                          color: iMat.isFavorite(widget.product) ? Colors.amber : Colors.black,
-                          size: 32,
-                        ),
-                        tooltip: iMat.isFavorite(widget.product) ? 'Ta bort från favoriter' : 'Lägg till som favorit',
-                        onPressed: () {
-                          iMat.toggleFavorite(widget.product);
-                        },
-                      ),
-                      ],
                     ),
                   ],
                 ),
-              ),
-            ],
+                //const SizedBox(height: 16),
+                // ExpansionTiles under raden men i samma column
+
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Innehållsförteckning
+                    Expanded(
+                      child: ExpansionTile(
+                        title: const Text('Innehållsförteckning', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                            child: Text(
+                              detail != null && detail.contents.isNotEmpty
+                                  ? detail.contents
+                                  : 'Innehållsförteckning saknas',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Produktbeskrivning
+                    Expanded(
+                      child: ExpansionTile(
+                        title: const Text('Produktbeskrivning', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                            child: Text(
+                              detail != null && detail.description.isNotEmpty
+                                  ? detail.description
+                                  : 'Beskrivning saknas',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppTheme.paddingMedium),
+              ],
+            ),
           ),
           // Stäng-kryss uppe till höger
           Positioned(
