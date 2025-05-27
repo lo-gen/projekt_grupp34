@@ -84,7 +84,7 @@ class _ListorPageState extends State<ListorPage> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 6,
+                    crossAxisCount: 7,
                     childAspectRatio: 0.75,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
