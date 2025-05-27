@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/model/imat/product.dart';
 import 'package:projekt_grupp34/model/imat/shopping_item.dart';
+import 'package:projekt_grupp34/widgets/shoppingLists.dart';
 import 'package:provider/provider.dart';
 import 'package:projekt_grupp34/model/imat_data_handler.dart';
 import 'package:projekt_grupp34/model/imat/product_detail.dart';
@@ -118,6 +119,24 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
                                 tooltip: iMat.isFavorite(widget.product) ? 'Ta bort från favoriter' : 'Lägg till som favorit',
                                 onPressed: () {
                                   iMat.toggleFavorite(widget.product);
+                                },
+                              ),
+                              SizedBox(width: AppTheme.paddingSmall),
+                              // Knapp för att lägga till i inköpslista
+                              IconButton(
+                                icon: const Icon(Icons.assignment, size: 32, color: AppTheme.darkblue),
+                                tooltip: 'Lägg till i inköpslista',
+                                onPressed: () {
+                                  // Lägg till funktionalitet här om det behövs
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      content: SingleChildScrollView( child: SizedBox(
+                                        width: 1000,
+                                        child: ShoppingLists(selectedItemProduct: widget.product),
+                                      ), )
+                                    ),
+                                  );
                                 },
                               ),
                             ],
