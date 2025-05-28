@@ -59,7 +59,7 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                   ),
                 ),
-                SizedBox(height: AppTheme.paddingSmall),
+                SizedBox(height: AppTheme.paddingTiny),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: GestureDetector(
@@ -74,13 +74,23 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                   ),
                 ),
-                SizedBox(height: AppTheme.paddingTiny),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    widget.product.name.isNotEmpty ? '${widget.product.price.toStringAsFixed(2)} ${widget.product.unit}' : 'Okänt pris',
-                    style: const TextStyle(fontSize: 14),
-                    textAlign: TextAlign.center,
+                  child: 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.product.name.isNotEmpty ? '${widget.product.price.toStringAsFixed(2)} ${widget.product.unit}' : 'Okänt pris',
+                        style: const TextStyle(fontSize: 14),
+                        textAlign: TextAlign.center,
+                  ),
+                      IconButton(
+                        icon: Icon(Icons.info_rounded, color: Colors.black),
+                        onPressed: () => _showProductPopUp(context),
+                        iconSize: 16,
+                        )
+                    ],
                   ),
                 ),
                 SizedBox(height: AppTheme.paddingTiny),
