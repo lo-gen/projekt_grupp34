@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/model/imat/product.dart';
+import 'package:projekt_grupp34/pages/startsida.dart';
 import 'package:projekt_grupp34/widgets/Header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/widgets/product_card.dart';
@@ -33,9 +34,37 @@ class Searchresult extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Kategorierslider på vänster sida
-                Kategorierslider(),
-                  
+                Column(
+                  children: [
+                    SizedBox(height: 20,),
+                    Container(
+                      width: 200,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: AppTheme.darkblue,
+                      ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                        },
+                        child: Center(
+                          child: Text(
+                            'Tillbaka till Startsida',
+                            style: TextStyle(
+                              fontSize: 28,
+                              color: AppTheme.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Kategorierslider(),
+                  ],
+                ),
                 
                 SizedBox(width: 16), // Liten mellanrum mellan slider och produkter
                 // Produkter och rubrik

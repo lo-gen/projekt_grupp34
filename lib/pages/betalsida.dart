@@ -452,7 +452,12 @@ class _BetalsidaState extends State<Betalsida> {
           ),
         ),
         const SizedBox(height: 24),
+        
         Image.asset("assets/images/thumbsup.jpg", height: 250),
+
+        Text('Kvitto skickas till din e-postadress',
+            style: TextStyle(fontSize: 24, color: Colors.black)),
+
         const SizedBox(height: AppTheme.paddingHuge),
         
         ElevatedButton(
