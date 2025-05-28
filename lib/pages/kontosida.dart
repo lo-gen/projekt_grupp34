@@ -23,12 +23,17 @@ class _KontosidaState extends State<Kontosida> {
   late String phone = "If you see this something went wrong - phone";
   late String address = "If you see this something went wrong - address";
   late String postal = "If you see this something went wrong - postal";
-  late String postAddress = "If you see this something went wrong - postAddress";
+  late String postAddress =
+      "If you see this something went wrong - postAddress";
 
   ///Metod för att öppna en dialogruta för att redigera information
   ///Triggeras när användaren trycker på "Ändra" knappen
   ///Tar emot en titel och en callback-funktion som körs när informationen ändras
-  Future<void> _editInfo(String title, ValueChanged<String> onChanged, {String initialValue = ""}) async {
+  Future<void> _editInfo(
+    String title,
+    ValueChanged<String> onChanged, {
+    String initialValue = "",
+  }) async {
     final controller = TextEditingController(text: initialValue);
     String? errorText;
 
@@ -46,9 +51,13 @@ class _KontosidaState extends State<Kontosida> {
               if (title == "E-post") {
                 valid = val.contains("@") && val.contains(".");
               } else if (title == "Telefon") {
-                valid = val.isNotEmpty && val.runes.every((c) => c >= 48 && c <= 57);
+                valid =
+                    val.isNotEmpty &&
+                    val.runes.every((c) => c >= 48 && c <= 57);
               } else if (title == "Postnummer") {
-                valid = val.length == 5 && val.runes.every((c) => c >= 48 && c <= 57);
+                valid =
+                    val.length == 5 &&
+                    val.runes.every((c) => c >= 48 && c <= 57);
               } else {
                 valid = val.isNotEmpty;
               }
@@ -88,7 +97,10 @@ class _KontosidaState extends State<Kontosida> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: errorText != null ? Colors.red : Theme.of(context).colorScheme.primary,
+                            color:
+                                errorText != null
+                                    ? Colors.red
+                                    : Theme.of(context).colorScheme.primary,
                             width: 2,
                           ),
                         ),
@@ -101,13 +113,14 @@ class _KontosidaState extends State<Kontosida> {
                         height: 22,
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: errorText != null && errorText!.isNotEmpty
-                              ? Text(
-                                  errorText!,
-                                  style: const TextStyle(color: Colors.red),
-                                  textAlign: TextAlign.left,
-                                )
-                              : null,
+                          child:
+                              errorText != null && errorText!.isNotEmpty
+                                  ? Text(
+                                    errorText!,
+                                    style: const TextStyle(color: Colors.red),
+                                    textAlign: TextAlign.left,
+                                  )
+                                  : null,
                         ),
                       ),
                     ),
@@ -119,10 +132,7 @@ class _KontosidaState extends State<Kontosida> {
                   onPressed: () => Navigator.pop(context),
                   child: const Text('Avbryt'),
                 ),
-                ElevatedButton(
-                  onPressed: trySave,
-                  child: const Text('Spara'),
-                ),
+                ElevatedButton(onPressed: trySave, child: const Text('Spara')),
               ],
             );
           },
@@ -135,14 +145,34 @@ class _KontosidaState extends State<Kontosida> {
     final dataHandler = Provider.of<ImatDataHandler>(context, listen: false);
     CreditCard? savedCard = dataHandler.getCreditCard();
     final cardTypes = ['Visa', 'Mastercard', 'Amex'];
-    String selectedType = cardTypes.contains(savedCard?.cardType)
-        ? savedCard!.cardType
-        : cardTypes[0];
-    final nameController = TextEditingController(text: savedCard?.holdersName ?? "");
-    final monthController = TextEditingController(text: savedCard?.validMonth != null ? savedCard!.validMonth.toString().padLeft(2, '0') : "");
-    final yearController = TextEditingController(text: savedCard?.validYear != null ? savedCard!.validYear.toString().padLeft(2, '0') : "");
-    final numberController = TextEditingController(text: savedCard?.cardNumber ?? "");
-    final cvcController = TextEditingController(text: savedCard?.verificationCode != null ? savedCard!.verificationCode.toString().padLeft(3, '0') : "");
+    String selectedType =
+        cardTypes.contains(savedCard?.cardType)
+            ? savedCard!.cardType
+            : cardTypes[0];
+    final nameController = TextEditingController(
+      text: savedCard?.holdersName ?? "",
+    );
+    final monthController = TextEditingController(
+      text:
+          savedCard?.validMonth != null
+              ? savedCard!.validMonth.toString().padLeft(2, '0')
+              : "",
+    );
+    final yearController = TextEditingController(
+      text:
+          savedCard?.validYear != null
+              ? savedCard!.validYear.toString().padLeft(2, '0')
+              : "",
+    );
+    final numberController = TextEditingController(
+      text: savedCard?.cardNumber ?? "",
+    );
+    final cvcController = TextEditingController(
+      text:
+          savedCard?.verificationCode != null
+              ? savedCard!.verificationCode.toString().padLeft(3, '0')
+              : "",
+    );
     String? errorText;
 
     await showDialog(
@@ -206,12 +236,15 @@ class _KontosidaState extends State<Kontosida> {
                     children: [
                       DropdownButtonFormField<String>(
                         value: selectedType,
-                        items: cardTypes
-                            .map((type) => DropdownMenuItem(
-                                  value: type,
-                                  child: Text(type),
-                                ))
-                            .toList(),
+                        items:
+                            cardTypes
+                                .map(
+                                  (type) => DropdownMenuItem(
+                                    value: type,
+                                    child: Text(type),
+                                  ),
+                                )
+                                .toList(),
                         onChanged: (val) {
                           if (val != null) setState(() => selectedType = val);
                         },
@@ -283,13 +316,14 @@ class _KontosidaState extends State<Kontosida> {
                           height: 22,
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: errorText != null && errorText!.isNotEmpty
-                                ? Text(
-                                    errorText!,
-                                    style: const TextStyle(color: Colors.red),
-                                    textAlign: TextAlign.left,
-                                  )
-                                : null,
+                            child:
+                                errorText != null && errorText!.isNotEmpty
+                                    ? Text(
+                                      errorText!,
+                                      style: const TextStyle(color: Colors.red),
+                                      textAlign: TextAlign.left,
+                                    )
+                                    : null,
                           ),
                         ),
                       ),
@@ -302,10 +336,7 @@ class _KontosidaState extends State<Kontosida> {
                   onPressed: () => Navigator.pop(context),
                   child: const Text('Avbryt'),
                 ),
-                ElevatedButton(
-                  onPressed: trySave,
-                  child: const Text('Spara'),
-                ),
+                ElevatedButton(onPressed: trySave, child: const Text('Spara')),
               ],
             );
           },
@@ -322,7 +353,6 @@ class _KontosidaState extends State<Kontosida> {
     required VoidCallback onEdit,
   }) {
     return Card(
-      
       color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
       elevation: 1,
@@ -334,61 +364,60 @@ class _KontosidaState extends State<Kontosida> {
       ),
       ), */
       child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-        const SizedBox(width: 8),
-        Icon(icon, size: 48, color: AppTheme.darkestblue),
-        const SizedBox(width: 10),
-        Container(
-          width: 2,
-          height: 80,
-          color: AppTheme.darkestblue,
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 26,
-              decoration: TextDecoration.underline,
-              color: AppTheme.darkestblue,
+            const SizedBox(width: 8),
+            Icon(icon, size: 48, color: AppTheme.darkestblue),
+            const SizedBox(width: 10),
+            Container(width: 2, height: 80, color: AppTheme.darkestblue),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 26,
+                      decoration: TextDecoration.underline,
+                      color: AppTheme.darkestblue,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    info,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: AppTheme.darkestblue,
+                    ),
+                  ),
+                ],
+              ),
             ),
+            InkWell(
+              onTap: onEdit,
+              child: Row(
+                children: const [
+                  Icon(Icons.edit_outlined, color: Color(0xFF8B0000), size: 22),
+                  SizedBox(width: 2),
+                  Text(
+                    "Ändra",
+                    style: TextStyle(
+                      color: Color(0xFF8B0000),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 2),
-            Text(
-            info,
-            style: const TextStyle(fontSize: 20, color: AppTheme.darkestblue),
-            ),
+            const SizedBox(width: 12),
           ],
-          ),
         ),
-        InkWell(
-          onTap: onEdit,
-          child: Row(
-          children: const [
-            Icon(Icons.edit_outlined, color: Color(0xFF8B0000), size: 22),
-            SizedBox(width: 2),
-            Text(
-            "Ändra",
-            style: TextStyle(
-              color: Color(0xFF8B0000),
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              decoration: TextDecoration.underline,
-            ),
-            ),
-          ],
-          ),
-        ),
-        const SizedBox(width: 12),
-        ],
-      ),
       ),
     );
   }
@@ -428,23 +457,94 @@ class _KontosidaState extends State<Kontosida> {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 0,
-                          vertical: 34,
+                          vertical: 0,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             //"Dina uppgifter" rubrik
-                            const SizedBox(height: 24),
-                            const Text(
-                              "Dina uppgifter",
-                              style: TextStyle(
-                                fontSize: 48,
-                                fontWeight: FontWeight.w400,
-                                decoration: TextDecoration.underline,
-                                color: AppTheme.darkestblue,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16.0,
                               ),
-                              textAlign: TextAlign.center,
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 100,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    // Centered tabs
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        AnimatedDefaultTextStyle(
+                                          duration: const Duration(
+                                            milliseconds: 200,
+                                          ),
+                                          style: TextStyle(
+                                            fontSize: 36,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppTheme.darkestblue,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12.0,
+                                              vertical: 8.0,
+                                            ),
+                                            child: Text("Dina uppgifter"),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    // Left-aligned back button
+                                    Positioned(
+                                      left: 16,
+                                      child: Container(
+                                        width: 200,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          color: AppTheme.darkblue,
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: InkWell(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (context) => HomePage(),
+                                              ),
+                                            );
+                                          },
+                                          child: Center(
+                                            child: Text(
+                                              'Tillbaka till Startsida',
+                                              style: TextStyle(
+                                                fontSize: 28,
+                                                color: AppTheme.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
+                            const Divider(thickness: 1),
+
                             const SizedBox(height: 24),
 
                             //Container för kundens namn
@@ -662,44 +762,7 @@ class _KontosidaState extends State<Kontosida> {
                             ),
                             const SizedBox(height: 100),
                             Footer(),
-                            const SizedBox(height: 32),
                           ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16.0, left: 16.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: 200,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: AppTheme.darkblue,
-                            ),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(16),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomePage(),
-                                  ),
-                                );
-                              },
-                              child: Center(
-                                child: Text(
-                                  'Tillbaka till Startsida',
-                                  style: TextStyle(
-                                    fontSize: 28,
-                                    color: AppTheme.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
                         ),
                       ),
                     ],
