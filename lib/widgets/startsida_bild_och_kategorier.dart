@@ -3,6 +3,8 @@ import 'package:projekt_grupp34/app_theme.dart';
 import 'package:projekt_grupp34/pages/kategorisida.dart';
 import 'package:projekt_grupp34/model/imat/product.dart';
 import 'package:projekt_grupp34/pages/listor.dart';
+import 'package:projekt_grupp34/widgets/LeveranstiderGrid.dart';
+import 'package:projekt_grupp34/widgets/LeveranstiderGridSimple.dart';
 
 class StartsidaBildOchKategorier extends StatelessWidget {
   const StartsidaBildOchKategorier({super.key});
@@ -172,10 +174,24 @@ class StartsidaBildOchKategorier extends StatelessWidget {
                     
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ListorPage()));
+                   showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      content: SizedBox(
+                        width: 500,
+                        height: 310,
+                        child: LeveranstiderGridSimple(
+                          onSelectSlot: (String slotValue) {
+                            Navigator.of(context).pop();
+                            // hantera slot selection om du vill
+                          },
+                        ),
+                      ),
+                    ),
+          );
                   },
                   child: Text(
-                    'Till dina listor',
+                    'Se lediga leveranstider',
                     style: TextStyle(
                       color: AppTheme.white,
                       fontSize: 40,
