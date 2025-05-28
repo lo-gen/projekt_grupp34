@@ -14,7 +14,6 @@ class ShoppingLists extends StatelessWidget {
   Widget build(BuildContext context) {
     var lists = Provider.of<ImatDataHandler>(context).getExtras();
     var imat = Provider.of<ImatDataHandler>(context);
-    print('ShoppingLists: $lists');
 
     final newShoppingItem = ShoppingItem(selectedItemProduct, amount: 1);
 
@@ -91,8 +90,7 @@ class ShoppingLists extends StatelessWidget {
           children:
               lists.entries.map<Widget>((entry) {
                 final listName = entry.key;
-                print('entries: $entry');
-                print('entry.value: ${entry.value}');
+                
 
                 // Convert items by MANUALLY creating ShoppingItem objects
                 final List<ShoppingItem> items = [];
@@ -112,9 +110,7 @@ class ShoppingLists extends StatelessWidget {
                             final productMap = Map<String, dynamic>.from(
                               itemMap['product'],
                             );
-                            print(
-                              'productMap: $productMap',
-                            ); // Debug print to inspect the productMap
+                            
 
                             // Manually create a Product object
                             final product = Product(
@@ -160,8 +156,7 @@ class ShoppingLists extends StatelessWidget {
                   }
                 }
 
-                print('listName: $listName');
-                print('items: $items');
+               
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(

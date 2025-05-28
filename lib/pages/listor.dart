@@ -630,8 +630,7 @@ class _ListorPageState extends State<ListorPage> {
       children:
           lists.entries.map<Widget>((entry) {
             final listName = entry.key;
-            print('entries: $entry');
-            print('entry.value: ${entry.value}');
+          
 
             // Convert items by MANUALLY creating ShoppingItem objects
             final List<ShoppingItem> items = [];
@@ -651,9 +650,7 @@ class _ListorPageState extends State<ListorPage> {
                         final productMap = Map<String, dynamic>.from(
                           itemMap['product'],
                         );
-                        print(
-                          'productMap: $productMap',
-                        ); // Debug print to inspect the productMap
+                        
 
                         // Manually create a Product object
                         final product = Product(
@@ -679,7 +676,7 @@ class _ListorPageState extends State<ListorPage> {
                         );
                         items.add(shoppingItem);
                       } catch (e) {
-                        print('Error manually creating item at index $i: $e');
+                        
                         if (itemMap['product'] is Map) {
                           print(
                             'Problematic productMap: ${itemMap['product']}',
@@ -697,8 +694,7 @@ class _ListorPageState extends State<ListorPage> {
               }
             }
 
-            print('listName: $listName');
-            print('items: $items');
+           
 
             return Padding(
               padding: const EdgeInsets.symmetric(
@@ -1344,7 +1340,6 @@ class _ListorPageState extends State<ListorPage> {
       products = [];
       orders = imat.orders.reversed.toList();
       var extras = imat.getExtras();
-      print('Extras: $extras');
 
       if (products.isEmpty && extras.isEmpty) {
         return Center(
