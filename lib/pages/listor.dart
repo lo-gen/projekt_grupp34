@@ -12,6 +12,7 @@ import 'package:projekt_grupp34/widgets/Header.dart';
 import 'package:projekt_grupp34/widgets/footer.dart';
 import 'package:projekt_grupp34/widgets/kategorierslider.dart';
 import 'package:projekt_grupp34/widgets/product_card.dart';
+import 'package:projekt_grupp34/widgets/showfavorites.dart';
 import 'package:projekt_grupp34/widgets/startsida_bild_och_kategorier.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class ListorPage extends StatefulWidget {
 enum ListType { favoriter, inkopslistor, tidigareKop }
 
 class _ListorPageState extends State<ListorPage> {
-  ListType selectedList = ListType.favoriter;
+  ListType selectedList = ListType.inkopslistor;
 
   Widget _buildTab(String title, ListType type) {
     final bool isSelected = selectedList == type;
@@ -65,41 +66,6 @@ class _ListorPageState extends State<ListorPage> {
       case ListType.tidigareKop:
         return _buildItemsGrid('Tidigare köp', imat);
     }
-  }
-
-  Widget showFavorites(List<Product> products) {
-    // Show a grid of ProductCards (Should only be displayed for favorites)
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(children: [SizedBox(height: AppTheme.paddingSmall)]),
-
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 7,
-                    childAspectRatio: 0.75,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                  ),
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    return ProductCard(products[index]);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 
   Widget showPreviousOrders(List<Order> orders, ImatDataHandler imat) {
@@ -1320,19 +1286,8 @@ class _ListorPageState extends State<ListorPage> {
     List<Order> orders = [];
 
     //Main function to show the different lists
-    if (listType == 'Favoriter') {
-      products = imat.favorites;
-      orders = []; // No orders for favorites
-      if (products.isEmpty && orders.isEmpty) {
-        return Center(
-          child: Text(
-            'Det finns inga $listType sparade',
-            style: TextStyle(fontSize: 24, color: AppTheme.darkestblue),
-          ),
-        );
-      }
-      return showFavorites(products);
-    } else if (listType == 'Inköpslistor') {
+    
+      if (listType == 'Inköpslistor') {
       products = [];
       orders = imat.orders.reversed.toList();
       var extras = imat.getExtras();
@@ -1405,11 +1360,7 @@ class _ListorPageState extends State<ListorPage> {
                             ListType.inkopslistor,
                           ),
                         ),
-                        SizedBox(width: 40),
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: _buildTab('Favoriter', ListType.favoriter),
-                        ),
+                        
                         SizedBox(width: 40),
                         MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -1539,3 +1490,5 @@ class _ListorPageState extends State<ListorPage> {
     );
   }
 }
+
+

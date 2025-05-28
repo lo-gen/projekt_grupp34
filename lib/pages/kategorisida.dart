@@ -84,7 +84,7 @@ class _KategorisidaState extends State<Kategorisida> {
         return ProductCategory.MELONS;
       case 'exotisk frukt':
         return ProductCategory.EXOTIC_FRUIT;
-      case 'pod':
+      case 'baljväxter':
         return ProductCategory.POD;
       case 'ört':
         return ProductCategory.HERB;

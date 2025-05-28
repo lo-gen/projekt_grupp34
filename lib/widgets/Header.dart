@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projekt_grupp34/app_theme.dart';
+import 'package:projekt_grupp34/pages/favoriter.dart';
 import 'package:projekt_grupp34/pages/kontosida.dart';
 import 'package:projekt_grupp34/pages/leveranstider.dart';
 import 'package:projekt_grupp34/pages/listor.dart';
@@ -84,9 +85,9 @@ class _HeaderState extends State<Header> {
                         textStyle: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LeveranstiderPage()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => FavoriterPage()));
                       }, 
-                      child: const Text('Lev. tider', style: TextStyle(fontSize: 26, color: Colors.white)),
+                      child: const Text('Favoriter', style: TextStyle(fontSize: 26, color: Colors.white)),
                     ), 
                   ),
                   SizedBox(width: AppTheme.paddingSmall,), 
