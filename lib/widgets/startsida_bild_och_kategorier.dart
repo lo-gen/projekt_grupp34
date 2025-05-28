@@ -175,7 +175,7 @@ class StartsidaBildOchKategorier extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => ListorPage()));
                   },
                   child: Text(
-                    'Till dina inköpslistor',
+                    'Till dina listor',
                     style: TextStyle(
                       color: AppTheme.white,
                       fontSize: 40,
