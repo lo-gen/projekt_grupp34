@@ -116,18 +116,31 @@ class ProductCard extends StatelessWidget {
           Positioned(
             top: 4,
             right: 4,
-            child: IconButton(
-              icon: Icon(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+              // Background icon (not a button)
+              Icon(
+                isFavorite ? Icons.star : Icons.star,
+                color: Colors.white,
+                size: 32,
+              ),
+              // Foreground icon button
+              IconButton(
+                icon: Icon(
                 isFavorite ? Icons.star : Icons.star_border,
                 color: isFavorite ? Colors.amber : Colors.black,
                 size: 32,
-              ),
-              tooltip: isFavorite ? 'Ta bort från favoriter' : 'Lägg till som favorit',
-              onPressed: () {
+                ),
+                tooltip: isFavorite ? 'Ta bort från favoriter' : 'Lägg till som favorit',
+                onPressed: () {
                 iMat.toggleFavorite(product);
-              },
+                },
+              ),
+              ],
             ),
-          ),
+            ),
+          
         ],
       ),
     );
