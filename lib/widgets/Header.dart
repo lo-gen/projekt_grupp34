@@ -136,7 +136,7 @@ class _HeaderState extends State<Header> {
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ListorPage()));
                       }, 
-                      child: Text('Listor', style: TextStyle(fontSize: 26, color: AppTheme.white)),
+                      child: Text('Listor & Köp', style: TextStyle(fontSize: 26, color: AppTheme.white)),
                     ), 
                   ), 
                   SizedBox(width: AppTheme.paddingSmall,), 
