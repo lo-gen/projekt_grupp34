@@ -22,8 +22,8 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
     final ProductDetail? detail = iMat.getDetail(widget.product);
 
     return Container(
-      width: 600,
-      height: 400,
+      width: 650,
+      height: 450,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -109,7 +109,7 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: AppTheme.paddingHuge),
+                              SizedBox(width: 130),
                               IconButton(
                                 icon: Icon(
                                   iMat.isFavorite(widget.product) ? Icons.star : Icons.star_border,
@@ -121,7 +121,7 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
                                   iMat.toggleFavorite(widget.product);
                                 },
                               ),
-                              SizedBox(width: AppTheme.paddingSmall),
+                              SizedBox(width: AppTheme.paddingTiny),
                               // Knapp för att lägga till i inköpslista
                               IconButton(
                                 icon: const Icon(Icons.assignment, size: 32, color: AppTheme.darkblue),
@@ -156,37 +156,41 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
                   children: [
                     // Innehållsförteckning
                     Expanded(
-                      child: ExpansionTile(
-                        title: const Text('Innehållsförteckning', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                            child: Text(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Innehållsförteckning', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 4),
+                            Text(
                               detail != null && detail.contents.isNotEmpty
                                   ? detail.contents
                                   : 'Innehållsförteckning saknas',
                               style: const TextStyle(fontSize: 16),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     // Produktbeskrivning
                     Expanded(
-                      child: ExpansionTile(
-                        title: const Text('Produktbeskrivning', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                            child: Text(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Produktbeskrivning', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 4),
+                            Text(
                               detail != null && detail.description.isNotEmpty
                                   ? detail.description
                                   : 'Beskrivning saknas',
                               style: const TextStyle(fontSize: 16),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
