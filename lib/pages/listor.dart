@@ -219,7 +219,6 @@ class _ListorPageState extends State<ListorPage> {
                                                     ).showSnackBar(
                                                       SnackBar(
                                                         content: Container(
-                                                          height: 80,
                                                           alignment:
                                                               Alignment.center,
                                                           child: Text(
@@ -248,7 +247,7 @@ class _ListorPageState extends State<ListorPage> {
                                                                 .floating,
                                                         margin: EdgeInsets.only(
                                                           top: 100,
-                                                          bottom: 580,
+                                                          bottom: 520,
                                                           left:
                                                               MediaQuery.of(
                                                                 context,
@@ -327,7 +326,6 @@ class _ListorPageState extends State<ListorPage> {
                                       ).showSnackBar(
                                         SnackBar(
                                           content: Container(
-                                            height: 80,
                                             alignment: Alignment.center,
                                             child: Text(
                                               'Alla produkter har lagts till i kundvagnen!',
@@ -344,7 +342,7 @@ class _ListorPageState extends State<ListorPage> {
                                           behavior: SnackBarBehavior.floating,
                                           margin: EdgeInsets.only(
                                             top: 100,
-                                            bottom: 580,
+                                            bottom: 520,
                                             left:
                                                 MediaQuery.of(
                                                   context,
@@ -767,7 +765,6 @@ class _ListorPageState extends State<ListorPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Container(
-                                height: 80,
                                 alignment: Alignment.center,
                                 child: Text(
                                   'Listan $listName har \n lagts till i kundvagnen!',
@@ -784,7 +781,7 @@ class _ListorPageState extends State<ListorPage> {
                               behavior: SnackBarBehavior.floating,
                               margin: EdgeInsets.only(
                                 top: 100,
-                                bottom: 580,
+                                bottom: 520,
                                 left:
                                     MediaQuery.of(context).size.width *
                                     0.735, // Increased left margin to make it less wide
@@ -1000,7 +997,6 @@ class _ListorPageState extends State<ListorPage> {
                                                         ).showSnackBar(
                                                           SnackBar(
                                                             content: Container(
-                                                              height: 80,
                                                               alignment:
                                                                   Alignment
                                                                       .center,
@@ -1031,7 +1027,7 @@ class _ListorPageState extends State<ListorPage> {
                                                                     .floating,
                                                             margin: EdgeInsets.only(
                                                               top: 100,
-                                                              bottom: 580,
+                                                              bottom: 520,
                                                               left:
                                                                   MediaQuery.of(
                                                                     context,
@@ -1160,7 +1156,6 @@ class _ListorPageState extends State<ListorPage> {
                                         ).showSnackBar(
                                           SnackBar(
                                             content: Container(
-                                              height: 80,
                                               alignment: Alignment.center,
                                               child: Text(
                                                 'Alla produkter har lagts till i kundvagnen!',
@@ -1170,6 +1165,7 @@ class _ListorPageState extends State<ListorPage> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                                 textAlign: TextAlign.center,
+
                                               ),
                                             ),
                                             duration: Duration(seconds: 2),
@@ -1177,7 +1173,7 @@ class _ListorPageState extends State<ListorPage> {
                                             behavior: SnackBarBehavior.floating,
                                             margin: EdgeInsets.only(
                                               top: 100,
-                                              bottom: 580,
+                                              bottom: 520,
                                               left:
                                                   MediaQuery.of(
                                                     context,
