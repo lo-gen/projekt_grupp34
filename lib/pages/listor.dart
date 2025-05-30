@@ -160,7 +160,9 @@ class _ListorPageState extends State<ListorPage> {
                                         children: [
                                           ListTile(
                                             title: Text(item.product.name),
-                                            subtitle: Text('${item.amount} st'),
+                                            subtitle: Text(
+                                              '${item.amount} ${item.product.unit.length > 3 ? item.product.unit.substring(3) : item.product.unit}',
+                                            ),
                                             trailing: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
@@ -594,7 +596,6 @@ class _ListorPageState extends State<ListorPage> {
       children:
           lists.entries.map<Widget>((entry) {
             final listName = entry.key;
-          
 
             // Convert items by MANUALLY creating ShoppingItem objects
             final List<ShoppingItem> items = [];
@@ -614,7 +615,6 @@ class _ListorPageState extends State<ListorPage> {
                         final productMap = Map<String, dynamic>.from(
                           itemMap['product'],
                         );
-                        
 
                         // Manually create a Product object
                         final product = Product(
@@ -640,7 +640,6 @@ class _ListorPageState extends State<ListorPage> {
                         );
                         items.add(shoppingItem);
                       } catch (e) {
-                        
                         if (itemMap['product'] is Map) {
                           print(
                             'Problematic productMap: ${itemMap['product']}',
@@ -657,8 +656,6 @@ class _ListorPageState extends State<ListorPage> {
                 }
               }
             }
-
-           
 
             return Padding(
               padding: const EdgeInsets.symmetric(
@@ -852,7 +849,7 @@ class _ListorPageState extends State<ListorPage> {
                                               ListTile(
                                                 title: Text(item.product.name),
                                                 subtitle: Text(
-                                                  '${item.amount} st',
+                                                  '${item.amount} ${item.product.unit.length > 3 ? item.product.unit.substring(3) : item.product.unit}',
                                                 ),
                                                 trailing: Row(
                                                   mainAxisSize:
@@ -1131,7 +1128,6 @@ class _ListorPageState extends State<ListorPage> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                                 textAlign: TextAlign.center,
-
                                               ),
                                             ),
                                             duration: Duration(seconds: 2),
@@ -1286,8 +1282,8 @@ class _ListorPageState extends State<ListorPage> {
     List<Order> orders = [];
 
     //Main function to show the different lists
-    
-      if (listType == 'Inköpslistor') {
+
+    if (listType == 'Inköpslistor') {
       products = [];
       orders = imat.orders.reversed.toList();
       var extras = imat.getExtras();
@@ -1360,7 +1356,7 @@ class _ListorPageState extends State<ListorPage> {
                             ListType.inkopslistor,
                           ),
                         ),
-                        
+
                         SizedBox(width: 40),
                         MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -1490,5 +1486,3 @@ class _ListorPageState extends State<ListorPage> {
     );
   }
 }
-
-
