@@ -113,12 +113,7 @@ class _ProductCardState extends State<ProductCard> {
                               quantity = 1;
                             });
                             iMat.shoppingCartAdd(item);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('${widget.product.name} har lagts till i din inköpslista!'),
-                                duration: const Duration(seconds: 2),
-                              ),
-                            );
+                           
                           },
                           child: Text(
                             '    Lägg till    ',
