@@ -114,6 +114,7 @@ class _KategorisidaState extends State<Kategorisida> {
       );
     }
     return Scaffold(
+      backgroundColor: AppTheme.white,
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(

@@ -18,7 +18,7 @@ class FavoriterPage extends StatelessWidget {
     List<Product> products = imat.favorites;
 
     return Scaffold(
-      backgroundColor: const Color(0xFAF7F7F7),
+      backgroundColor: AppTheme.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -14,6 +14,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: AppTheme.white,
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(

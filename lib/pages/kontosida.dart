@@ -441,7 +441,7 @@ class _KontosidaState extends State<Kontosida> {
     postAddress = customer.postAddress;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFAF6F6),
+      backgroundColor: AppTheme.white,
       body: SafeArea(
         child: Column(
           children: [
