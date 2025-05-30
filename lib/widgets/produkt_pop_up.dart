@@ -16,6 +16,8 @@ class ProduktPopUp extends StatefulWidget {
 }
 
 class _ProduktPopUpState extends State<ProduktPopUp> {
+  int quantity = 0;
+
   @override
   Widget build(BuildContext context) {
     var iMat = Provider.of<ImatDataHandler>(context);
@@ -84,31 +86,77 @@ class _ProduktPopUpState extends State<ProduktPopUp> {
                           const SizedBox(height: 100),
                           Row(
                             children: [
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.darkblue,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  final item = ShoppingItem(widget.product);
-                                  iMat.shoppingCartAdd(item);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('${widget.product.name} har lagts till i din inköpslista!'),
-                                      duration: const Duration(seconds: 2),
+                              quantity == 0
+                                  ? ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppTheme.darkblue,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          quantity = 1;
+                                        });
+                                        final item = ShoppingItem(widget.product, amount: 1);
+                                        iMat.shoppingCartAdd(item);
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text('${widget.product.name} har lagts till i din inköpslista!'),
+                                            duration: const Duration(seconds: 2),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text(
+                                        '    Lägg till    ',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: AppTheme.white,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      width: 160,
+                                      height: 32,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: AppTheme.darkblue,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(Icons.remove, color: AppTheme.white),
+                                            onPressed: () {
+                                              setState(() {
+                                                if (quantity > 1) {
+                                                  quantity--;
+                                                  iMat.shoppingCartUpdate(ShoppingItem(widget.product), delta: -1);
+                                                } else {
+                                                  quantity = 0;
+                                                  iMat.shoppingCartRemove(ShoppingItem(widget.product));
+                                                }
+                                              });
+                                            },
+                                          ),
+                                          SizedBox(width: 30),
+                                          Text(
+                                            '$quantity',
+                                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.white),
+                                          ),
+                                          SizedBox(width: 30),
+                                          IconButton(
+                                            icon: const Icon(Icons.add, color: AppTheme.white),
+                                            onPressed: () {
+                                              setState(() {
+                                                quantity++;
+                                                iMat.shoppingCartAdd(ShoppingItem(widget.product));
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  );
-                                },
-                                child: const Text(
-                                  '    Lägg till    ',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: AppTheme.white,
-                                  ),
-                                ),
-                              ),
                               SizedBox(width: 130),
                               IconButton(
                                 icon: Icon(
