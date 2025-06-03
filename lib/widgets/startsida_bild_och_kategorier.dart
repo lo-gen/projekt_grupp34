@@ -36,7 +36,7 @@ class StartsidaBildOchKategorier extends StatelessWidget {
       ProductCategory.NUTS_AND_SEEDS: 'assets/images/Nötter.jpg',
       ProductCategory.SWEET: 'assets/images/Sött.jpg',
       ProductCategory.CABBAGE: 'assets/images/Kål.jpg',
-      ProductCategory.MELONS: 'assets/images/Frukt.jpg', // Ingen Melon-bild, använder Frukt
+      ProductCategory.MELONS: 'assets/images/melon.jpg', // Ingen Melon-bild, använder Frukt
       ProductCategory.EXOTIC_FRUIT: 'assets/images/Exotisk frukt.jpg',
       ProductCategory.POD: 'assets/images/Baljväxter.jpg',
       ProductCategory.HERB: 'assets/images/Ört.jpg',
